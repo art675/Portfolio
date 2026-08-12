@@ -1,0 +1,369 @@
+
+% ============================================================
+% PICKLEBALL PADDLE — SINGLE-PAGE PORTFOLIO CASE STUDY
+% Project 02 in the Composites section
+%
+% IMPORTANT:
+% 1. This file must NOT contain \documentclass, \begin{document},
+%    or \end{document}.
+% 2. In main.tex, place \input{pickleball} before \end{document}.
+% 3. Image references use these Overleaf base filenames:
+%       waterjet
+%       side_core_view
+%       full_assy
+%       front_view
+%       LAMINATE
+% ============================================================
+
+% Clickable project resource
+\providecommand{\PaddleWaterjetVideo}
+{https://drive.google.com/file/d/1mTuaE_g5mE2f7Nn3R5k7yFxqCWH_pvBh/view?usp=drive_link}
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{pickleball}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% ============================================================
+% BACKGROUND AND PAGE BARS
+% ============================================================
+
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% ============================================================
+% HEADER
+% ============================================================
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{01 COMPOSITES \hspace{5pt}/\hspace{5pt} PROJECT 02};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{22.5}{23.5}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{CARBON FIBER PICKLEBALL PADDLE};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.4}{9.2}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly Composites Laboratory \hspace{7pt}\textbullet\hspace{7pt}
+Individual Project \hspace{7pt}\textbullet\hspace{7pt}
+Spring 2026 \hspace{7pt}\textbullet\hspace{7pt}
+San Luis Obispo, California};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(6.10in,-1.315in)$);
+
+% ============================================================
+% TOP LEFT — HERO PRODUCT IMAGE
+% ============================================================
+
+\node[
+    anchor=center,
+    inner sep=3pt,
+    draw=DeepGreen,
+    line width=0.75pt,
+    rounded corners=6pt
+]
+at ($(current page.north west)+(1.60in,-3.20in)$)
+{
+    \includegraphics[
+        width=3.72in,
+        height=3.18in,
+        keepaspectratio
+    ]{full_assy}
+};
+
+\node[
+    anchor=north,
+    text=Muted,
+    font=\sffamily\fontsize{6.9}{7.5}\selectfont
+]
+at ($(current page.north west)+(1.60in,-4.86in)$)
+{Completed solo-built paddle assembly};
+
+% ============================================================
+% TOP CENTER — PROJECT OVERVIEW
+% ============================================================
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(2.95in,-1.62in)$)
+    rectangle
+    ($(current page.north west)+(5.53in,-4.86in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(2.95in,-1.62in)$)
+    rectangle
+    ($(current page.north west)+(3.05in,-4.86in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(3.23in,-1.79in)$)
+{PROJECT OVERVIEW};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.02in,
+    text=Ink,
+    font=\fontsize{7.05}{8.35}\selectfont
+]
+at ($(current page.north west)+(3.23in,-2.07in)$)
+{
+Independently designed and manufactured a lightweight prepreg
+carbon-fiber pickleball paddle using a half-inch honeycomb
+sandwich core, vacuum-bag consolidation, precision waterjet
+trimming, and custom TPU and PLA components.
+
+\vspace{5pt}
+
+The project emphasized lightweight sandwich-composite design, repeatable manufacturing methods, dimensional accuracy, and the integration of custom 3D-printed TPU and PLA components into the final assembly.
+};
+
+\node[
+    anchor=south west,
+    align=left,
+    text width=2.02in,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{6.65}{7.35}\selectfont
+]
+at ($(current page.north west)+(3.23in,-4.74in)$)
+{
+SOLE DESIGNER\\[2pt]
+COMPOSITE FABRICATOR\\[2pt]
+MANUFACTURING ENGINEER
+};
+
+% ============================================================
+% TOP RIGHT — LAMINATE GRAPHIC
+% ============================================================
+
+\node[
+    anchor=north west,
+    inner sep=2.5pt,
+    draw=DeepGreen,
+    line width=0.65pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(5.71in,-1.62in)$)
+{
+    \includegraphics[
+        width=4.80in,
+        keepaspectratio
+    ]{LAMINATE}
+};
+
+% ============================================================
+% BOTTOM LEFT — SUPPORTING IMAGES
+% ============================================================
+
+\node[
+    anchor=center,
+    inner sep=3pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(1.12in,-5.98in)$)
+{
+    \includegraphics[
+        width=1.30in,
+        height=1.78in,
+        keepaspectratio
+    ]{front_view}
+};
+
+\node[
+    anchor=center,
+    inner sep=3pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(2.72in,-5.98in)$)
+{
+    \includegraphics[
+        width=1.30in,
+        height=1.78in,
+        keepaspectratio
+    ]{side_core_view}
+};
+
+\node[
+    anchor=center,
+    inner sep=3pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(4.32in,-5.98in)$)
+{
+    \includegraphics[
+        angle=-90,
+        origin=c,
+        width=1.30in,
+        height=1.78in,
+        keepaspectratio
+    ]{waterjet}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=1.38in,
+    text=Muted,
+    font=\sffamily\fontsize{6.5}{7.1}\selectfont
+]
+at ($(current page.north west)+(1.12in,-7.00in)$)
+{Front view};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=1.38in,
+    text=Muted,
+    font=\sffamily\fontsize{6.5}{7.1}\selectfont
+]
+at ($(current page.north west)+(2.72in,-7.00in)$)
+{Core and edge profile};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=1.38in,
+    text=Muted,
+    font=\sffamily\fontsize{6.5}{7.1}\selectfont
+]
+at ($(current page.north west)+(4.32in,-7.00in)$)
+{Waterjet cutting setup};
+
+% ============================================================
+% BOTTOM RIGHT — MANUFACTURING HIGHLIGHTS
+% ============================================================
+
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(5.18in,-5.05in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.18in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(5.18in,-5.05in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.18in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.9}{8.6}\selectfont
+]
+at ($(current page.north west)+(5.44in,-5.20in)$)
+{MANUFACTURING HIGHLIGHTS};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=5.05in,
+    text=Ink,
+    font=\fontsize{6.72}{7.82}\selectfont
+]
+at ($(current page.north west)+(5.44in,-5.49in)$)
+{
+\textbf{Consolidation.}
+Vacuum bagging and distributed weight pressure maintained intimate contact
+throughout the prepreg sandwich layup.\\[2.4pt]
+\textbf{Surface quality.}
+A scarce PTFE release film produced an unusually consistent matte finish
+with a subtle sheen and minimal post-processing.\\[2.4pt]
+\textbf{Waterjet stability.}
+Perimeter weights restrained the cured stock against jet-induced lifting
+and rotational moments during cutting.\\[2.4pt]
+\textbf{Final assembly.}
+A printed TPU edge band protected the carbon perimeter, while the PLA handle
+used clearance cutouts to accommodate future stock-thickness and cutting variation.
+};
+
+% ============================================================
+% RESOURCE LINK
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.north)+(0,-7.42in)$)
+{\href{\PaddleWaterjetVideo}
+{\faPlayCircle\ WATERJET PICKLEBALL PADDLE DEMONSTRATION}};
+
+% ============================================================
+% FOOTER
+% ============================================================
+
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\hyperlink{toro-results}{\faArrowLeft\ TORO COVER}};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{PICKLEBALL PADDLE \hspace{6pt} 1 / 1};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{NEXT PROJECT \faArrowRight};
+
+\end{tikzpicture}
+\input{Beam}
+\clearpage

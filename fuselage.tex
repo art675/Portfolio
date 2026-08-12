@@ -1,0 +1,420 @@
+% ============================================================
+% FIBERGLASS FUSELAGE FEA & THREE-POINT BEND VALIDATION
+% SINGLE-PAGE PORTFOLIO CASE STUDY
+% 01 Composites / Project 04
+%
+% IMPORTANT:
+% 1. This file must NOT contain \documentclass, \begin{document},
+%    or \end{document}.
+% 2. In main.tex, place \input{fuselage} before \end{document}.
+% 3. This script assumes the main portfolio preamble already defines:
+%       DeepGreen, PolyGold, SoftGold, SoftGreen,
+%       RuleGray, Muted, Ink
+%    and loads tikz, graphicx, hyperref, and fontawesome5.
+% 4. Upload these files to Overleaf with the exact same names:
+%       Setup & Mesh of FEA.png
+%       fuselage 3 point bend test.JPG
+%       Countor Plot of Reaction Force.png
+%       fuselage data.png
+% ============================================================
+
+\providecommand{\FuselageDemoVideo}
+{https://drive.google.com/file/d/1xFCbBJXPhVVlnaleRyZeSM8ucD_xWwB2/view?usp=drive_link}
+
+\providecommand{\FuselageFinalReport}
+{https://drive.google.com/file/d/1LYRNlwk73l_KRgaSPgzfsYis-9bsuaxX/view?usp=drive_link}
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{fuselage}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% ============================================================
+% BACKGROUND AND PAGE BARS
+% ============================================================
+
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% ============================================================
+% HEADER
+% ============================================================
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{01 COMPOSITES \hspace{5pt}/\hspace{5pt} PROJECT 04};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{20.8}{21.8}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{FIBERGLASS FUSELAGE FEA \& THREE-POINT BEND VALIDATION};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.15}{8.9}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly Composites Laboratory \hspace{7pt}\textbullet\hspace{7pt}
+Individual Project \hspace{7pt}\textbullet\hspace{7pt}
+Winter 2026 \hspace{7pt}\textbullet\hspace{7pt}
+San Luis Obispo, California};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(6.10in,-1.315in)$);
+
+
+% ============================================================
+% TOP LEFT — ABAQUS MODEL SETUP
+% ============================================================
+
+\node[
+    anchor=north west,
+    inner sep=2.6pt,
+    draw=DeepGreen,
+    line width=0.68pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(0.42in,-1.58in)$)
+{
+    \includegraphics[
+        width=3.55in,
+        height=2.34in,
+        keepaspectratio
+    ]{\detokenize{Setup & Mesh of FEA.png}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.42in,
+    text=Muted,
+    font=\sffamily\fontsize{6.30}{7.00}\selectfont
+]
+at ($(current page.north west)+(2.195in,-4.02in)$)
+{Abaqus assembly and quad-dominated mesh for the composite shell fuselage and rigid loading fixtures};
+
+% ============================================================
+% TOP CENTER — PROJECT OVERVIEW / STAR SUMMARY
+% ============================================================
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(4.18in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(8.55in,-4.10in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(4.18in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(4.28in,-4.10in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(4.48in,-1.76in)$)
+{PROJECT OVERVIEW};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=3.38in,
+    text=Ink,
+    font=\fontsize{6.28}{7.28}\selectfont
+]
+at ($(current page.north west)+(4.48in,-2.03in)$)
+{
+I developed and validated a seven-ply fiberglass fuselage model under a SAMPE-inspired three-point bend configuration. The Abaqus model reproduced the physical geometry, composite layup, rigid tooling, contact interactions, and displacement-controlled loading used during testing. I defined equivalent orthotropic lamina properties, preserved the 4-inch inner diameter through shell offset, created rigid-body reference points, and evaluated transverse-shear assumptions through sensitivity studies. The model correctly identified the experimentally observed critical region beneath the loading shoe, while the simulation-to-test comparison revealed the limitations of idealized composite failure modeling and guided a more defensible interpretation of the results.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{6.35}{7.0}\selectfont
+]
+at ($(current page.north west)+(4.48in,-3.94in)$)
+{7 PLIES \hspace{7pt}\textbullet\hspace{7pt} 20,584 SHELL ELEMENTS \hspace{7pt}\textbullet\hspace{7pt} 2 in DISPLACEMENT};
+
+% ============================================================
+% TOP RIGHT — PHYSICAL TEST
+% ============================================================
+
+\node[
+    anchor=north west,
+    inner sep=2.6pt,
+    draw=DeepGreen,
+    line width=0.68pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(8.70in,-1.58in)$)
+{
+    \includegraphics[
+        angle=-90,
+        origin=c,
+        width=3.18in,
+        height=2.18in,
+        keepaspectratio
+    ]{\detokenize{fuselage 3 point bend test.JPG}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=2.70in,
+    text=Muted,
+    font=\sffamily\fontsize{6.30}{7.00}\selectfont
+]
+at ($(current page.north west)+(9.95in,-4.21in)$)
+{Three-point bend validation test};
+
+% ============================================================
+% CENTER ROW — SIMULATION RESPONSE AND EXPERIMENTAL DATA
+% ============================================================
+
+% Left response card
+\fill[SoftGreen!42,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-4.34in)$)
+    rectangle
+    ($(current page.north west)+(6.60in,-6.28in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-4.34in)$)
+    rectangle
+    ($(current page.north west)+(5.55in,-6.28in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.10}{7.75}\selectfont
+]
+at ($(current page.north west)+(0.66in,-4.48in)$)
+{ABAQUS RESPONSE};
+
+\node[
+    anchor=north,
+    inner sep=0pt
+]
+at ($(current page.north west)+(2.985in,-4.70in)$)
+{
+    \includegraphics[
+        width=4.70in,
+        height=1.26in,
+        keepaspectratio
+    ]{\detokenize{Countor Plot of Reaction Force.png}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=4.55in,
+    text=Muted,
+    font=\sffamily\fontsize{6.15}{6.85}\selectfont
+]
+at ($(current page.north west)+(2.985in,-6.08in)$)
+{Abaqus reaction-force response under bending};
+
+% Right response card
+\fill[SoftGreen!42,rounded corners=5pt]
+    ($(current page.north west)+(5.76in,-4.34in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-6.28in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(5.76in,-4.34in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-6.28in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.10}{7.75}\selectfont
+]
+at ($(current page.north west)+(6.00in,-4.48in)$)
+{EXPERIMENTAL RESPONSE};
+
+\node[
+    anchor=north,
+    inner sep=0pt
+]
+at ($(current page.north west)+(8.425in,-4.68in)$)
+{
+    \includegraphics[
+        width=4.58in,
+        height=1.32in,
+        keepaspectratio
+    ]{\detokenize{fuselage data.png}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=4.45in,
+    text=Muted,
+    font=\sffamily\fontsize{6.15}{6.85}\selectfont
+]
+at ($(current page.north west)+(8.425in,-6.08in)$)
+{Measured load history and peak response};
+
+% ============================================================
+% BOTTOM LEFT — MODELING APPROACH
+% ============================================================
+
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.50in)$)
+    rectangle
+    ($(current page.north west)+(5.34in,-7.45in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.50in)$)
+    rectangle
+    ($(current page.north west)+(5.34in,-7.45in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.65}{8.35}\selectfont
+]
+at ($(current page.north west)+(0.66in,-6.64in)$)
+{MODELING APPROACH};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.44in,
+    text=Ink,
+    font=\fontsize{6.08}{7.02}\selectfont
+]
+at ($(current page.north west)+(0.66in,-6.89in)$)
+{
+The fuselage was represented as a seven-ply woven-fiberglass composite shell.
+Rigid upper and lower fixtures transferred load through frictional contact, while
+two static steps imposed 2 inches of total downward displacement. High- and
+low-case studies for $G_{13}$ and $G_{23}$ changed peak reaction force by only
+about 1.8\%, showing that the global response was not dominated by those assumptions.
+};
+
+% ============================================================
+% BOTTOM RIGHT — VALIDATION AND ENGINEERING JUDGMENT
+% ============================================================
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(5.56in,-6.50in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.45in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(5.56in,-6.50in)$)
+    rectangle
+    ($(current page.north west)+(5.66in,-7.45in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.65}{8.35}\selectfont
+]
+at ($(current page.north west)+(5.86in,-6.64in)$)
+{VALIDATION AND ENGINEERING JUDGMENT};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.66in,
+    text=Ink,
+    font=\fontsize{6.02}{6.96}\selectfont
+]
+at ($(current page.north west)+(5.86in,-6.89in)$)
+{
+Abaqus predicted 1,814 lbf versus the measured 1,123.82 lbf, an overprediction
+of 61.4\%. Rather than treating the model as fully validated, I traced the gap to
+approximated material properties, idealized shell geometry, simplified contact,
+and the absence of progressive crushing, delamination, and tear-through.
+The study demonstrated both technical persistence and the judgment to distinguish
+useful qualitative agreement from unsupported quantitative confidence.
+};
+
+% ============================================================
+% RESOURCE LINKS
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.75}{7.35}\selectfont
+]
+at ($(current page.north)+(0,-7.56in)$)
+{
+\href{\FuselageFinalReport}{\faFilePdf\ FINAL ANALYSIS REPORT}
+\hspace{16pt}
+\href{\FuselageDemoVideo}{\faPlayCircle\ FUSELAGE DEMONSTRATION}
+};
+
+% ============================================================
+% FOOTER
+% ============================================================
+
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\hyperlink{ibeam}{\faArrowLeft\ CARBON FIBER I-BEAM}};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{FIBERGLASS FUSELAGE \hspace{6pt} 1 / 1};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{NEXT PROJECT \faArrowRight};
+
+\end{tikzpicture}
+\input{coupons}
+\clearpage

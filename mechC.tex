@@ -1,0 +1,431 @@
+
+% ============================================================
+% PROJECT 09C — PI MOTOR CONTROL / ENCODER FEEDBACK / MODEL VALIDATION
+% ME 305 — INTERACTIVE MOTOR CONTROLLER
+%
+% Intended to be included from the main portfolio:
+%     \input{project_09C_mechC}
+%
+% Main portfolio preamble requirements:
+%     tikz, graphicx, hyperref, fontawesome5, amsmath, amssymb
+% and portfolio colors:
+%     DeepGreen, PolyGold, SoftGold, SoftGreen,
+%     RuleGray, Muted, Ink, Panel
+%
+% Upload these images to Overleaf with the exact base filenames:
+%     MOTOR W_ ENCODER
+%     Simulink & System Comparison
+%     Simulink Block Diagram
+%     UI DISPLAY MOTOR IO
+% ============================================================
+
+% ------------------------------------------------------------
+% PROJECT 09C RESOURCE LINKS
+% ------------------------------------------------------------
+
+\providecommand{\MechCReportURL}
+{https://drive.google.com/file/d/1qfpFpnMO1gRtw9fWikRB7nvnAdpQKRaO/view?usp=drive_link}
+
+\providecommand{\MechCGainCalibrationURL}
+{https://drive.google.com/file/d/1jdHEu18lmVMqsy5tKET_DTwHOfNGkhg8/view?usp=drive_link}
+
+
+% ============================================================
+% PAGE — PROJECT 09C
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{project09C}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% ------------------------------------------------------------
+% PAGE FOUNDATION
+% ------------------------------------------------------------
+
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+
+% ------------------------------------------------------------
+% HEADER
+% ------------------------------------------------------------
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{02 MECHATRONICS \hspace{5pt}/\hspace{5pt} PROJECT 09C};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{21.4}{22.4}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{INTERACTIVE PI MOTOR CONTROL \& MODEL VALIDATION};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly ME 305 Mechatronics
+\hspace{7pt}\textbullet\hspace{7pt}
+Two-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Spring 2025
+\hspace{7pt}\textbullet\hspace{7pt}
+Assembly + Simulink};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(9.26in,-1.315in)$);
+
+
+% ------------------------------------------------------------
+% HERO LEFT — MOTOR + ENCODER HARDWARE
+% ------------------------------------------------------------
+
+\fill[SoftGreen!40,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(5.18in,-4.98in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(5.18in,-4.98in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(0.70in,-1.78in)$)
+{DC MOTOR + ENCODER TEST PLATFORM};
+
+\node[
+    anchor=north,
+    inner sep=2.0pt,
+    draw=DeepGreen,
+    line width=0.58pt,
+    rounded corners=4pt,
+    fill=white
+]
+at ($(current page.north west)+(2.80in,-2.05in)$)
+{
+    \includegraphics[
+        width=4.35in,
+        height=2.42in,
+        keepaspectratio
+    ]{\detokenize{MOTOR W_ ENCODER}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=4.15in,
+    text=Muted,
+    font=\sffamily\fontsize{6.06}{6.73}\selectfont
+]
+at ($(current page.north west)+(2.80in,-4.58in)$)
+{Motor, encoder, and mechanical load used for gain identification and controller validation};
+
+
+% ------------------------------------------------------------
+% HERO RIGHT — LIVE MOTOR I/O
+% ------------------------------------------------------------
+
+\fill[SoftGreen!40,rounded corners=5pt]
+    ($(current page.north west)+(5.40in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-4.98in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(5.40in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-4.98in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(5.68in,-1.78in)$)
+{LIVE MOTOR I/O};
+
+\node[
+    anchor=north,
+    inner sep=2.0pt,
+    draw=DeepGreen,
+    line width=0.58pt,
+    rounded corners=4pt,
+    fill=white
+]
+at ($(current page.north west)+(8.12in,-2.05in)$)
+{
+    \includegraphics[
+        width=4.50in,
+        height=2.42in,
+        keepaspectratio
+    ]{\detokenize{UI DISPLAY MOTOR IO}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=4.25in,
+    text=Muted,
+    font=\sffamily\fontsize{6.06}{6.73}\selectfont
+]
+at ($(current page.north west)+(8.12in,-4.58in)$)
+{Interactive display for reference, measured speed, error, effort, gains, and loop state};
+
+
+% ------------------------------------------------------------
+% LOWER LEFT — CONTROLLER / IMPLEMENTATION PANEL
+% ------------------------------------------------------------
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-5.22in)$)
+    rectangle
+    ($(current page.north west)+(5.00in,-7.30in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-5.22in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-7.30in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.60}{8.30}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.40in)$)
+{INTERRUPT-BASED PI CONTROL};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=3.95in,
+    text=Ink,
+    font=\fontsize{5.73}{6.58}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.69in)$)
+{
+The final exercise implemented a proportional-plus-integral velocity
+controller directly in assembly. A timer interrupt read the encoder,
+computed the two-point velocity difference, formed the tracking error,
+updated the accumulated error, and calculated separate proportional and
+integral effort terms before commanding the motor.\\[4pt]
+
+The controller supported both open- and closed-loop operation and exposed
+live values for reference velocity, actual velocity, error, effort,
+$K_P$, and $K_I$ through the interface. Motor effort was saturated to the
+permitted command range before being sent to the motor driver.\\[4pt]
+
+This tied together interrupt timing, encoder feedback, signed arithmetic,
+overflow handling, saturation, register manipulation, and real-time
+hardware control.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{5.90}{6.60}\selectfont
+]
+at ($(current page.north west)+(0.72in,-7.12in)$)
+{PI CONTROL \hspace{5pt}\textbullet\hspace{5pt}
+ENCODER FEEDBACK \hspace{5pt}\textbullet\hspace{5pt}
+SATURATION};
+
+
+% ------------------------------------------------------------
+% LOWER CENTER — SIMULINK BLOCK DIAGRAM
+% ------------------------------------------------------------
+
+\fill[SoftGreen!38,rounded corners=5pt]
+    ($(current page.north west)+(5.22in,-5.22in)$)
+    rectangle
+    ($(current page.north west)+(8.18in,-7.30in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(5.22in,-5.22in)$)
+    rectangle
+    ($(current page.north west)+(8.18in,-7.30in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.42}{8.12}\selectfont
+]
+at ($(current page.north west)+(5.48in,-5.40in)$)
+{CONTROL MODEL};
+
+\node[
+    anchor=north,
+    inner sep=1.5pt
+]
+at ($(current page.north west)+(6.70in,-5.72in)$)
+{
+    \includegraphics[
+        width=2.68in,
+        height=1.13in,
+        keepaspectratio
+    ]{\detokenize{Simulink Block Diagram}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=2.62in,
+    text=Muted,
+    font=\sffamily\fontsize{5.78}{6.40}\selectfont
+]
+at ($(current page.north west)+(6.70in,-6.91in)$)
+{PI controller and identified first-order motor model used for comparison with hardware};
+
+
+% ------------------------------------------------------------
+% LOWER RIGHT — MODEL VS. MEASURED RESPONSE
+% ------------------------------------------------------------
+
+\fill[SoftGreen!38,rounded corners=5pt]
+    ($(current page.north west)+(8.40in,-5.22in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.30in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(8.40in,-5.22in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.30in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.42}{8.12}\selectfont
+]
+at ($(current page.north west)+(8.66in,-5.40in)$)
+{MODEL VS. MEASURED RESPONSE};
+
+\node[
+    anchor=north,
+    inner sep=1.5pt,
+    draw=RuleGray,
+    line width=0.48pt,
+    rounded corners=3pt,
+    fill=white
+]
+at ($(current page.north west)+(9.6in,-5.72in)$)
+{
+    \includegraphics[
+        width=2.18in,
+        height=1.13in,
+        keepaspectratio
+    ]{\detokenize{Simulink & System Comparison}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=2.15in,
+    text=Muted,
+    font=\sffamily\fontsize{5.72}{6.35}\selectfont
+]
+at ($(current page.north west)+(9.6in,-6.91in)$)
+{Collected motor-speed response compared directly against the Simulink plant model};
+
+
+% ------------------------------------------------------------
+% RESOURCE BAR
+% ------------------------------------------------------------
+
+\fill[SoftGreen!34,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\draw[RuleGray,line width=0.45pt,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\node[
+    anchor=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.20}{6.85}\selectfont,
+    align=center
+]
+at ($(current page.south)+(0,0.75in)$)
+{
+\href{\MechCReportURL}{\faFilePdf\ REPORT \& SOURCE CODE}
+\hspace{20pt}
+\href{\MechCGainCalibrationURL}{\faPlayCircle\ MOTOR GAIN CALIBRATION}
+};
+
+
+% ------------------------------------------------------------
+% FOOTER
+% ------------------------------------------------------------
+
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ PROJECT 09B};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ASSEMBLY PROGRAMMING, FSMs \& HARDWARE INTERACTION \hspace{6pt} 09C};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{NEXT PROJECT \faArrowRight};
+
+\end{tikzpicture}
+\input{roboticsA}
+\input{roboticsB} % keep inputs at this level to avoid exceeding TeX input nesting limit
+\input{roboticsC} 
+\input{roboticsD} 
+\input{autonomy} 
+\input{roadfollower} 
+\clearpage

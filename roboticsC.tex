@@ -1,0 +1,339 @@
+
+% ============================================================
+% PROJECT 10C — LEAD-THROUGH LEARNING & TRAJECTORY FOLLOWING
+% ME 423 ROBOTICS LABORATORY
+%
+% Intended to be included from the main portfolio:
+%     \input{project_10C_roboticsC}
+%
+% Main portfolio preamble requirements:
+%     tikz, graphicx, hyperref, fontawesome5, amsmath, amssymb
+% and portfolio colors:
+%     DeepGreen, PolyGold, SoftGold, SoftGreen,
+%     RuleGray, Muted, Ink, Panel
+%
+% Upload these images to Overleaf with the exact filenames:
+%     learn follow hearo image.png
+%     XYZ Trajectory A and D.png
+%     3D Trajectory.png
+% ============================================================
+
+\providecommand{\RoboticsCMemoURL}
+{https://drive.google.com/file/d/184WUor2TEIoXNuWrwx3SmxhRx_vTRppH/view?usp=drive_link}
+
+\providecommand{\RoboticsCTaskTwoURL}
+{https://drive.google.com/file/d/1z3a2HibP2Ih_EmBUxWb4r6Oe55C84cH0/view?usp=drive_link}
+
+\providecommand{\RoboticsCTaskOneURL}
+{https://drive.google.com/file/d/1xwT0zhK-K6DDWahd5rAQlFpTmLwevGfw/view?usp=drive_link}
+
+\providecommand{\RoboticsCLeadFollowURL}
+{https://drive.google.com/file/d/1M_9OVw6ABhqNdUcpFuu0Na2tZ9Oe4Bvp/view?usp=drive_link}
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{project10C}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\fill[white] (current page.south west) rectangle (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{02 MECHATRONICS \hspace{5pt}/\hspace{5pt} PROJECT 10C};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{20.9}{21.9}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{LEAD-THROUGH LEARNING \& TRAJECTORY FOLLOWING};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly ME 423 Robotics Laboratory
+\hspace{7pt}\textbullet\hspace{7pt}
+Three-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Winter 2026
+\hspace{7pt}\textbullet\hspace{7pt}
+Quanser QArm};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(9.24in,-1.315in)$);
+
+% HERO LEFT
+\fill[SoftGreen!40,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(4.88in,-5.06in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(4.88in,-5.06in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(0.70in,-1.78in)$)
+{LEAD-THROUGH LEARNING};
+
+\node[
+    anchor=north,
+    inner sep=2.0pt,
+    draw=DeepGreen,
+    line width=0.58pt,
+    rounded corners=4pt,
+    fill=white
+]
+at ($(current page.north west)+(2.65in,-2.05in)$)
+{
+    \includegraphics[
+        width=3.95in,
+        height=2.55in,
+        keepaspectratio
+    ]{\detokenize{learn follow hearo image.png}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.80in,
+    text=Muted,
+    font=\sffamily\fontsize{6.04}{6.70}\selectfont
+]
+at ($(current page.north west)+(2.65in,-4.72in)$)
+{Manual guidance records a reference motion, followed by autonomous replay of the learned end-effector path};
+
+% HERO RIGHT
+\fill[SoftGreen!40,rounded corners=5pt]
+    ($(current page.north west)+(5.10in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.06in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(5.10in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.06in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(5.38in,-1.78in)$)
+{DESIRED VS. ACTUAL 3D PATH};
+
+\node[
+    anchor=north,
+    inner sep=1.8pt,
+    draw=DeepGreen,
+    line width=0.58pt,
+    rounded corners=4pt,
+    fill=white
+]
+at ($(current page.north west)+(8.09in,-2.05in)$)
+{
+    \includegraphics[
+        width=4.90in,
+        height=2.55in,
+        keepaspectratio
+    ]{\detokenize{3D Trajectory.png}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=4.62in,
+    text=Muted,
+    font=\sffamily\fontsize{6.04}{6.70}\selectfont
+]
+at ($(current page.north west)+(8.09in,-4.72in)$)
+{Spatial comparison between the recorded desired trajectory and the path reproduced by the robot};
+
+% LOWER LEFT
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-5.30in)$)
+    rectangle
+    ($(current page.north west)+(5.68in,-7.30in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-5.30in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-7.30in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.60}{8.30}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.49in)$)
+{LEARN, STORE, AND REPLAY MOTION};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.65in,
+    text=Ink,
+    font=\fontsize{5.74}{6.60}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.78in)$)
+{
+This exercise explored robot programming by demonstration. The QArm was
+first guided manually through a desired motion so the resulting end-effector
+trajectory could be recorded. That learned motion was then used as the
+reference for autonomous replay, allowing the robot to reproduce the path
+without manually specifying each intermediate waypoint.\\[4pt]
+
+The resulting motion was evaluated by comparing desired and actual
+end-effector position in the $x$, $y$, and $z$ directions and by plotting
+both trajectories in 3D. The comparison highlights the tracking accuracy
+of the reproduced motion as well as small deviations caused by the physical
+robot and closed-loop response.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{5.88}{6.58}\selectfont
+]
+at ($(current page.north west)+(0.72in,-7.10in)$)
+{LEAD-THROUGH \hspace{5pt}\textbullet\hspace{5pt}
+TRAJECTORY RECORDING \hspace{5pt}\textbullet\hspace{5pt}
+AUTONOMOUS REPLAY};
+
+% LOWER RIGHT
+\fill[SoftGreen!38,rounded corners=5pt]
+    ($(current page.north west)+(5.90in,-5.30in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.30in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(5.90in,-5.30in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.30in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.52}{8.22}\selectfont
+]
+at ($(current page.north west)+(6.18in,-5.49in)$)
+{AXIS-BY-AXIS TRACKING};
+
+\node[
+    anchor=north,
+    inner sep=1.5pt,
+    draw=RuleGray,
+    line width=0.48pt,
+    rounded corners=3pt,
+    fill=white
+]
+at ($(current page.north west)+(8.55in,-5.78in)$)
+{
+    \includegraphics[
+        width=4.35in,
+        height=1.10in,
+        keepaspectratio
+    ]{\detokenize{XYZ Trajectory A and D.png}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=4.10in,
+    text=Muted,
+    font=\sffamily\fontsize{5.76}{6.38}\selectfont
+]
+at ($(current page.north west)+(8.55in,-6.97in)$)
+{Desired and actual end-effector position across the full learned trajectory in $x$, $y$, and $z$};
+
+% RESOURCE BAR
+\fill[SoftGreen!34,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\draw[RuleGray,line width=0.45pt,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\node[
+    anchor=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{5.98}{6.65}\selectfont,
+    align=center
+]
+at ($(current page.south)+(0,0.75in)$)
+{
+\href{\RoboticsCMemoURL}{\faFilePdf\ ROBOTICSC MEMO}
+\hspace{13pt}
+\href{\RoboticsCTaskOneURL}{\faPlayCircle\ TASK 1 — LEARN}
+\hspace{13pt}
+\href{\RoboticsCTaskTwoURL}{\faPlayCircle\ TASK 2 — FOLLOW}
+\hspace{13pt}
+\href{\RoboticsCLeadFollowURL}{\faPlayCircle\ LEAD-THROUGH \& FOLLOW DEMO}
+};
+
+% FOOTER
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ PROJECT 10B};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ROBOTICS METHODS: VISION, KINEMATICS \& TRAJECTORY PLANNING \hspace{6pt} 10C};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{PROJECT 10D \faArrowRight};
+
+\end{tikzpicture}

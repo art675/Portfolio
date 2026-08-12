@@ -1,0 +1,424 @@
+% ============================================================
+% CARBON FIBER I-BEAM — SINGLE-PAGE PORTFOLIO CASE STUDY
+% 01 Composites / Project 03
+%
+% IMPORTANT:
+% 1. This file must NOT contain \documentclass, \begin{document},
+%    or \end{document}.
+% 2. In main.tex, place \input{ibeam_one_page} before \end{document}.
+% 3. This script assumes the main portfolio preamble already defines:
+%       DeepGreen, PolyGold, SoftGold, SoftGreen,
+%       RuleGray, Muted, Ink
+%    and loads tikz, graphicx, hyperref, and fontawesome5.
+% 4. Upload these image files to Overleaf with the same names:
+%       front view assembly graphic.png
+%       Distributed weight with bolts.jpg
+%       Stress Analysis on Generic CAD model.png
+%       Beam Fiulure Delamination and cracking.jpeg
+%       Three Point Bend Test.JPG
+% ============================================================
+
+\providecommand{\IBeamCompetitionGuidelines}
+{https://drive.google.com/file/d/16S6MPVWWzPNKjXWVGKEySAi9i1f1BZYn/view?usp=sharing}
+
+\providecommand{\IBeamBendTestVideo}
+{https://drive.google.com/file/d/1LK_-pyK_y-a_4gDTiasz4uLUi95nAfrO/view?usp=drive_link}
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{ibeam}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% ============================================================
+% BACKGROUND AND PAGE BARS
+% ============================================================
+
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% ============================================================
+% HEADER
+% ============================================================
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{01 COMPOSITES \hspace{5pt}/\hspace{5pt} PROJECT 03};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{22.3}{23.3}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{CARBON FIBER I-BEAM DESIGN \& TESTING};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.25}{9.0}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly Composites Laboratory \hspace{7pt}\textbullet\hspace{7pt}
+Individual Project \hspace{7pt}\textbullet\hspace{7pt}
+Winter 2026 \hspace{7pt}\textbullet\hspace{7pt}
+San Luis Obispo, California};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(6.10in,-1.315in)$);
+
+
+% ============================================================
+% TOP LEFT — ASSEMBLY ARCHITECTURE
+% ============================================================
+
+\node[
+    anchor=north west,
+    inner sep=2.6pt,
+    draw=DeepGreen,
+    line width=0.68pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(0.42in,-1.58in)$)
+{
+    \includegraphics[
+        width=3.55in,
+        height=2.45in,
+        keepaspectratio
+    ]{front view assembly graphic.png}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.42in,
+    text=Muted,
+    font=\sffamily\fontsize{6.35}{7.05}\selectfont
+]
+at ($(current page.north west)+(2.195in,-4.12in)$)
+{Four-piece laminate architecture with top and bottom flange laminates, paired C-channels, and longitudinal radius fillers};
+
+% ============================================================
+% TOP CENTER — PROJECT OVERVIEW + C-CHANNEL LAYUP
+% ============================================================
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(4.18in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(7.42in,-4.20in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(4.18in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(4.28in,-4.20in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(4.48in,-1.76in)$)
+{PROJECT OVERVIEW};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.64in,
+    text=Ink,
+    font=\fontsize{6.40}{7.45}\selectfont
+]
+at ($(current page.north west)+(4.48in,-2.04in)$)
+{
+A 24-inch carbon-fiber I-beam was manufactured from two molded
+C-channel laminates, separate top and bottom flange laminates,
+and longitudinal unidirectional radius fillers. The completed
+684 g specimen sustained 28.2 kN (6,340 lbf) in three-point bending.\\[3pt]
+\textbf{C-channel layup.}
+Each channel used the same 12-ply sequence:
+\mbox{$[+45/-45/0/+45/-45/0/0/-45/+45/0/-45/+45]$}.
+The layup was completed twice, once for each channel.\\[3pt]
+\textbf{Flange layups.}
+Top flange: \mbox{$[90/0_6/90/0_6]$}. Bottom flange:
+\mbox{$[90/0_6]$}, where $0_6$ denotes six consecutive 0-degree plies.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{6.45}{7.1}\selectfont
+]
+at ($(current page.north west)+(4.48in,-4.03in)$)
+{MASS: 684 g \hspace{8pt}\textbullet\hspace{8pt} PEAK LOAD: 28.2 kN \hspace{8pt}\textbullet\hspace{8pt} LENGTH: 24 in};
+
+% ============================================================
+% TOP RIGHT — C-CHANNEL MANUFACTURING
+% ============================================================
+
+\node[
+    anchor=north west,
+    inner sep=2.6pt,
+    draw=DeepGreen,
+    line width=0.68pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(7.62in,-1.58in)$)
+{
+    \includegraphics[
+        width=3.55in,
+        height=2.45in,
+        keepaspectratio
+    ]{Distributed weight with bolts.jpg}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.42in,
+    text=Muted,
+    font=\sffamily\fontsize{6.35}{7.05}\selectfont
+]
+at ($(current page.north west)+(9.395in,-4.12in)$)
+{Distributed bolt pressure maintained alignment and consolidated the full beam assembly during cure};
+
+% ============================================================
+% CENTER ROW — MODEL, TEST, AND OBSERVED FAILURE
+% ============================================================
+
+\node[
+    anchor=north west,
+    inner sep=2.4pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(0.42in,-4.43in)$)
+{
+    \includegraphics[
+        width=3.33in,
+        height=1.62in,
+        keepaspectratio
+    ]{Stress Analysis on Generic CAD model.png}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.20in,
+    text=Muted,
+    font=\sffamily\fontsize{6.20}{6.85}\selectfont
+]
+at ($(current page.north west)+(2.085in,-6.14in)$)
+{Generic FEA predicted peak compressive stress beneath the center loading shoe};
+
+\node[
+    anchor=north west,
+    inner sep=2.4pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(3.92in,-4.43in)$)
+{
+    \includegraphics[
+        angle=180,
+        origin=c,
+        width=3.18in,
+        height=1.62in,
+        keepaspectratio
+    ]{Three Point Bend Test.JPG}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.05in,
+    text=Muted,
+    font=\sffamily\fontsize{6.20}{6.85}\selectfont
+]
+at ($(current page.north west)+(5.510in,-6.14in)$)
+{Experimental three-point bend test on the completed I-beam specimen};
+
+\node[
+    anchor=north west,
+    inner sep=2.4pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(7.28in,-4.43in)$)
+{
+    \includegraphics[
+        width=3.65in,
+        height=1.62in,
+        keepaspectratio
+    ]{Beam Fiulure Delamination and cracking.jpeg}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.50in,
+    text=Muted,
+    font=\sffamily\fontsize{6.20}{6.85}\selectfont
+]
+at ($(current page.north west)+(9.105in,-6.14in)$)
+{Observed edge failure with delamination and longitudinal crack propagation};
+
+% ============================================================
+% BOTTOM LEFT — MANUFACTURING PROCESS
+% ============================================================
+
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.43in)$)
+    rectangle
+    ($(current page.north west)+(5.30in,-7.18in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.43in)$)
+    rectangle
+    ($(current page.north west)+(5.30in,-7.18in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.65}{8.35}\selectfont
+]
+at ($(current page.north west)+(0.66in,-6.57in)$)
+{MANUFACTURING APPROACH};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.38in,
+    text=Ink,
+    font=\fontsize{6.20}{7.15}\selectfont
+]
+at ($(current page.north west)+(0.66in,-6.82in)$)
+{
+The separately molded channels were aligned with longitudinal carbon-fiber
+``noodles'' filling the radius-induced flange voids. Top and bottom flanges
+were then installed, and the full assembly was consolidated in a custom
+steel fixture using distributed bolt pressure along the beam length.
+};
+
+% ============================================================
+% BOTTOM RIGHT — FAILURE ANALYSIS AND NEXT ITERATION
+% ============================================================
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(5.52in,-6.43in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.18in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(5.52in,-6.43in)$)
+    rectangle
+    ($(current page.north west)+(5.62in,-7.18in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.65}{8.35}\selectfont
+]
+at ($(current page.north west)+(5.82in,-6.57in)$)
+{FAILURE ANALYSIS AND NEXT ITERATION};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.72in,
+    text=Ink,
+    font=\fontsize{6.14}{7.08}\selectfont
+]
+at ($(current page.north west)+(5.82in,-6.82in)$)
+{
+The model suggested a center-span compression failure, but the physical beam
+failed near its edge. This mismatch indicates that local consolidation defects
+likely enabled premature delamination. A future build should use staged vacuum
+debulking after each ply group rather than relying only on manual rolling before
+final fixture consolidation.
+};
+
+% ============================================================
+% RESOURCE LINKS
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.75}{7.35}\selectfont
+]
+at ($(current page.north)+(0,-7.43in)$)
+{
+\href{\IBeamCompetitionGuidelines}{\faFilePdf\ COMPETITION GUIDELINES}
+\hspace{16pt}
+\href{\IBeamBendTestVideo}{\faPlayCircle\ THREE-POINT BEND TEST VIDEO}
+};
+
+% ============================================================
+% FOOTER
+% ============================================================
+
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\hyperlink{pickleball}{\faArrowLeft\ PICKLEBALL PADDLE}};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{CARBON FIBER I-BEAM \hspace{6pt} 1 / 1};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{NEXT PROJECT \faArrowRight};
+
+\end{tikzpicture}
+\input{fuselage}
+\clearpage
+

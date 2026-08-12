@@ -1,0 +1,378 @@
+
+% ============================================================
+% PROJECT 10B — END-EFFECTOR TRAJECTORY / RUBIK'S CUBE PICKUP
+% ME 423 ROBOTICS LABORATORY
+%
+% Intended to be included from the main portfolio:
+%     \input{project_10B_roboticsB}
+%
+% Main portfolio preamble requirements:
+%     tikz, graphicx, hyperref, fontawesome5, amsmath, amssymb
+% and portfolio colors:
+%     DeepGreen, PolyGold, SoftGold, SoftGreen,
+%     RuleGray, Muted, Ink, Panel
+%
+% Upload these images to Overleaf with the exact filenames:
+%     Coordinate System.png
+%     Hero Image.JPG
+% ============================================================
+
+% ------------------------------------------------------------
+% PROJECT 10B RESOURCE LINKS
+% ------------------------------------------------------------
+
+\providecommand{\RoboticsBTrajectoryVideoURL}
+{https://drive.google.com/file/d/1AHrTi55OUPx9Bee0Wu4HhMTRMOvSHS1L/view?usp=drive_link}
+
+\providecommand{\RoboticsBMemoURL}
+{https://drive.google.com/file/d/1afosPSZXxYk_hSKMPgRqBIFYRbWIb3TZ/view?usp=drive_link}
+
+
+% ============================================================
+% PAGE — PROJECT 10B
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{project10B}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% ------------------------------------------------------------
+% PAGE FOUNDATION
+% ------------------------------------------------------------
+
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+
+% ------------------------------------------------------------
+% HEADER
+% ------------------------------------------------------------
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{02 MECHATRONICS \hspace{5pt}/\hspace{5pt} PROJECT 10B};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{21.2}{22.2}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{END-EFFECTOR TRAJECTORY \& RUBIK'S CUBE PICKUP};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly ME 423 Robotics Laboratory
+\hspace{7pt}\textbullet\hspace{7pt}
+Three-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Winter 2026
+\hspace{7pt}\textbullet\hspace{7pt}
+Quanser QArm};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(9.30in,-1.315in)$);
+
+
+% ------------------------------------------------------------
+% HERO LEFT — PHYSICAL PICKUP
+% ------------------------------------------------------------
+
+\fill[SoftGreen!40,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(5.37in,-5.02in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(5.37in,-5.02in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(0.70in,-1.78in)$)
+{PHYSICAL PICKUP EXECUTION};
+
+\node[
+    anchor=north,
+    inner sep=2.0pt,
+    draw=DeepGreen,
+    line width=0.58pt,
+    rounded corners=4pt,
+    fill=white
+]
+at ($(current page.north west)+(2.90in,-2.05in)$)
+{
+    \includegraphics[
+        width=4.45in,
+        height=2.50in,
+        keepaspectratio
+    ]{\detokenize{Hero Image.JPG}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=4.25in,
+    text=Muted,
+    font=\sffamily\fontsize{6.04}{6.70}\selectfont
+]
+at ($(current page.north west)+(2.90in,-4.67in)$)
+{QArm end effector positioned at the Rubik's Cube during the pickup sequence};
+
+
+% ------------------------------------------------------------
+% HERO RIGHT — COORDINATE SYSTEM
+% ------------------------------------------------------------
+
+\fill[SoftGreen!40,rounded corners=5pt]
+    ($(current page.north west)+(5.59in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.02in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(5.59in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.02in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(5.87in,-1.78in)$)
+{TASK-SPACE COORDINATE DEFINITION};
+
+\node[
+    anchor=north,
+    inner sep=1.8pt,
+    draw=DeepGreen,
+    line width=0.58pt,
+    rounded corners=4pt,
+    fill=white
+]
+at ($(current page.north west)+(8.32in,-2.05in)$)
+{
+    \includegraphics[
+        width=4.35in,
+        height=2.50in,
+        keepaspectratio
+    ]{\detokenize{Coordinate System.png}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=4.18in,
+    text=Muted,
+    font=\sffamily\fontsize{6.04}{6.70}\selectfont
+]
+at ($(current page.north west)+(8.32in,-4.67in)$)
+{Reference axes and pickup points used to define the commanded end-effector motion};
+
+
+% ------------------------------------------------------------
+% LOWER LEFT — LAB OBJECTIVE / APPROACH
+% ------------------------------------------------------------
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-5.27in)$)
+    rectangle
+    ($(current page.north west)+(6.15in,-7.28in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-5.27in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-7.28in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.60}{8.30}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.46in)$)
+{TASK-SPACE MOTION PLANNING};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=5.15in,
+    text=Ink,
+    font=\fontsize{5.75}{6.60}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.75in)$)
+{
+This exercise focused on commanding the QArm end effector through a defined
+task-space motion rather than treating each joint independently. The pickup
+geometry was first described with a laboratory coordinate system so the
+object location and required approach direction could be expressed relative
+to the robot.\\[4pt]
+
+A trajectory was then developed to move the end effector from its initial
+pose toward the Rubik's Cube, complete the pickup, and preserve a controlled
+path between intermediate positions. The physical demonstration provided a
+direct check that the commanded end-effector motion matched the intended
+task-space behavior.\\[4pt]
+
+The exercise built on the forward-kinematics work from 10A by shifting the
+focus from predicting pose to deliberately planning and executing useful
+end-effector motion.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{5.88}{6.58}\selectfont
+]
+at ($(current page.north west)+(0.72in,-7.10in)$)
+{TASK SPACE \hspace{5pt}\textbullet\hspace{5pt}
+TRAJECTORY PLANNING \hspace{5pt}\textbullet\hspace{5pt}
+PICKUP EXECUTION};
+
+
+% ------------------------------------------------------------
+% LOWER RIGHT — PORTFOLIO TAKEAWAY
+% ------------------------------------------------------------
+
+\fill[SoftGreen!38,rounded corners=5pt]
+    ($(current page.north west)+(6.37in,-5.27in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.28in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(6.37in,-5.27in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.28in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.52}{8.22}\selectfont
+]
+at ($(current page.north west)+(6.65in,-5.46in)$)
+{ROBOTICS TAKEAWAY};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=3.95in,
+    text=Ink,
+    font=\fontsize{5.72}{6.56}\selectfont
+]
+at ($(current page.north west)+(6.65in,-5.77in)$)
+{
+The key shift in this lab was from joint-level reasoning to
+end-effector-level reasoning. Defining the motion in workspace coordinates
+made the manipulation objective easier to interpret physically and created
+a direct connection between geometric planning and real robot behavior.\\[5pt]
+
+The resulting pickup demonstration showed the complete chain from
+coordinate definition to commanded trajectory to physical manipulation.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{5.88}{6.58}\selectfont
+]
+at ($(current page.north west)+(6.65in,-7.10in)$)
+{COORDINATES \hspace{5pt}\textbullet\hspace{5pt}
+END EFFECTOR \hspace{5pt}\textbullet\hspace{5pt}
+MANIPULATION};
+
+
+% ------------------------------------------------------------
+% RESOURCE BAR
+% ------------------------------------------------------------
+
+\fill[SoftGreen!34,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\draw[RuleGray,line width=0.45pt,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\node[
+    anchor=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.12}{6.78}\selectfont,
+    align=center
+]
+at ($(current page.south)+(0,0.75in)$)
+{
+\href{\RoboticsBMemoURL}{\faFilePdf\ ROBOTICSB MEMO}
+\hspace{20pt}
+\href{\RoboticsBTrajectoryVideoURL}{\faPlayCircle\ RUBIK'S CUBE PICKUP — END-EFFECTOR TRAJECTORY}
+};
+
+
+% ------------------------------------------------------------
+% FOOTER
+% ------------------------------------------------------------
+
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ PROJECT 10A};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ROBOTICS METHODS: VISION, KINEMATICS \& TRAJECTORY PLANNING \hspace{6pt} 10B};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{PROJECT 10C \faArrowRight};
+
+\end{tikzpicture}

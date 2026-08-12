@@ -1,0 +1,378 @@
+
+% ============================================================
+% PROJECT 10D — VISUAL SERVOING & ROBOT TRACKING
+% ME 423 ROBOTICS LABORATORY
+%
+% Intended to be included from the main portfolio:
+%     \input{project_10D_roboticsD}
+%
+% Main portfolio preamble requirements:
+%     tikz, graphicx, hyperref, fontawesome5, amsmath, amssymb
+% and portfolio colors:
+%     DeepGreen, PolyGold, SoftGold, SoftGreen,
+%     RuleGray, Muted, Ink, Panel
+%
+% Upload these images to Overleaf with the exact filenames:
+%     Image Main Hero.jpg
+%     ABC_CV CENTROID.png
+%     End Effector 3D Traj.png
+% ============================================================
+
+% ------------------------------------------------------------
+% PROJECT 10D RESOURCE LINKS
+% ------------------------------------------------------------
+
+\providecommand{\RoboticsDTrackingDemoURL}
+{https://drive.google.com/file/d/1XVJdeYP3TwMgiTpZvHS740kUR5SZ8AV2/view?usp=drive_link}
+
+\providecommand{\RoboticsDMemoURL}
+{https://drive.google.com/file/d/1RYsMheg0mxGet_W_UyLYcgJE1PjfGwSs/view?usp=drive_link}
+
+
+% ============================================================
+% PAGE — PROJECT 10D
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{project10D}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% ------------------------------------------------------------
+% PAGE FOUNDATION
+% ------------------------------------------------------------
+
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+
+% ------------------------------------------------------------
+% HEADER
+% ------------------------------------------------------------
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{02 MECHATRONICS \hspace{5pt}/\hspace{5pt} PROJECT 10D};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{21.2}{22.2}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{VISUAL SERVOING \& CAMERA-GUIDED ROBOT TRACKING};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly ME 423 Robotics Laboratory
+\hspace{7pt}\textbullet\hspace{7pt}
+Three-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Winter 2026
+\hspace{7pt}\textbullet\hspace{7pt}
+Quanser QArm};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(9.32in,-1.315in)$);
+
+
+% ------------------------------------------------------------
+% HERO LEFT — PHYSICAL VISUAL SERVOING DEMO
+% ------------------------------------------------------------
+
+\fill[SoftGreen!40,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(5.20in,-5.02in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(5.20in,-5.02in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(0.70in,-1.78in)$)
+{CAMERA-GUIDED TRACKING};
+
+\node[
+    anchor=north,
+    inner sep=2.0pt,
+    draw=DeepGreen,
+    line width=0.58pt,
+    rounded corners=4pt,
+    fill=white
+]
+at ($(current page.north west)+(2.81in,-2.05in)$)
+{
+    \includegraphics[
+        width=4.30in,
+        height=2.48in,
+        keepaspectratio
+    ]{\detokenize{Image Main Hero.jpg}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=4.14in,
+    text=Muted,
+    font=\sffamily\fontsize{6.04}{6.70}\selectfont
+]
+at ($(current page.north west)+(2.81in,-4.65in)$)
+{QArm tracking a colored target using camera feedback to continuously update end-effector motion};
+
+
+% ------------------------------------------------------------
+% HERO RIGHT — COMPUTER VISION CENTROID DETECTION
+% ------------------------------------------------------------
+
+\fill[SoftGreen!40,rounded corners=5pt]
+    ($(current page.north west)+(5.42in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.02in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(5.42in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.02in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(5.70in,-1.78in)$)
+{END-EFFECTOR TRACKING PATH};
+
+\node[
+    anchor=north,
+    inner sep=1.8pt,
+    draw=DeepGreen,
+    line width=0.58pt,
+    rounded corners=4pt,
+    fill=white
+]
+at ($(current page.north west)+(8.20in,-2.05in)$)
+{
+    \includegraphics[
+        width=4.55in,
+        height=2.48in,
+        keepaspectratio
+    ]{\detokenize{End Effector 3D Traj.png}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=4.35in,
+    text=Muted,
+    font=\sffamily\fontsize{6.04}{6.70}\selectfont
+]
+at ($(current page.north west)+(8.20in,-4.65in)$)
+{Measured 3D end-effector trajectory produced while the robot followed the moving visual target};
+
+
+% ------------------------------------------------------------
+% LOWER LEFT — PROJECT DESCRIPTION
+% ------------------------------------------------------------
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-5.27in)$)
+    rectangle
+    ($(current page.north west)+(6.03in,-7.30in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-5.27in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-7.30in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.60}{8.30}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.46in)$)
+{CLOSING THE LOOP WITH VISION};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=5.00in,
+    text=Ink,
+    font=\fontsize{5.74}{6.60}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.75in)$)
+{
+This final robotics exercise introduced visual servoing by using camera
+measurements directly inside the robot feedback loop. A colored target was
+identified in the image, its centroid was measured, and the QArm adjusted
+its end-effector motion as the target moved through the workspace.\\[4pt]
+
+Rather than executing only a precomputed path, the commanded motion was
+updated from live visual information. This connected computer vision,
+coordinate interpretation, feedback control, and manipulator motion into
+one real-time behavior. The recorded end-effector trajectory provides a
+geometric view of the resulting tracking response as the arm continually
+repositions to follow the observed target.\\[4pt]
+
+The exercise completed the robotics sequence by progressing from forward
+kinematics, to trajectory execution, to learned motion, and finally to
+sensor-driven closed-loop manipulation.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{5.88}{6.58}\selectfont
+]
+at ($(current page.north west)+(0.72in,-7.11in)$)
+{COMPUTER VISION \hspace{5pt}\textbullet\hspace{5pt}
+CENTROID TRACKING \hspace{5pt}\textbullet\hspace{5pt}
+VISUAL SERVOING};
+
+
+% ------------------------------------------------------------
+% LOWER RIGHT — END-EFFECTOR TRAJECTORY
+% ------------------------------------------------------------
+
+\fill[SoftGreen!38,rounded corners=5pt]
+    ($(current page.north west)+(6.25in,-5.27in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.30in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(6.25in,-5.27in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.30in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.52}{8.22}\selectfont
+]
+at ($(current page.north west)+(6.53in,-5.46in)$)
+{VISION-BASED TARGET CENTROID};
+
+\node[
+    anchor=north,
+    inner sep=1.5pt,
+    draw=RuleGray,
+    line width=0.48pt,
+    rounded corners=3pt,
+    fill=white
+]
+at ($(current page.north west)+(8.45in,-5.77in)$)
+{
+    \includegraphics[
+        width=3.78in,
+        height=1.16in,
+        keepaspectratio
+    ]{\detokenize{ABC_CV CENTROID.png}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.62in,
+    text=Muted,
+    font=\sffamily\fontsize{5.76}{6.38}\selectfont
+]
+at ($(current page.north west)+(8.63in,-7.01in)$)
+{Color segmentation isolates the target and extracts its image-plane centroid as the visual feedback signal};
+
+
+% ------------------------------------------------------------
+% RESOURCE BAR
+% ------------------------------------------------------------
+
+\fill[SoftGreen!34,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\draw[RuleGray,line width=0.45pt,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\node[
+    anchor=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.10}{6.76}\selectfont,
+    align=center
+]
+at ($(current page.south)+(0,0.75in)$)
+{
+\href{\RoboticsDMemoURL}{\faFilePdf\ ROBOTICSD MEMO}
+\hspace{22pt}
+\href{\RoboticsDTrackingDemoURL}{\faPlayCircle\ VISUAL SERVOING ROBOT TRACKING DEMO}
+};
+
+
+% ------------------------------------------------------------
+% FOOTER
+% ------------------------------------------------------------
+
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ PROJECT 10C};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ROBOTICS METHODS: VISION, KINEMATICS \& TRAJECTORY PLANNING \hspace{6pt} 10D};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{AUTONOMY \faArrowRight};
+
+\end{tikzpicture}

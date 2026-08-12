@@ -1,0 +1,193 @@
+%==============================================================
+% COMPOSITES DIVIDER PAGE
+%==============================================================
+
+\clearpage
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture,overlay]
+
+%--------------------------------------------------------------
+% Background
+%--------------------------------------------------------------
+
+\fill[white]
+(current page.south west)
+rectangle
+(current page.north east);
+
+% Top bar
+
+\fill[DeepGreen]
+(current page.north west)
+rectangle
+($(current page.north east)+(0,-0.10in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0,-0.10in)$)
+rectangle
+($(current page.north east)+(0,-0.14in)$);
+
+% Bottom bar
+
+\fill[DeepGreen]
+(current page.south west)
+rectangle
+($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+($(current page.south west)+(0,0.36in)$)
+rectangle
+($(current page.south east)+(0,0.40in)$);
+
+%--------------------------------------------------------------
+% Large section number
+%--------------------------------------------------------------
+
+\node[
+anchor=north west,
+text=SoftGreen,
+font=\bfseries\fontsize{96}{96}\selectfont
+]
+at ($(current page.north west)+(0.70in,-0.90in)$)
+{01};
+
+%--------------------------------------------------------------
+% Section Title
+%--------------------------------------------------------------
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\bfseries\fontsize{30}{32}\selectfont
+]
+at ($(current page.north west)+(2.15in,-1.05in)$)
+{COMPOSITES};
+
+%--------------------------------------------------------------
+% Subtitle
+%--------------------------------------------------------------
+
+\node[
+anchor=north west,
+text=PolyGold,
+font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+]
+at ($(current page.north west)+(2.18in,-1.62in)$)
+{Design for Manufacturability};
+
+% Gold rule
+
+\fill[PolyGold]
+($(current page.north west)+(2.18in,-1.83in)$)
+rectangle
+($(current page.north west)+(4.2in,-1.79in)$);
+
+%--------------------------------------------------------------
+% Description
+%--------------------------------------------------------------
+
+\node[
+anchor=north west,
+align=left,
+text width=6.5in,
+font=\fontsize{12}{15}\selectfont,
+text=Ink
+]
+at ($(current page.north west)+(2.18in,-2.05in)$)
+{
+This section highlights advanced composite engineering projects
+covering carbon fiber manufacturing, structural analysis,
+design for manufacturability, experimental validation,
+and prototype development.
+};
+
+%--------------------------------------------------------------
+% Project Roadmap
+%--------------------------------------------------------------
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{11}{12}\selectfont
+]
+at ($(current page.north west)+(2.18in,-3.25in)$)
+{PROJECTS};
+
+\node[
+anchor=north west,
+align=left,
+text width=6.5in,
+font=\fontsize{13}{20}\selectfont,
+text=Ink
+]
+at ($(current page.north west)+(2.18in,-3.60in)$)
+{
+
+\textcolor{PolyGold}{\textbf{01}}
+\hspace{0.15in}
+Toro Carbon Fiber Safety Pool Cover
+
+\vspace{0.18in}
+
+\textcolor{PolyGold}{\textbf{02}}
+\hspace{0.15in}
+Carbon Fiber Honeycomb Pickleball Paddle
+
+\vspace{0.18in}
+
+\textcolor{PolyGold}{\textbf{03}}
+\hspace{0.15in}
+Carbon Fiber I-Beam Design \& Testing
+
+\vspace{0.18in}
+
+\textcolor{PolyGold}{\textbf{04}}
+\hspace{0.15in}
+Fiberglass Fuselage FEA \& Three-Point Bend Validation
+
+\vspace{0.18in}
+
+\textcolor{PolyGold}{\textbf{05}}
+\hspace{0.15in}
+Carbon Fiber Coupon Manufacturing \& Tensile Testing
+
+};
+
+%--------------------------------------------------------------
+% Navigation
+%--------------------------------------------------------------
+
+\node[
+anchor=south west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+]
+at ($(current page.south west)+(0.70in,0.65in)$)
+{\hyperlink{overview}{\faArrowLeft\ Portfolio Overview}};
+
+\node[
+anchor=south east,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+]
+at ($(current page.south east)+(-0.70in,0.65in)$)
+{\hyperlink{toro}{Toro Carbon Fiber Safety Pool Cover \faArrowRight}};
+
+%--------------------------------------------------------------
+% Footer
+%--------------------------------------------------------------
+
+\node[
+anchor=east,
+text=white,
+font=\sffamily\fontsize{8}{9}\selectfont
+]
+at ($(current page.south east)+(-0.45in,0.18in)$)
+{01 COMPOSITES};
+
+\end{tikzpicture}
+
+
+
+\input{toro}

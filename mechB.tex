@@ -1,0 +1,386 @@
+
+% ============================================================
+% PROJECT 09B — ASSEMBLY FUNCTION GENERATOR / INTERRUPTS / FSMs
+% ME 305 — DISCRETE WAVEFORM GENERATION
+%
+% Intended to be included from the main portfolio:
+%     \input{project_09B_mechB}
+%
+% Main portfolio preamble requirements:
+%     tikz, graphicx, hyperref, fontawesome5, amsmath, amssymb
+% and portfolio colors:
+%     DeepGreen, PolyGold, SoftGold, SoftGreen,
+%     RuleGray, Muted, Ink, Panel
+%
+% Upload these images to Overleaf with the exact base filenames:
+%     MechB Mastermind
+%     Discrete Sawtooth Output
+%     Screen Display UI
+%
+% NOTE:
+% If your UI image file has another exact name, replace
+%     {\detokenize{Screen Display UI}}
+% with that exact Overleaf filename.
+% ============================================================
+
+% ------------------------------------------------------------
+% PROJECT 09B RESOURCE LINKS
+% ------------------------------------------------------------
+
+\providecommand{\MechBReportURL}
+{https://drive.google.com/file/d/1C8j9IXm-CsvMwbTjfCEarlFQ3zZKNQnJ/view?usp=drive_link}
+
+\providecommand{\MechBSineDemoURL}
+{https://drive.google.com/file/d/1YRibCKGDhlLPiYu1Y9qPAVtJq4WjL0PU/view?usp=drive_link}
+
+
+% ============================================================
+% PAGE — PROJECT 09B
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{project09B}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% ------------------------------------------------------------
+% PAGE FOUNDATION
+% ------------------------------------------------------------
+
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+
+% ------------------------------------------------------------
+% HEADER
+% ------------------------------------------------------------
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{02 MECHATRONICS \hspace{5pt}/\hspace{5pt} PROJECT 09B};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{21.3}{22.3}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{INTERRUPT-DRIVEN DISCRETE WAVEFORM GENERATOR};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly ME 305 Mechatronics
+\hspace{7pt}\textbullet\hspace{7pt}
+Two-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Spring 2025
+\hspace{7pt}\textbullet\hspace{7pt}
+Assembly Language};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(9.18in,-1.315in)$);
+
+
+% ------------------------------------------------------------
+% HERO LEFT — MASTERMIND FSM
+% ------------------------------------------------------------
+
+\fill[SoftGreen!38,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(7.05in,-5.10in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(7.05in,-5.10in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(0.70in,-1.78in)$)
+{USER-INPUT COORDINATION FSM};
+
+\node[
+    anchor=north,
+    inner sep=1.4pt
+]
+at ($(current page.north west)+(3.73in,-2.05in)$)
+{
+    \includegraphics[
+        width=6.08in,
+        height=2.68in,
+        keepaspectratio
+    ]{\detokenize{MechB Mastermind}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=5.92in,
+    text=Muted,
+    font=\sffamily\fontsize{6.02}{6.68}\selectfont
+]
+at ($(current page.north west)+(3.73in,-4.79in)$)
+{Mastermind FSM separates valid digit, backspace, and enter events before returning execution to the shared hub state};
+
+
+% ------------------------------------------------------------
+% HERO RIGHT — USER INTERFACE
+% ------------------------------------------------------------
+
+\fill[SoftGreen!44,rounded corners=5pt]
+    ($(current page.north west)+(7.27in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.10in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(7.27in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.10in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(7.55in,-1.78in)$)
+{LCD WAVEFORM INTERFACE};
+
+\node[
+    anchor=north,
+    inner sep=2.0pt,
+    draw=DeepGreen,
+    line width=0.58pt,
+    rounded corners=4pt,
+    fill=white
+]
+at ($(current page.north west)+(9.02in,-2.06in)$)
+{
+    \includegraphics[
+        width=3.10in,
+        height=2.30in,
+        keepaspectratio
+    ]{\detokenize{Screen Display UI}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.00in,
+    text=Muted,
+    font=\sffamily\fontsize{6.05}{6.72}\selectfont
+]
+at ($(current page.north west)+(9.02in,-4.53in)$)
+{LCD interface for selecting sawtooth, seven-segment sine, or square output and entering NINT};
+
+
+% ------------------------------------------------------------
+% LOWER LEFT — ARCHITECTURE PANEL
+% ------------------------------------------------------------
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-5.34in)$)
+    rectangle
+    ($(current page.north west)+(6.10in,-7.28in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-5.34in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-7.28in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.65}{8.35}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.53in)$)
+{INTERRUPT-DRIVEN FUNCTION GENERATOR};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=5.03in,
+    text=Ink,
+    font=\fontsize{5.78}{6.66}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.82in)$)
+{
+This exercise extended the cooperative-task architecture into real-time
+waveform generation through the DAC. A timer interrupt occurred every
+0.1 ms, while the user selected a sawtooth, seven-segment sine, or square
+wave and entered an \texttt{NINT} value from 1 to 255 to control the update
+interval.\\[4pt]
+
+Separate FSMs handled keypad input, LCD messaging, validation, and waveform
+execution. Wave data were stored as segment definitions containing the
+segment count, starting value, segment length, and increment. The function
+generator advanced through these values only when the interrupt-driven
+update flag was available, keeping the UI and signal-generation logic
+modular.\\[4pt]
+
+The exercise reinforced interrupt timing, data pointers, state variables,
+buffers, flag-based communication, DAC output, and reusable assembly
+subroutines. Software development was shared equally with one partner.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{5.95}{6.65}\selectfont
+]
+at ($(current page.north west)+(0.72in,-7.10in)$)
+{INTERRUPTS \hspace{5pt}\textbullet\hspace{5pt}
+DAC \hspace{5pt}\textbullet\hspace{5pt}
+POINTERS \hspace{5pt}\textbullet\hspace{5pt}
+FSMs \hspace{5pt}\textbullet\hspace{5pt}
+VALIDATION};
+
+
+% ------------------------------------------------------------
+% LOWER RIGHT — SAWTOOTH OUTPUT
+% ------------------------------------------------------------
+
+\fill[SoftGreen!42,rounded corners=5pt]
+    ($(current page.north west)+(6.32in,-5.34in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.28in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(6.32in,-5.34in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.28in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.55}{8.25}\selectfont
+]
+at ($(current page.north west)+(6.58in,-5.53in)$)
+{DISCRETE SAWTOOTH OUTPUT};
+
+\node[
+    anchor=north,
+    inner sep=2.0pt,
+    draw=RuleGray,
+    line width=0.50pt,
+    rounded corners=3pt,
+    fill=white
+]
+at ($(current page.north west)+(8.68in,-5.82in)$)
+{
+    \includegraphics[
+        angle=180,
+        origin=c,
+        width=3.88in,
+        height=1.15in,
+        keepaspectratio
+    ]{\detokenize{Discrete Sawtooth Output}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.82in,
+    text=Muted,
+    font=\sffamily\fontsize{5.98}{6.64}\selectfont
+]
+at ($(current page.north west)+(8.68in,-7.04in)$)
+{DAC output captured on the oscilloscope, showing the intentionally discrete staircase approximation};
+
+
+% ------------------------------------------------------------
+% RESOURCE BAR
+% ------------------------------------------------------------
+
+\fill[SoftGreen!34,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\draw[RuleGray,line width=0.45pt,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\node[
+    anchor=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.20}{6.85}\selectfont,
+    align=center
+]
+at ($(current page.south)+(0,0.75in)$)
+{
+\href{\MechBReportURL}{\faFilePdf\ REPORT \& SOURCE CODE}
+\hspace{19pt}
+\href{\MechBSineDemoURL}{\faPlayCircle\ DISCRETE SINE WAVE DEMO}
+};
+
+
+% ------------------------------------------------------------
+% FOOTER
+% ------------------------------------------------------------
+
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ PROJECT 09A};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ASSEMBLY PROGRAMMING, FSMs \& HARDWARE INTERACTION \hspace{6pt} 09B};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{PROJECT 09C \faArrowRight};
+
+\end{tikzpicture}
+\input{mechC}
+\clearpage

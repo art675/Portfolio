@@ -1,0 +1,657 @@
+\documentclass[10pt]{article}
+
+% ============================================================
+% ARTURO RAMIREZ — ENGINEERING PORTFOLIO OVERVIEW
+% One-page landscape layout
+% Compatible with pdfLaTeX
+%
+% REQUIRED IMAGE:
+% Upload your profile picture as: pfp.jpg
+% ============================================================
+
+\usepackage[
+    paperwidth=11in,
+    paperheight=8.5in,
+    margin=0in
+]{geometry}
+
+% Georgia-like serif and clean sans-serif
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{tgschola}
+\usepackage{tgheros}
+
+\usepackage{graphicx}
+\setkeys{Gin}{draft=false}
+
+\usepackage{tikz}
+\usetikzlibrary{
+    calc,
+    positioning
+}
+
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{fontawesome5}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+% ============================================================
+% COLORS
+% ============================================================
+
+\definecolor{PolyGreen}{HTML}{0B5A46}
+\definecolor{DeepGreen}{HTML}{063F34}
+\definecolor{PolyGold}{HTML}{D4A72C}
+\definecolor{SoftGold}{HTML}{F5E9C8}
+\definecolor{SoftGreen}{HTML}{E9F0ED}
+
+\definecolor{Ink}{HTML}{202725}
+\definecolor{Muted}{HTML}{626C68}
+\definecolor{Panel}{HTML}{F3F6F4}
+\definecolor{RuleGray}{HTML}{D3DBD7}
+
+% ============================================================
+% PDF SETTINGS
+% ============================================================
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=PolyGreen,
+    urlcolor=PolyGreen,
+    pdfauthor={Arturo Ramirez},
+    pdftitle={Arturo Ramirez Mechanical Engineering Portfolio}
+}
+
+% ============================================================
+% SECTION CARD
+%
+% #1 = destination
+% #2 = section number
+% #3 = section title
+% #4 = competency line
+% #5 = project list
+% ============================================================
+
+\newcommand{\sectioncard}[5]{%
+
+\begin{scope}
+
+    % Main card body
+    \fill[
+        Panel,
+        rounded corners=6pt
+    ]
+        (0,0) rectangle (3.25,2.80);
+
+    \draw[
+        RuleGray,
+        line width=0.65pt,
+        rounded corners=6pt
+    ]
+        (0,0) rectangle (3.25,2.80);
+
+    % Header
+    \fill[
+        DeepGreen,
+        rounded corners=6pt
+    ]
+        (0,2.31) rectangle (3.25,2.80);
+
+    % Square off lower corners of header
+    \fill[DeepGreen]
+        (0,2.31) rectangle (3.25,2.52);
+
+    % Gold accent
+    \fill[PolyGold]
+        (0,2.31) rectangle (0.09,2.80);
+
+    % Section title
+    \node[
+        anchor=west,
+        text=white,
+        font=\sffamily\bfseries
+             \fontsize{12.2}{12.8}\selectfont
+    ]
+        at (0.20,2.555)
+        {#3};
+
+    % Section number
+    \node[
+        anchor=east,
+        text=PolyGold,
+        font=\sffamily\bfseries
+             \fontsize{9.1}{9.6}\selectfont
+    ]
+        at (3.04,2.555)
+        {#2};
+
+    % Competency line
+    \node[
+        anchor=north west,
+        align=left,
+        text width=2.87in,
+        text=Muted,
+        font=\sffamily
+             \fontsize{6.8}{7.8}\selectfont
+    ]
+        at (0.18,2.15)
+        {#4};
+
+    % Divider
+    \draw[
+        RuleGray,
+        line width=0.5pt
+    ]
+        (0.18,1.79) -- (3.07,1.79);
+
+    % Project list
+    \node[
+        anchor=north west,
+        align=left,
+        text width=2.87in,
+        text=Ink,
+        font=\fontsize{7.05}{8.05}\selectfont
+    ]
+        at (0.18,1.67)
+        {#5};
+
+    % Navigation
+    \node[
+        anchor=south east,
+        text=PolyGreen,
+        font=\sffamily\bfseries
+             \fontsize{7.1}{7.7}\selectfont
+    ]
+        at (3.04,0.11)
+        {\hyperlink{#1}{VIEW PROJECTS \;\faArrowRight}};
+
+\end{scope}
+
+}
+
+% ============================================================
+% DOCUMENT
+% ============================================================
+
+\begin{document}
+
+% Temporary internal targets.
+% Move these to the actual section pages later.
+
+\hypertarget{composites}{}
+\hypertarget{mechatronics}{}
+\hypertarget{autonomy}{}
+
+\begin{tikzpicture}[
+    remember picture,
+    overlay,
+    x=1in,
+    y=1in
+]
+
+% ============================================================
+% BACKGROUND
+% ============================================================
+
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+% Top bars
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+% Footer bars
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% ============================================================
+% INTRODUCTION — LEFT SIDE
+% ============================================================
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries
+         \fontsize{8.5}{9.1}\selectfont
+]
+    at ($(current page.north west)+(0.39in,-0.43in)$)
+    {MECHANICAL ENGINEERING PORTFOLIO};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries
+         \fontsize{25.5}{26.5}\selectfont
+]
+    at ($(current page.north west)+(0.37in,-0.70in)$)
+    {ARTURO RAMIREZ};
+
+% Gold underline
+\fill[PolyGold]
+    ($(current page.north west)+(0.39in,-1.17in)$)
+    rectangle
+    ($(current page.north west)+(4.23in,-1.125in)$);
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=6.05in,
+    text=Ink,
+    font=\fontsize{9.25}{10.9}\selectfont
+]
+    at ($(current page.north west)+(0.39in,-1.34in)$)
+    {A selection of applied engineering work in composite design,
+    embedded control, robotics, and autonomous systems. The portfolio
+    emphasizes my contributions, engineering decisions, development
+    challenges, validation, and lessons learned.};
+
+% ============================================================
+% ENGINEERING FOCUS PANEL
+% ============================================================
+
+\fill[
+    SoftGold,
+    rounded corners=4pt
+]
+    ($(current page.north west)+(0.39in,-2.05in)$)
+    rectangle
+    ($(current page.north west)+(6.53in,-2.67in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.39in,-2.05in)$)
+    rectangle
+    ($(current page.north west)+(0.48in,-2.67in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries
+         \fontsize{7.7}{8.2}\selectfont
+]
+    at ($(current page.north west)+(0.61in,-2.17in)$)
+    {ENGINEERING FOCUS};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=5.63in,
+    text=Ink,
+    font=\fontsize{7.75}{9.0}\selectfont
+]
+    at ($(current page.north west)+(0.61in,-2.37in)$)
+    {Design for manufacturability, controls, system integration,
+    physical prototyping, technical analysis, testing, and iterative improvement.};
+
+% ============================================================
+% PROFILE DETAILS
+% ============================================================
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries
+         \fontsize{7.35}{8}\selectfont
+]
+    at ($(current page.north west)+(0.41in,-2.88in)$)
+    {CORE AREAS};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.88in,
+    text=Ink,
+    font=\fontsize{7.55}{8.7}\selectfont
+]
+    at ($(current page.north west)+(1.48in,-2.88in)$)
+    {Composites, mechatronics, controls, robotics, computer vision, and autonomy};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries
+         \fontsize{7.35}{8}\selectfont
+]
+    at ($(current page.north west)+(0.41in,-3.15in)$)
+    {PROCESS};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.88in,
+    text=Ink,
+    font=\fontsize{7.55}{8.7}\selectfont
+]
+    at ($(current page.north west)+(1.48in,-3.15in)$)
+    {Define, analyze, design, build, test, diagnose, and refine};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries
+         \fontsize{7.35}{8}\selectfont
+]
+    at ($(current page.north west)+(0.41in,-3.42in)$)
+    {DOCUMENTATION};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.88in,
+    text=Ink,
+    font=\fontsize{7.55}{8.7}\selectfont
+]
+    at ($(current page.north west)+(1.48in,-3.42in)$)
+    {Reports, GitHub repositories, Colab notebooks, figures, data, and videos};
+
+% ============================================================
+% PROFILE IMAGE — RIGHT SIDE
+% Entire image block lowered
+% ============================================================
+
+\begin{scope}
+
+    % Rounded clipping frame
+    \clip[
+        rounded corners=7pt
+    ]
+        ($(current page.north east)+(-3.93in,-1.00in)$)
+        rectangle
+        ($(current page.north east)+(-0.38in,-3.00in)$);
+
+    \IfFileExists{pfp.jpg}
+    {
+        \node[
+            anchor=center,
+            inner sep=0pt
+        ]
+        at ($(current page.north east)+(-2.155in,-2.00in)$)
+        {
+            \includegraphics[
+                width=3.72in,
+                keepaspectratio
+            ]{pfp.jpg}
+        };
+    }
+    {
+        \fill[SoftGreen]
+            ($(current page.north east)+(-3.93in,-1.00in)$)
+            rectangle
+            ($(current page.north east)+(-0.38in,-3.00in)$);
+
+        \node[
+            align=center,
+            text=DeepGreen,
+            font=\sffamily\bfseries
+                 \fontsize{9}{10.5}\selectfont
+        ]
+        at ($(current page.north east)+(-2.155in,-2.00in)$)
+        {PROFILE IMAGE\\[3pt]\texttt{pfp.jpg}};
+    }
+
+\end{scope}
+
+% Matching border
+\draw[
+    DeepGreen,
+    line width=0.9pt,
+    rounded corners=7pt
+]
+    ($(current page.north east)+(-3.93in,-1.00in)$)
+    rectangle
+    ($(current page.north east)+(-0.38in,-3.00in)$);
+% ============================================================
+% PORTFOLIO MAP
+% ============================================================
+
+\fill[
+    SoftGreen,
+    rounded corners=4pt
+]
+    ($(current page.south west)+(0.39in,4.28in)$)
+    rectangle
+    ($(current page.south east)+(-0.39in,4.73in)$);
+
+\node[
+    anchor=west,
+    text=DeepGreen,
+    font=\sffamily\bfseries
+         \fontsize{7.4}{8}\selectfont
+]
+    at ($(current page.south west)+(0.60in,4.505in)$)
+    {PORTFOLIO MAP};
+
+\node[
+    anchor=west,
+    text=Ink,
+    font=\sffamily\fontsize{7.6}{8.3}\selectfont
+]
+    at ($(current page.south west)+(1.76in,4.505in)$)
+    {
+        \hyperlink{composites}{\textbf{01 COMPOSITES}}
+        \hspace{0.25in}
+        \textcolor{PolyGold}{\faChevronRight}
+        \hspace{0.25in}
+        \hyperlink{mechatronics}{\textbf{02 MECHATRONICS}}
+        \hspace{0.25in}
+        \textcolor{PolyGold}{\faChevronRight}
+        \hspace{0.25in}
+        \hyperlink{autonomy}{\textbf{03 AUTONOMY}}
+    };
+
+\node[
+    anchor=east,
+    text=Muted,
+    font=\sffamily
+         \fontsize{7.1}{7.8}\selectfont
+]
+    at ($(current page.south east)+(-0.60in,4.505in)$)
+    {Select a discipline or project to continue};
+
+% ============================================================
+% COMPOSITES CARD — 5 PROJECTS
+% ============================================================
+
+\begin{scope}[
+    shift={($(current page.south west)+(0.39in,0.88in)$)}
+]
+
+\sectioncard
+{composites}
+{01}
+{COMPOSITES}
+{Design for Manufacturability \textbullet\
+ Composite Manufacturing \textbullet\
+ Structural Analysis \textbullet\
+ Experimental Validation}
+{
+\textcolor{PolyGold}{\textbf{01}} \;
+\textbf{Toro Carbon Fiber Safety Pool Cover}\\[4pt]
+
+\textcolor{PolyGold}{\textbf{02}} \;
+Carbon Fiber Honeycomb Pickleball Paddle\\[4pt]
+
+\textcolor{PolyGold}{\textbf{03}} \;
+Carbon Fiber I-Beam Design \& Testing\\[4pt]
+
+\textcolor{PolyGold}{\textbf{04}} \;
+Fiberglass Fuselage FEA \& Three-Point Bend Validation\\[4pt]
+
+\textcolor{PolyGold}{\textbf{05}} \;
+Carbon Fiber Coupon Manufacturing \& Tensile Testing
+}
+
+\end{scope}
+
+% ============================================================
+% MECHATRONICS CARD — 5 PROJECTS
+% ============================================================
+
+\begin{scope}[
+    shift={($(current page.south west)+(3.88in,0.88in)$)}
+]
+
+\sectioncard
+{mechatronics}
+{02}
+{MECHATRONICS}
+{Embedded Systems \textbullet\
+ PCB Design \textbullet\
+ Robotics \textbullet\
+ Controls \textbullet\
+ Hardware Integration}
+{
+\textcolor{PolyGold}{\textbf{06}} \;
+\textbf{Custom Gearbox Control PCB}\\[4pt]
+
+\textcolor{PolyGold}{\textbf{07}} \;
+Romi Autonomous Differential-Drive Robot\\[4pt]
+
+\textcolor{PolyGold}{\textbf{08}} \;
+Kinect-Guided Autonomous Drone\\[4pt]
+
+\textcolor{PolyGold}{\textbf{09}} \;
+Assembly Programming, FSMs \& Hardware Interaction\\[4pt]
+
+\textcolor{PolyGold}{\textbf{10}} \;
+Robotics Methods: Vision, Kinematics \& Trajectory Planning
+}
+
+\end{scope}
+
+% ============================================================
+% AUTONOMY CARD — 3 PROJECTS
+% ============================================================
+
+\begin{scope}[
+    shift={($(current page.south west)+(7.37in,0.88in)$)}
+]
+
+\sectioncard
+{autonomy}
+{03}
+{AUTONOMY}
+{Computer Vision \textbullet\
+ Machine Learning \textbullet\
+ Vehicle Control \textbullet\
+ Autonomous Navigation}
+{
+\textcolor{PolyGold}{\textbf{11}} \;
+\textbf{Vision-Based Road-Following Vehicle}\\[7pt]
+
+\textcolor{PolyGold}{\textbf{12}} \;
+Autonomous Parallel-Parking System\\[7pt]
+
+\textcolor{PolyGold}{\textbf{13}} \;
+U-Net Semantic Segmentation for Road-Scene Perception\\[11pt]
+
+{\sffamily
+ \fontsize{6.7}{7.7}\selectfont
+ \color{Muted}
+ Perception, planning, control implementation,
+ testing, and autonomous vehicle behavior.}
+}
+
+\end{scope}
+
+% ============================================================
+% PROJECT RESOURCES
+% ============================================================
+
+\node[
+    anchor=west,
+    text=DeepGreen,
+    font=\sffamily\bfseries
+         \fontsize{7.25}{7.9}\selectfont
+]
+    at ($(current page.south west)+(0.40in,0.61in)$)
+    {PROJECT RESOURCES};
+
+\node[
+    anchor=west,
+    text=Ink,
+    font=\sffamily
+         \fontsize{7.1}{7.9}\selectfont
+]
+    at ($(current page.south west)+(1.72in,0.61in)$)
+    {
+        \faFilePdf\ Full Reports
+        \hspace{0.20in}
+        \faGithub\ GitHub
+        \hspace{0.20in}
+        \faLaptopCode\ Colab Notebooks
+        \hspace{0.20in}
+        \faPlayCircle\ Demonstrations
+    };
+
+\node[
+    anchor=east,
+    text=Muted,
+    font=\sffamily
+         \fontsize{6.9}{7.6}\selectfont
+]
+    at ($(current page.south east)+(-0.40in,0.61in)$)
+    {Resource links are provided within each project.};
+
+% ============================================================
+% FOOTER
+% ============================================================
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries
+         \fontsize{7.3}{7.9}\selectfont
+]
+    at ($(current page.south west)+(0.39in,0.18in)$)
+    {
+        DEFINE
+        \;\textcolor{PolyGold}{\faChevronRight}\;
+        ANALYZE
+        \;\textcolor{PolyGold}{\faChevronRight}\;
+        DESIGN
+        \;\textcolor{PolyGold}{\faChevronRight}\;
+        BUILD
+        \;\textcolor{PolyGold}{\faChevronRight}\;
+        TEST
+        \;\textcolor{PolyGold}{\faChevronRight}\;
+        IMPROVE
+    };
+
+\node[
+    anchor=east,
+    text=white,
+    font=\sffamily
+         \fontsize{7.1}{7.8}\selectfont
+]
+    at ($(current page.south east)+(-0.39in,0.18in)$)
+    {ARTURO RAMIREZ \;|\; PORTFOLIO OVERVIEW};
+
+\end{tikzpicture}
+
+% =========================
+% Composites Section
+% =========================
+
+\input{composites}
+
+
+\end{document}

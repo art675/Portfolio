@@ -1,0 +1,1548 @@
+
+% ============================================================
+% ROMI AUTONOMOUS DIFFERENTIAL-DRIVE ROBOT
+% FIVE-PAGE PORTFOLIO CASE STUDY
+% 02 Mechatronics / Project 07
+%
+% IMPORTANT
+% ----------
+% 1. This file is intended to be included from the main portfolio:
+%       \input{romi}
+%    It must NOT contain \documentclass, \begin{document}, or \end{document}.
+%
+% 2. The main preamble should already define:
+%       DeepGreen, PolyGold, SoftGold, SoftGreen,
+%       RuleGray, Muted, Ink, Panel
+%    and load:
+%       tikz, graphicx, hyperref, fontawesome5, amsmath, amssymb
+%
+% 3. Upload the following image files to Overleaf using these exact
+%    base filenames. Extensions may be .png, .jpg, or .jpeg; LaTeX will
+%    resolve them automatically when only the base filename is supplied.
+%
+%       Romi Hero Image
+%       Romi Pluggedin
+%       Romi Side View
+%       Romi Top View
+%       Real Time Software Diagram
+%       Chassis Dynamics
+%       Dynamics
+%       Romi Total Dynamics
+%       Wheel Encoder Rotation
+%       effort based position
+%       effort based velocity
+%       gain calibration
+%       nested control loop
+%       Track Course
+%
+%    Each image is used only once in this script.
+%
+% 4. The instructor's timer auto-reload visualization is intentionally
+%    excluded because the page prioritizes team-created engineering artifacts.
+%
+% 5. The notebook HTML button should only be restored after the file has
+%    been uploaded to a public HTTPS address. Local file:/// and run: links
+%    are intentionally excluded because they break for other viewers.
+%
+% 6. Resource links are each used once across the five pages.
+% ============================================================
+
+% ------------------------------------------------------------
+% PROJECT RESOURCE URLS
+% ------------------------------------------------------------
+
+\providecommand{\RomiGitHubURL}
+{https://github.com/shwanpla/ME-405-Term-Project}
+
+\providecommand{\RomiDocumentationURL}
+{https://me-405-term-project.readthedocs.io/en/latest/overview.html}
+
+\providecommand{\RomiTrackYouTubeURL}
+{https://youtu.be/gsIIfVX_UOE?si=vdGteQbXHBkoHcBp}
+
+\providecommand{\RomiLineYouTubeURL}
+{https://youtu.be/3hr3dCyPbDM?si=kXSeATZV6t0dCAKc}
+
+\providecommand{\RomiDataCaptureURL}
+{https://drive.google.com/file/d/1NIpuxDYtf03tbfd8yQCP5n-v_P9-T6j7/view?usp=drive_link}
+
+% Replace this placeholder with the HTML-export link supplied for the project.
+% IMPORTANT: A file:///D:/... path is private to one computer and cannot
+% be opened by employers. Upload HW0x04_ARTURO_RAMIREZ.html to a public host
+% such as GitHub Pages, Google Drive with public access, or a personal website,
+% then replace the URL below with that absolute https:// address.
+%
+% Example after enabling GitHub Pages:
+% https://YOUR-USERNAME.github.io/YOUR-REPOSITORY/HW0x04_ARTURO_RAMIREZ.html
+%
+% Until a public URL is supplied, the notebook button is intentionally omitted
+% from the resource row so the portfolio contains no broken link.
+\providecommand{\RomiNotebookHTMLURL}
+{https://art675.github.io/Romi-Dynamics-Study/}
+
+% ============================================================
+% PAGE 1 — SYSTEM OVERVIEW AND PHYSICAL INTEGRATION
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{romi}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% Background and page bars
+\fill[white] (current page.south west) rectangle (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% Header
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{02 MECHATRONICS \hspace{5pt}/\hspace{5pt} PROJECT 07};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{22.4}{23.4}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{ROMI AUTONOMOUS DIFFERENTIAL-DRIVE ROBOT};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.25}{9.0}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly Mechatronics Laboratory
+\hspace{7pt}\textbullet\hspace{7pt}
+Three-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Fall 2025
+\hspace{7pt}\textbullet\hspace{7pt}
+San Luis Obispo, California};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(8.90in,-1.315in)$);
+
+% Hero image
+\node[
+    anchor=north west,
+    inner sep=2.7pt,
+    draw=DeepGreen,
+    line width=0.70pt,
+    rounded corners=6pt
+]
+at ($(current page.north west)+(0.42in,-1.58in)$)
+{
+    \includegraphics[
+        width=5.18in,
+        height=3.26in,
+        keepaspectratio
+    ]{\detokenize{Romi Hero Image}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=4.95in,
+    text=Muted,
+    font=\sffamily\fontsize{6.30}{7.00}\selectfont
+]
+at ($(current page.north west)+(3.01in,-4.94in)$)
+{Final Romi autonomous robot.};
+
+% Project overview
+% Extended farther left while preserving the original 0.10 in accent strip.
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(4.43in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-4.98in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(4.43in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(4.53in,-4.98in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(4.73in,-1.76in)$)
+{PROJECT OVERVIEW};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=5.73in,
+    text=Ink,
+    font=\fontsize{6.45}{7.50}\selectfont
+]
+at ($(current page.north west)+(4.73in,-2.05in)$)
+{
+Our three-person team built a fully integrated autonomous differential-drive
+robot for a course-specific navigation challenge. The system combined an
+STM32 Nucleo running MicroPython, wheel encoders, a QTR reflectance array,
+a BNO055 IMU, bumper sensing, Bluetooth/serial telemetry, and closed-loop
+motor control.\\[4pt]
+
+The software architecture separated hardware drivers, periodic sensing,
+state estimation, velocity control, data processing, communications, and
+navigation into cooperative generator-based tasks. Shared variables and
+queues provided explicit interfaces between subsystems while a priority-based
+scheduler maintained deterministic update periods.\\[4pt]
+
+Programming, dynamic analysis, controller tuning, testing, and integration
+were shared across the team. The project emphasized collaborative code
+development rather than isolated subsystem ownership.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{6.25}{6.95}\selectfont
+]
+at ($(current page.north west)+(4.73in,-4.82in)$)
+{MICROPYTHON \hspace{6pt}\textbullet\hspace{6pt}
+STM32 \hspace{6pt}\textbullet\hspace{6pt}
+COOPERATIVE MULTITASKING \hspace{6pt}\textbullet\hspace{6pt}
+CLOSED-LOOP CONTROL};
+
+% Supporting hardware images
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.43in,-5.22in)$)
+{HARDWARE BRING-UP AND SENSOR INTEGRATION};
+
+% Equal-width light-green image cards
+\fill[SoftGreen!46,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-5.48in)$)
+    rectangle
+    ($(current page.north west)+(3.63in,-7.18in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-5.48in)$)
+    rectangle
+    ($(current page.north west)+(3.63in,-7.18in)$);
+
+\fill[SoftGreen!46,rounded corners=5pt]
+    ($(current page.north west)+(4.05in,-5.48in)$)
+    rectangle
+    ($(current page.north west)+(7.26in,-7.18in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(4.05in,-5.48in)$)
+    rectangle
+    ($(current page.north west)+(7.26in,-7.18in)$);
+
+\fill[SoftGreen!46,rounded corners=5pt]
+    ($(current page.north west)+(7.46in,-5.48in)$)
+    rectangle
+    ($(current page.north west)+(10.67in,-7.18in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(7.46in,-5.48in)$)
+    rectangle
+    ($(current page.north west)+(10.67in,-7.18in)$);
+
+% Card 1 — firmware flashing
+\node[
+    anchor=north,
+    inner sep=2.2pt,
+    draw=RuleGray,
+    line width=0.50pt,
+    rounded corners=3pt,
+    fill=white
+]
+at ($(current page.north west)+(2.025in,-5.61in)$)
+{
+    \includegraphics[
+        width=2.82in,
+        height=1.17in,
+        keepaspectratio
+    ]{\detokenize{Romi Pluggedin}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=2.78in,
+    text=Muted,
+    font=\sffamily\fontsize{6.25}{6.85}\selectfont
+]
+at ($(current page.north west)+(2.025in,-6.91in)$)
+{Firmware flashing};
+
+% Card 2 — side view
+\node[
+    anchor=north,
+    inner sep=2.2pt,
+    draw=RuleGray,
+    line width=0.50pt,
+    rounded corners=3pt,
+    fill=white
+]
+at ($(current page.north west)+(5.655in,-5.61in)$)
+{
+    \includegraphics[
+        width=2.82in,
+        height=1.17in,
+        keepaspectratio
+    ]{\detokenize{Romi Side View}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=2.78in,
+    text=Muted,
+    font=\sffamily\fontsize{6.25}{6.85}\selectfont
+]
+at ($(current page.north west)+(5.655in,-6.91in)$)
+{Side view};
+
+% Card 3 — top view
+\node[
+    anchor=north,
+    inner sep=2.2pt,
+    draw=RuleGray,
+    line width=0.50pt,
+    rounded corners=3pt,
+    fill=white
+]
+at ($(current page.north west)+(9.065in,-5.61in)$)
+{
+    \includegraphics[
+        width=2.82in,
+        height=1.17in,
+        keepaspectratio
+    ]{\detokenize{Romi Top View}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=2.78in,
+    text=Muted,
+    font=\sffamily\fontsize{6.25}{6.85}\selectfont
+]
+at ($(current page.north west)+(9.065in,-6.91in)$)
+{Top view};
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\hyperlink{gearboxpcb}{\faArrowLeft\ GEARBOX CONTROLLER}};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ROMI AUTONOMOUS ROBOT \hspace{6pt} 1 / 5};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{SOFTWARE ARCHITECTURE \faArrowRight};
+
+\end{tikzpicture}
+
+% ============================================================
+% PAGE 2 — REAL-TIME SOFTWARE ARCHITECTURE
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{ROMI AUTONOMOUS ROBOT \hspace{5pt}/\hspace{5pt} REAL-TIME SOFTWARE};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{22.0}{23.0}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{COOPERATIVE TASK ARCHITECTURE AND DATA FLOW};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.25}{9.0}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Generator-based tasks, shared variables, queues, priorities, periods, and finite-state navigation};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(8.72in,-1.315in)$);
+
+% Main architecture image
+\node[
+    anchor=north west,
+    inner sep=2.8pt,
+    draw=DeepGreen,
+    line width=0.68pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(0.42in,-1.58in)$)
+{
+    \includegraphics[
+        width=6.74in,
+        height=5.55in,
+        keepaspectratio
+    ]{\detokenize{Real Time Software Diagram}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=6.45in,
+    text=Muted,
+    font=\sffamily\fontsize{6.25}{6.95}\selectfont
+]
+at ($(current page.north west)+(3.79in,-7.25in)$)
+{Team-developed real-time task diagram showing priorities, periods, shared data, commands, and telemetry paths};
+
+% Architecture explanation
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(6.62in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-3.58in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(6.62in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(6.72in,-3.58in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(7.00in,-1.76in)$)
+{WHY THE ARCHITECTURE MATTERED};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=3.28in,
+    text=Ink,
+    font=\fontsize{5.52}{6.34}\selectfont
+]
+at ($(current page.north west)+(6.96in,-2.05in)$)
+{
+Each subsystem ran as a periodic generator task rather than as one
+monolithic loop. This kept sensing, estimation, control, navigation,
+data logging, and communications independently testable while preserving
+deterministic update timing.\\[3.5pt]
+
+Queues carried ordered data streams; shared variables exposed the latest
+state or command; object interfaces encapsulated hardware drivers.
+};
+
+% Software stack
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(6.62in,-3.82in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.53in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(6.62in,-3.82in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.53in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(6.88in,-4.00in)$)
+{SOFTWARE STACK};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=3.56in,
+    text=Ink,
+    font=\fontsize{5.68}{6.50}\selectfont
+]
+at ($(current page.north west)+(6.88in,-4.28in)$)
+{
+\textbf{High level:} main scheduler, navigation FSM, user commands\\[3pt]
+\textbf{Middle level:} control, observer, data processing, serial tasks\\[3pt]
+\textbf{Low level:} motors, encoders, ADC, I\textsuperscript{2}C IMU, bump and line sensors\\[3pt]
+\textbf{Interfaces:} Bluetooth/USB telemetry, reusable classes, explicit task boundaries
+};
+
+% Timing panel
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(6.62in,-5.77in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.12in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(6.62in,-5.77in)$)
+    rectangle
+    ($(current page.north west)+(6.72in,-7.12in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(6.92in,-5.95in)$)
+{IMPLEMENTATION DISCIPLINE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=3.52in,
+    text=Ink,
+    font=\fontsize{5.72}{6.54}\selectfont
+]
+at ($(current page.north west)+(6.92in,-6.23in)$)
+{
+Tasks were assigned explicit priorities and periods according to control
+bandwidth and I/O demands. Incremental integration, serial telemetry, and
+repeatable trials made timing errors, stale data, state-transition faults,
+and gain interactions visible early.
+};
+
+% Resource links
+\node[
+    anchor=north,
+    align=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.75}{7.35}\selectfont
+]
+at ($(current page.north)+(0,-7.48in)$)
+{
+\href{\RomiGitHubURL}{\faGithub\ SOURCE CODE}
+\hspace{22pt}
+\href{\RomiDocumentationURL}{\faBook\ DOCUMENTATION}
+};
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ SYSTEM OVERVIEW};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ROMI AUTONOMOUS ROBOT \hspace{6pt} 2 / 5};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{DYNAMIC MODELING \faArrowRight};
+
+\end{tikzpicture}
+
+% ============================================================
+% PAGE 3 — DIFFERENTIAL-DRIVE DYNAMICS AND STATE MODELING
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{ROMI AUTONOMOUS ROBOT \hspace{5pt}/\hspace{5pt} DYNAMIC MODELING};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{21.6}{22.6}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{FROM WHEEL MOTION TO NONLINEAR ROBOT DYNAMICS};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.15}{8.9}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Differential-drive kinematics, state selection, first-order motor dynamics, and observer-oriented modeling};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(9.25in,-1.315in)$);
+
+% Kinematics images
+\node[
+    anchor=north west,
+    inner sep=2.4pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(0.42in,-1.58in)$)
+{
+    \includegraphics[
+        width=3.78in,
+        height=2.30in,
+        keepaspectratio
+    ]{\detokenize{Chassis Dynamics}}
+};
+
+\node[
+    anchor=north west,
+    inner sep=2.4pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(4.42in,-1.58in)$)
+{
+    \includegraphics[
+        width=3.78in,
+        height=2.30in,
+        keepaspectratio
+    ]{\detokenize{Dynamics}}
+};
+
+\node[
+    anchor=north west,
+    inner sep=2.4pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(8.43in,-1.58in)$)
+{
+    \includegraphics[
+        width=3.32in,
+        height=2.08in,
+        keepaspectratio
+    ]{\detokenize{Romi Total Dynamics}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.55in,
+    text=Muted,
+    font=\sffamily\fontsize{6.0}{6.7}\selectfont
+]
+at ($(current page.north west)+(2.31in,-3.81in)$)
+{Wheel-speed difference determines yaw rate};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.55in,
+    text=Muted,
+    font=\sffamily\fontsize{6.0}{6.7}\selectfont
+]
+at ($(current page.north west)+(6.31in,-3.81in)$)
+{Wheel-speed average determines forward speed};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.10in,
+    text=Muted,
+    font=\sffamily\fontsize{6.0}{6.7}\selectfont
+]
+at ($(current page.north west)+(9.7in,-3.81in)$)
+{Body velocity mapped into the global frame};
+
+% State vector approach image
+% Enlarged while preserving top-edge alignment with the nonlinear model panel.
+\node[
+    anchor=north west,
+    inner sep=2.5pt,
+    draw=DeepGreen,
+    line width=0.65pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(0.42in,-4.03in)$)
+{
+    \includegraphics[
+        width=3.58in,
+        height=2.10in,
+        keepaspectratio
+    ]{\detokenize{Wheel Encoder Rotation}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.10in,
+    text=Muted,
+    font=\sffamily\fontsize{6.0}{6.7}\selectfont
+]
+at ($(current page.north west)+(1.98in,-6.34in)$)
+{Manual wheel rotation used to validate encoder position tracking};
+
+% Nonlinear model panel
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(3.70in,-4.03in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-6.30in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(3.70in,-4.03in)$)
+    rectangle
+    ($(current page.north west)+(3.80in,-6.30in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(4.00in,-4.21in)$)
+{NONLINEAR STATE MODEL};
+
+% State and input column vectors
+% array is used inside scalable brackets so the entries remain vertically stacked.
+\node[
+    anchor=north west,
+    inner sep=0pt,
+    text=Ink,
+    font=\fontsize{6.85}{8.00}\selectfont
+]
+at ($(current page.north west)+(4.00in,-4.48in)$)
+{%
+$\displaystyle
+\mathbf{x}
+=
+\left[
+\begin{array}{c}
+X\\
+Y\\
+\psi\\
+s\\
+\Omega_L\\
+\Omega_R
+\end{array}
+\right]
+$%
+};
+
+\node[
+    anchor=north west,
+    inner sep=0pt,
+    text=Ink,
+    font=\fontsize{6.85}{8.00}\selectfont
+]
+at ($(current page.north west)+(4.88in,-4.48in)$)
+{%
+$\displaystyle
+\mathbf{u}
+=
+\left[
+\begin{array}{c}
+u_L\\
+u_R
+\end{array}
+\right]
+$%
+};
+
+% Standard state-space organizational form
+\node[
+    anchor=north west,
+    inner sep=0pt,
+    text=Ink,
+    font=\fontsize{6.80}{7.85}\selectfont
+]
+at ($(current page.north west)+(4.00in,-5.30in)$)
+{%
+$\displaystyle
+\dot{\mathbf{x}}
+=
+A\mathbf{x}
++
+B\mathbf{u}
+$%
+};
+
+% Explanation of the modeling distinction
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.58in,
+    text=Ink,
+    font=\fontsize{5.55}{6.34}\selectfont
+]
+at ($(current page.north west)+(5.72in,-4.48in)$)
+{
+The state contains global position, robot heading, traveled distance, and
+left- and right-wheel angular velocities; the inputs are commanded motor
+voltages. The standard state-space organization is shown at left. However,
+because the kinematic equations contain $\sin\psi$ and $\cos\psi$, the
+complete robot cannot be represented by constant $A$ and $B$ matrices over
+its full operating range. The project therefore used the nonlinear governing
+equations for modeling while applying linear state-space methods where
+appropriate for controller and observer design.
+};
+
+% Governing nonlinear equations
+\node[
+    anchor=north,
+    align=center,
+    text=Ink,
+    font=\fontsize{7.35}{8.72}\selectfont
+]
+at ($(current page.north west)+(7.22in,-5.29in)$)
+{
+$\displaystyle
+\dot X=\frac{r}{2}(\Omega_R+\Omega_L)\cos\psi
+\qquad
+\dot Y=\frac{r}{2}(\Omega_R+\Omega_L)\sin\psi
+$
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text=Ink,
+    font=\fontsize{7.35}{8.72}\selectfont
+]
+at ($(current page.north west)+(7.22in,-5.63in)$)
+{
+$\displaystyle
+\dot\psi=\frac{r}{w}(\Omega_R-\Omega_L)
+\qquad
+\dot s=\frac{r}{2}(\Omega_R+\Omega_L)
+$
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text=Ink,
+    font=\fontsize{7.35}{8.72}\selectfont
+]
+at ($(current page.north west)+(7.22in,-5.97in)$)
+{
+$\displaystyle
+\dot\Omega_L=
+\frac{1}{\tau}
+\left(\frac{K}{N}u_L-\Omega_L\right)
+\qquad
+\dot\Omega_R=
+\frac{1}{\tau}
+\left(\frac{K}{N}u_R-\Omega_R\right)
+$
+};
+
+% Modeling judgment
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.54in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.34in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.54in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.34in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.5}{8.2}\selectfont
+]
+at ($(current page.north west)+(0.66in,-6.68in)$)
+{MODELING JUDGMENT};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=9.82in,
+    text=Ink,
+    font=\fontsize{5.92}{6.78}\selectfont
+]
+at ($(current page.north west)+(0.66in,-6.94in)$)
+{
+The motor-speed dynamics are first-order and linear, while the chassis
+kinematics are nonlinear. State-space concepts were used to organize states,
+inputs, measurements, observer development, and discretization. The physical
+plant was implemented through the governing differential equations rather
+than forced into a single constant $A,B$ representation across the full
+operating range.
+};
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ SOFTWARE ARCHITECTURE};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ROMI AUTONOMOUS ROBOT \hspace{6pt} 3 / 5};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{CONTROL AND CALIBRATION \faArrowRight};
+
+\end{tikzpicture}
+
+% ============================================================
+% PAGE 4 — CLOSED-LOOP CONTROL AND EXPERIMENTAL CALIBRATION
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{ROMI AUTONOMOUS ROBOT \hspace{5pt}/\hspace{5pt} CONTROL AND CALIBRATION};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{21.6}{22.6}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{FROM MOTOR CHARACTERIZATION TO LINE-FOLLOWING};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.15}{8.9}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Encoder-based velocity estimation, PI regulation, line-error feedback, telemetry, and iterative tuning};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(9.45in,-1.315in)$);
+
+% Top controller image
+\node[
+    anchor=north west,
+    inner sep=2.5pt,
+    draw=DeepGreen,
+    line width=0.65pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(0.42in,-1.58in)$)
+{
+    \includegraphics[
+        width=5.85in,
+        height=2.57in,
+        keepaspectratio
+    ]{\detokenize{nested control loop}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=5.55in,
+    text=Muted,
+    font=\sffamily\fontsize{6.15}{6.85}\selectfont
+]
+at ($(current page.north west)+(2.55in,-4.25in)$)
+{Nested wheel-velocity PI loops with proportional-integral line-error correction};
+
+% Control explanation
+% The nested-control-loop image is height-limited, so its visible right edge
+% falls near x = 4.20 in. The panel therefore begins at x = 4.28 in so the
+% two elements sit directly beside one another.
+% The PolyGold accent banner remains exactly 0.10 in thick.
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(4.28in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-4.29in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(4.28in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(4.38in,-4.29in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(4.58in,-1.76in)$)
+{CONTROL STRATEGY};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=5.88in,
+    text=Ink,
+    font=\fontsize{6.05}{7.00}\selectfont
+]
+at ($(current page.north west)+(4.58in,-2.05in)$)
+{
+The low-level controller regulated left and right wheel velocity from
+encoder feedback. A higher-level line-following loop converted the weighted
+reflectance-array error into opposing wheel-speed corrections, allowing
+the chassis to steer without bypassing the motor loops.\\[4pt]
+
+The team tuned gains through repeatable runs and live telemetry rather
+than relying only on analytical estimates. Position, velocity, line bias,
+motor effort, and task states were captured over serial/Bluetooth to expose
+overshoot, drift, saturation, and asymmetric motor response.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{6.25}{6.95}\selectfont
+]
+at ($(current page.north west)+(4.58in,-4.13in)$)
+{ENCODER FEEDBACK \hspace{5pt}\textbullet\hspace{5pt}
+PI VELOCITY CONTROL \hspace{5pt}\textbullet\hspace{5pt}
+LINE-ERROR CORRECTION};
+
+% Calibration plots
+\node[
+    anchor=north west,
+    inner sep=2.3pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(0.42in,-4.52in)$)
+{
+    \includegraphics[
+        width=3.24in,
+        height=1.72in,
+        keepaspectratio
+    ]{\detokenize{effort based position}}
+};
+
+\node[
+    anchor=north west,
+    inner sep=2.3pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(3.in,-4.52in)$)
+{
+    \includegraphics[
+        width=3.24in,
+        height=1.72in,
+        keepaspectratio
+    ]{\detokenize{effort based velocity}}
+};
+
+\node[
+    anchor=north west,
+    inner sep=2.3pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(5.7 in,-4.52in)$)
+{
+    \includegraphics[
+    width=4.80in,
+    height=2.55in,
+    keepaspectratio
+]{\detokenize{gain calibration}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.00in,
+    text=Muted,
+    font=\sffamily\fontsize{5.95}{6.60}\selectfont
+]
+at ($(current page.north west)+(1.7in,-6.35in)$)
+{Effort sweep used to characterize position growth};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.00in,
+    text=Muted,
+    font=\sffamily\fontsize{5.95}{6.60}\selectfont
+]
+at ($(current page.north west)+(4.3in,-6.35in)$)
+{Velocity plateaus used to estimate motor response};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.18in,
+    text=Muted,
+    font=\sffamily\fontsize{5.95}{6.60}\selectfont
+]
+at ($(current page.north west)+(8.34in,-6.35in)$)
+{Closed-loop response after gain tuning and integration};
+
+% Bottom takeaway panels
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.60in)$)
+    rectangle
+    ($(current page.north west)+(5.43in,-7.35in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.60in)$)
+    rectangle
+    ($(current page.north west)+(5.43in,-7.35in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.35}{8.05}\selectfont
+]
+at ($(current page.north west)+(0.66in,-6.74in)$)
+{CALIBRATION WORKFLOW};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.48in,
+    text=Ink,
+    font=\fontsize{5.88}{6.75}\selectfont
+]
+at ($(current page.north west)+(0.66in,-6.98in)$)
+{
+Command effort sweeps established baseline motor behavior. Controller gains
+were then refined using measured velocity, accumulated position, line error,
+and repeated track trials.
+};
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(5.66in,-6.60in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.35in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(5.66in,-6.60in)$)
+    rectangle
+    ($(current page.north west)+(5.76in,-7.35in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.35}{8.05}\selectfont
+]
+at ($(current page.north west)+(5.96in,-6.74in)$)
+{ENGINEERING TAKEAWAY};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.52in,
+    text=Ink,
+    font=\fontsize{5.88}{6.75}\selectfont
+]
+at ($(current page.north west)+(5.96in,-6.98in)$)
+{
+The robot's two motors were not interchangeable ideal plants. Closed-loop
+feedback and telemetry were essential for correcting friction, battery,
+surface, and assembly variation.
+};
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ DYNAMIC MODELING};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ROMI AUTONOMOUS ROBOT \hspace{6pt} 4 / 5};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{AUTONOMOUS VALIDATION \faArrowRight};
+
+\end{tikzpicture}
+
+% ============================================================
+% PAGE 5 — AUTONOMOUS NAVIGATION, VALIDATION, AND LESSONS
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{ROMI AUTONOMOUS ROBOT \hspace{5pt}/\hspace{5pt} VALIDATION AND ITERATION};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{21.8}{22.8}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{FROM SUBSYSTEM TESTS TO FULL-COURSE AUTONOMY};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.15}{8.9}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Finite-state navigation, obstacle interaction, telemetry-driven debugging, repeatability, and honest validation};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(9.30in,-1.315in)$);
+
+% ============================================================
+% TOP LEFT — NAVIGATION AND VALIDATION
+% ============================================================
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(5.42in,-4.04in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-4.04in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.9}{8.6}\selectfont
+]
+at ($(current page.north west)+(0.72in,-1.76in)$)
+{NAVIGATION AND SYSTEM VALIDATION};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.40in,
+    text=Ink,
+    font=\fontsize{6.22}{7.18}\selectfont
+]
+at ($(current page.north west)+(0.72in,-2.05in)$)
+{
+The final navigation task encoded the obstacle course as an explicit
+finite-state machine. States commanded line following, straight travel,
+distance-based motion, controlled turns, collision detection, and recovery
+behavior while the lower-level velocity loops remained active underneath.\\[4pt]
+
+The team validated the system incrementally through sensor calibration,
+motor characterization, line tracking, individual state transitions,
+recovery maneuvers, and complete-course trials. Bluetooth and serial data
+capture exposed internal states and supported revisions to thresholds,
+gains, and timing.\\[4pt]
+
+A successful official run completed the course in 165.72 seconds. Two earlier
+runs failed at the same narrow garage transition, showing that course
+completion and robust repeatability were not the same result.
+};
+
+% ============================================================
+% TOP RIGHT — MEASURED PERFORMANCE
+% ============================================================
+
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(5.66in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-3.40in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(5.66in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-3.40in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.9}{8.6}\selectfont
+]
+at ($(current page.north west)+(5.92in,-1.76in)$)
+{MEASURED SYSTEM PERFORMANCE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.56in,
+    text=Ink,
+    font=\fontsize{6.05}{7.05}\selectfont
+]
+at ($(current page.north west)+(5.92in,-2.05in)$)
+{
+\textbf{Velocity regulation}\\
+50 mm/s nominal setpoint; approximately 100 ms response; less than 2 mm/s
+reported steady-state error.\\[5pt]
+
+\textbf{Navigation and sensing}\\
+Encoder displacement supported state transitions; calibrated IR sensing
+provided line-error feedback; bump sensing triggered recovery logic.\\[5pt]
+
+\textbf{Scheduling}\\
+Motor, control, navigation, encoder, serial, and sensor tasks ran at
+independent periods without observed task starvation.\\[5pt]
+
+\textbf{Official trials}\\
+Two DNFs exposed garage-entry instability; the third trial completed all
+checkpoints in 165.72 seconds.
+};
+
+% ============================================================
+% BOTTOM LEFT — COMBINED LESSONS PANEL
+% ============================================================
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-4.30in)$)
+    rectangle
+    ($(current page.north west)+(5.42in,-6.38in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-4.30in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-6.38in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.7}{8.4}\selectfont
+]
+at ($(current page.north west)+(0.72in,-4.48in)$)
+{ENGINEERING TAKEAWAYS AND NEXT ITERATION};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.38in,
+    text=Ink,
+    font=\fontsize{5.92}{6.82}\selectfont
+]
+at ($(current page.north west)+(0.72in,-4.76in)$)
+{
+\textbf{What worked.}
+Modular drivers and task interfaces supported incremental bring-up.
+Cooperative scheduling separated timing-sensitive functions, encoder
+feedback reduced open-loop motor mismatch, and telemetry accelerated gain
+tuning and state-transition debugging. Controlled sensor geometry also
+improved reflectance repeatability.\\[5pt]
+
+\textbf{What the team would improve.}
+The next revision would redesign narrow-corridor heading control, add
+battery-voltage compensation, improve motor-symmetry handling, filter bump
+events, formalize fault states, and expand regression testing for navigation
+transitions. The central lesson was to distinguish one successful course
+completion from demonstrated robustness across repeated trials.
+};
+
+% ============================================================
+% BOTTOM RIGHT — COURSE MAP
+% ============================================================
+
+\node[
+    anchor=north west,
+    inner sep=2.7pt,
+    draw=DeepGreen,
+    line width=0.68pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(5.66in,-3.66in)$)
+{
+    \includegraphics[
+        width=5.55in,
+        height=2.48in,
+        keepaspectratio
+    ]{\detokenize{Track Course}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=4.82in,
+    text=Muted,
+    font=\sffamily\fontsize{6.10}{6.78}\selectfont
+]
+at ($(current page.north west)+(8.42in,-6.34in)$)
+{Obstacle-course layout used to define checkpoints, navigation states, and recovery transitions};
+
+% ============================================================
+% RESOURCE PANEL
+% ============================================================
+
+\fill[Panel,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.62in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.34in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.62in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.34in)$);
+
+\node[
+    anchor=north,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.48}{7.08}\selectfont,
+    align=center
+]
+at ($(current page.north)+(0,-6.83in)$)
+{
+\href{\RomiGitHubURL}{\faGithub\ SOURCE CODE}
+\hspace{13pt}
+\href{\RomiDocumentationURL}{\faBook\ DOCUMENTATION}
+\hspace{13pt}
+\href{\RomiNotebookHTMLURL}{\faGlobe\ DYNAMICS STUDY}
+\hspace{13pt}
+\href{\RomiTrackYouTubeURL}{\faYoutube\ TRACK NAVIGATION}
+\hspace{13pt}
+\href{\RomiLineYouTubeURL}{\faYoutube\ LINE-FOLLOWING DEMO}
+};
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ CONTROL AND CALIBRATION};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ROMI AUTONOMOUS ROBOT \hspace{6pt} 5 / 5};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{NEXT PROJECT \faArrowRight};
+
+\end{tikzpicture}
+\input{drone}
+
+\clearpage

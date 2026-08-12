@@ -1,0 +1,1006 @@
+%==============================================================
+% PROJECT 06 — CUSTOM GEARBOX CONTROLLER PCB
+% Three-page Mechatronics Portfolio Feature
+%==============================================================
+
+% Required image files in the Overleaf project:
+% prototype_overview.jpg, cad_overview.jpg, pcb_render.png,
+% Top_layer.png, bottom_layer.png, stm32_pinout.png, pcb_layer_view.png
+
+\newcommand{\GearMeshVideoURL}{https://drive.google.com/file/d/1c9Dpt7rh-xMqnXRiqxy8QwGIDzVrn4yP/view?usp=drive_link}
+\newcommand{\GearboxBOMURL}{https://drive.google.com/file/d/1r9MuhYR57b-BE1TgPTJExPTuizmPRoin/view?usp=drive_link}
+\newcommand{\GearboxPnPURL}{https://drive.google.com/file/d/1twTr6gidxc5jp6XXtx9B64dvdXTclb1i/view?usp=drive_link}
+\newcommand{\GearboxSchematicOneURL}{https://drive.google.com/file/d/1M6LuV9WgP7C7Q2sWUGcvKPZqV96tMXaU/view?usp=drive_link}
+\newcommand{\GearboxSchematicTwoURL}{https://drive.google.com/file/d/1DglJlnw1rp7rtF8z4b_QAwdovFRx10xd/view?usp=drive_link}
+\newcommand{\GearboxPinoutURL}{https://drive.google.com/file/d/1iSpHgZ1y8BdRfjCNocFGtaumFrspBP6K/view?usp=drive_link}
+
+% ============================================================
+% CUSTOM GEARBOX CONTROLLER PCB
+% THREE-PAGE PORTFOLIO CASE STUDY
+% 02 Mechatronics / Project 06
+%
+% IMPORTANT:
+% 1. This file must NOT contain \documentclass, \begin{document},
+%    or \end{document}.
+% 2. This script assumes the main portfolio preamble already defines:
+%       DeepGreen, PolyGold, SoftGold, SoftGreen,
+%       RuleGray, Muted, Ink, Panel
+%    and loads tikz, graphicx, hyperref, and fontawesome5.
+% 3. Each image and each Google Drive resource is used exactly once.
+% 4. Upload these files to Overleaf with the exact same names:
+%       prototype_overview.jpg
+%       cad_overview.jpg
+%       pcb_render.png
+%       Top_layer.png
+%       bottom_layer.png
+%       stm32_pinout.png
+%       pcb_layer_view.png
+%       WIRING_DIAGRAM.png
+% ============================================================
+
+% ============================================================
+% PAGE 1 — PROJECT OVERVIEW, OWNERSHIP, AND SYSTEM ARCHITECTURE
+% Images used on this page:
+%   prototype_overview.jpg
+%   cad_overview.jpg
+%   WIRING_DIAGRAM.png
+% Resources used on this page:
+%   Gear Mesh Demo
+%   Schematic 1
+%   Schematic 2
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{gearboxpcb}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% Background and page bars
+\fill[white] (current page.south west) rectangle (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% Header
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{02 MECHATRONICS \hspace{5pt}/\hspace{5pt} PROJECT 06};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{22.5}{23.5}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{CUSTOM GEARBOX CONTROLLER PCB};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.35}{9.1}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly Mechatronics Laboratory \hspace{7pt}\textbullet\hspace{7pt}
+Team Project \hspace{7pt}\textbullet\hspace{7pt}
+Spring 2026 \hspace{7pt}\textbullet\hspace{7pt}
+San Luis Obispo, California};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(6.in,-1.315in)$);
+
+% Upper left — challenge
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.1}{8.8}\selectfont
+]
+at ($(current page.north west)+(0.43in,-1.60in)$)
+{THE CHALLENGE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.42in,
+    text=Ink,
+    font=\fontsize{7.35}{8.70}\selectfont
+]
+at ($(current page.north west)+(0.43in,-1.84in)$)
+{
+Transform a passive gearbox demonstration into a dynamic,
+interactive mechatronic platform capable of motor actuation,
+encoder feedback, user input, display output, and safe enclosure
+operation. The controller also needed to remain expandable for
+future sensing, controls, and system-identification experiments.
+};
+
+% Upper-left role box
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-2.70in)$)
+    rectangle
+    ($(current page.north west)+(4.98in,-4.40in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-2.70in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-4.40in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.66in,-2.88in)$)
+{MY ROLE — PCB DESIGNER \& ELECTRONICS LEAD};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.00in,
+    text=Ink,
+    font=\fontsize{6.10}{7.02}\selectfont
+]
+at ($(current page.north west)+(0.66in,-3.16in)$)
+{
+\textbullet\ Defined the controller architecture and selected the feature set\\[1.0pt]
+\textbullet\ Sourced and verified components from the JLCPCB catalog\\[1.0pt]
+\textbullet\ Developed the schematic, four-layer PCB, BOM, and PnP files\\[1.0pt]
+\textbullet\ Routed signals on the top and bottom copper layers\\[1.0pt]
+\textbullet\ Added an internal 3.3 V logic plane and dedicated ground plane\\[1.0pt]
+\textbullet\ Soldered selected hardware and supported board bring-up\\[2.3pt]
+
+\textbf{Shared integration.}
+My partner and I configured CubeMX and developed the C/C++ multitasking structure.
+He also led the mechanical gearbox, frame, printed shafts, collars, couplers,
+keyed features, embedded bearings, acrylic door, and actuator/encoder mounts.
+};
+
+% Upper right — large prototype
+\node[
+    anchor=north west,
+    inner sep=2.6pt,
+    draw=DeepGreen,
+    line width=0.68pt,
+    rounded corners=6pt
+]
+at ($(current page.north west)+(5.18in,-1.58in)$)
+{
+    \includegraphics[
+        width=5.55in,
+        height=2.76in,
+        keepaspectratio
+    ]{prototype_overview.jpg}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=5.30in,
+    text=Muted,
+    font=\sffamily\fontsize{6.25}{6.95}\selectfont
+]
+at ($(current page.north west)+(7.2in,-4.46in)$)
+{Completed gearbox demonstration with enclosed mechanism, TFT interface, and user controls};
+
+% Lower section title
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.43in,-4.70in)$)
+{SYSTEM DEVELOPMENT AND FINAL ARCHITECTURE};
+
+% Lower left — CAD card
+\node[
+    anchor=north west,
+    inner sep=2.5pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(0.42in,-4.95in)$)
+{
+    \includegraphics[
+        width=2.88in,
+        height=1.93in,
+        keepaspectratio
+    ]{cad_overview.jpg}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=2.72in,
+    text=Muted,
+    font=\sffamily\fontsize{6.05}{6.75}\selectfont
+]
+at ($(current page.north west)+(1.86in,-6.98in)$)
+{SolidWorks packaging concept for the gearbox, enclosure, and control panel};
+
+% Lower center — wiring diagram
+\node[
+    anchor=north west,
+    inner sep=2.5pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(3.56in,-4.95in)$)
+{
+    \includegraphics[
+        width=3.62in,
+        height=1.93in,
+        keepaspectratio
+    ]{WIRING_DIAGRAM.png}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.46in,
+    text=Muted,
+    font=\sffamily\fontsize{6.05}{6.75}\selectfont
+]
+at ($(current page.north west)+(5.37in,-6.98in)$)
+{Power and control architecture};
+
+% Lower right — platform highlights moved into the open space
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(6.98in,-4.95in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-6.91in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(6.98in,-4.95in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-6.91in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.75}{8.45}\selectfont
+]
+at ($(current page.north west)+(7.20in,-5.14in)$)
+{PLATFORM HIGHLIGHTS};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=3.08in,
+    text=Ink,
+    font=\fontsize{5.72}{6.58}\selectfont
+]
+at ($(current page.north west)+(7.20in,-5.43in)$)
+{
+\textbf{Four-layer board.}
+Signals were routed on the top and bottom copper layers, with an internal 3.3 V logic plane and a dedicated ground plane.\\[4pt]
+
+\textbf{Integrated control.}
+The PCB combines dual encoder inputs, motor and actuator control, a TFT display, user buttons, USB, SWD, voltage sensing, and expansion headers.
+};
+
+% Standalone full-width centered resource bar
+\fill[Panel,rounded corners=4pt]
+    ($(current page.north west)+(0.42in,-7.20in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.64in)$);
+
+\draw[RuleGray,line width=0.5pt,rounded corners=4pt]
+    ($(current page.north west)+(0.42in,-7.20in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.64in)$);
+
+\node[
+    anchor=center,
+    align=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.75}{7.35}\selectfont
+]
+at ($(current page.north)+(0,-7.42in)$)
+{
+\href{\GearMeshVideoURL}{\faPlayCircle\ GEAR MESH DEMO}
+\hspace{24pt}
+\href{\GearboxSchematicOneURL}{\faFilePdf\ SCHEMATIC 1}
+\hspace{24pt}
+\href{\GearboxSchematicTwoURL}{\faFilePdf\ SCHEMATIC 2}
+};
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\hyperlink{mechatronics}{\faArrowLeft\ MECHATRONICS}};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{GEARBOX CONTROLLER \hspace{6pt} 1 / 3};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{PCB ARCHITECTURE \faArrowRight};
+
+\end{tikzpicture}
+
+% ============================================================
+% PAGE 2 — PCB DESIGN, ROUTING, AND MANUFACTURING
+% Images used on this page:
+%   pcb_render.png
+%   complete_pcb.jpeg
+%   Top_layer.png
+%   bottom_layer.png
+%   stm32_pinout.png
+% Resources used on this page:
+%   JLCPCB BOM
+%   Pick-and-Place
+%   PCB Pinout Logic
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% Background and bars
+\fill[white] (current page.south west) rectangle (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% Header
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{GEARBOX CONTROLLER \hspace{5pt}/\hspace{5pt} PCB ARCHITECTURE};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{21.5}{22.5}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{FROM COMPONENT SELECTION TO MANUFACTURED BOARD};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.2}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Independent circuit development, JLCPCB sourcing, multilayer routing, assembly, and embedded hardware integration};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(8.80in,-1.315in)$);
+
+% Top left — populated 3D render
+\node[
+    anchor=north west,
+    inner sep=2.6pt,
+    draw=DeepGreen,
+    line width=0.68pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(0.42in,-1.58in)$)
+{
+    \includegraphics[
+        width=3.23in,
+        height=2.25in,
+        keepaspectratio
+    ]{pcb_render.png}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.08in,
+    text=Muted,
+    font=\sffamily\fontsize{6.15}{6.85}\selectfont
+]
+at ($(current page.north west)+(1.7in,-3.94in)$)
+{Fusion 360 Electronics render of the populated controller PCB};
+
+% Top center — fabricated PCB photograph
+\node[
+    anchor=north west,
+    inner sep=2.6pt,
+    draw=DeepGreen,
+    line width=0.68pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(3.90in,-1.58in)$)
+{
+    \includegraphics[
+        width=3.38in,
+        height=2.25in,
+        keepaspectratio
+    ]{complete_pcb.jpeg}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.20in,
+    text=Muted,
+    font=\sffamily\fontsize{6.15}{6.85}\selectfont
+]
+at ($(current page.north west)+(5.2in,-3.94in)$)
+{Fabricated and partially populated first-generation controller PCB};
+
+% Top right — design approach
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(7.52in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-2.71in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(7.52in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(7.62in,-2.71in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(7.82in,-1.76in)$)
+{DESIGN APPROACH};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.48in,
+    text=Ink,
+    font=\fontsize{5.30}{6.05}\selectfont
+]
+at ($(current page.north west)+(7.82in,-2.04in)$)
+{
+The board was developed from the system requirements outward.\\[2pt]
+MCUs, drivers, regulators, connectors, passives, footprints, and
+protection devices were verified against datasheets, package limits,
+assembly access, and JLCPCB availability before routing.
+};
+
+% Top right — integrated features
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(7.52in,-2.91in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-4.04in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(7.52in,-2.91in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-4.04in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(7.78in,-3.09in)$)
+{INTEGRATED FEATURES};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.86in,
+    text=Ink,
+    font=\fontsize{5.55}{6.38}\selectfont
+]
+at ($(current page.north west)+(7.78in,-3.37in)$)
+{
+STM32F411 \textbullet\ 24 V input\\
+5 V buck \textbullet\ 3.3 V logic\\
+Motor and actuator control\\
+Dual encoder interfaces\\
+SPI TFT \textbullet\ buttons \textbullet\ limit switch\\
+USB \textbullet\ SWD \textbullet\ voltage sensing
+};
+
+% Routing section title
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.43in,-4.30in)$)
+{ROUTING, MCU ASSIGNMENT, AND DESIGN FOR MANUFACTURING};
+
+% Routing cards
+\node[
+    anchor=north west,
+    inner sep=2.4pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(0.42in,-4.56in)$)
+{
+    \includegraphics[
+        width=3.34in,
+        height=1.64in,
+        keepaspectratio
+    ]{Top_layer.png}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.18in,
+    text=Muted,
+    font=\sffamily\fontsize{6.10}{6.80}\selectfont
+]
+at ($(current page.north west)+(1.8in,-6.29in)$)
+{Top-layer routing and component fan-out};
+
+\node[
+    anchor=north west,
+    inner sep=2.4pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(3.98in,-4.56in)$)
+{
+    \includegraphics[
+        width=3.34in,
+        height=1.64in,
+        keepaspectratio
+    ]{bottom_layer.png}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.18in,
+    text=Muted,
+    font=\sffamily\fontsize{6.10}{6.80}\selectfont
+]
+at ($(current page.north west)+(5.3in,-6.29in)$)
+{Bottom-layer routing and return-path organization};
+
+\node[
+    anchor=north west,
+    inner sep=2.4pt,
+    draw=RuleGray,
+    line width=0.55pt,
+    rounded corners=4pt
+]
+at ($(current page.north west)+(7.54in,-4.56in)$)
+{
+    \includegraphics[
+        width=3.20in,
+        height=1.64in,
+        keepaspectratio
+    ]{stm32_pinout.png}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=3.04in,
+    text=Muted,
+    font=\sffamily\fontsize{6.10}{6.80}\selectfont
+]
+at ($(current page.north west)+(8.45in,-6.29in)$)
+{STM32F411 GPIO and peripheral assignment};
+
+% Bottom engineering panels
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.56in)$)
+    rectangle
+    ($(current page.north west)+(5.34in,-7.24in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-6.56in)$)
+    rectangle
+    ($(current page.north west)+(5.34in,-7.24in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.25}{7.95}\selectfont
+]
+at ($(current page.north west)+(0.66in,-6.70in)$)
+{POWER ARCHITECTURE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.40in,
+    text=Ink,
+    font=\fontsize{6.02}{6.90}\selectfont
+]
+at ($(current page.north west)+(0.66in,-6.94in)$)
+{
+24 V motor supply \(\rightarrow\) protected input \(\rightarrow\) 5 V buck conversion
+\(\rightarrow\) 3.3 V logic regulation, with local bulk and high-frequency decoupling.
+};
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(5.56in,-6.56in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.24in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(5.56in,-6.56in)$)
+    rectangle
+    ($(current page.north west)+(5.66in,-7.24in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.25}{7.95}\selectfont
+]
+at ($(current page.north west)+(5.86in,-6.70in)$)
+{DESIGN FOR MANUFACTURING};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.60in,
+    text=Ink,
+    font=\fontsize{6.00}{6.88}\selectfont
+]
+at ($(current page.north west)+(5.86in,-6.94in)$)
+{
+JLCPCB stock, assembly orientation, connector access, soldering practicality,
+test access, and footprint verification directly shaped the final board.
+};
+
+% Resource links
+\node[
+    anchor=north,
+    align=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.75}{7.35}\selectfont
+]
+at ($(current page.north)+(0,-7.45in)$)
+{
+\href{\GearboxBOMURL}{\faFilePdf\ JLCPCB BOM}
+\hspace{18pt}
+\href{\GearboxPnPURL}{\faFilePdf\ PICK-AND-PLACE}
+\hspace{18pt}
+\href{\GearboxPinoutURL}{\faFilePdf\ PCB PINOUT LOGIC}
+};
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ SYSTEM OVERVIEW};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{GEARBOX CONTROLLER \hspace{6pt} 2 / 3};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{INTEGRATION \& TAKEAWAYS \faArrowRight};
+
+\end{tikzpicture}
+
+% ============================================================
+% PAGE 3 — EMBEDDED INTEGRATION, LESSONS, AND FUTURE PLATFORM
+% Image used on this page:
+%   pcb_layer_view.png
+% No Google Drive resource is repeated on this page.
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% Background and bars
+\fill[white] (current page.south west) rectangle (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% Header
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{GEARBOX CONTROLLER \hspace{5pt}/\hspace{5pt} INTEGRATION AND ENGINEERING TAKEAWAYS};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{22.0}{23.0}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{A REUSABLE PLATFORM FOR EMBEDDED CONTROL};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.25}{9.0}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Hardware assembly, CubeMX configuration, collaborative firmware development, and next-generation expansion};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(8.82in,-1.315in)$);
+
+% Large PCB routing image — only use of this image
+\node[
+    anchor=north west,
+    inner sep=2.6pt,
+    draw=DeepGreen,
+    line width=0.68pt,
+    rounded corners=5pt
+]
+at ($(current page.north west)+(0.42in,-1.58in)$)
+{
+    \includegraphics[
+        width=5.20in,
+        height=3.15in,
+        keepaspectratio
+    ]{pcb_layer_view.png}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    inner sep=0pt,
+    text width=4.98in,
+    text=Muted,
+    font=\sffamily\fontsize{6.30}{7.00}\selectfont
+]
+at ($(current page.north west)+(3.02in,-4.85in)$)
+{Dense MCU breakout, encoder routing, SWD, USB, TFT, actuator, and sensing interfaces};
+
+% Top right — hardware and firmware integration
+% Left edge aligned with the Future Learning Platform panel below.
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(5.56in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-4.92in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(5.56in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(5.66in,-4.92in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(5.86in,-1.77in)$)
+{HARDWARE AND FIRMWARE INTEGRATION};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.54in,
+    text=Ink,
+    font=\fontsize{6.65}{7.78}\selectfont
+]
+at ($(current page.north west)+(5.86in,-2.07in)$)
+{
+After fabrication, I soldered the selected components and integrated the
+PCB into the larger system architecture. My partner and I jointly configured
+the STM32 in CubeMX to establish clocking, GPIO, timers, encoder inputs,
+SPI communication, USB, and debug access.\\[5pt]
+
+We developed the firmware around collaborative multitasking in C/C++ so
+that motor control, display updates, user commands, actuator behavior, and
+safety logic could operate as one cohesive controller rather than as isolated
+demonstrations.\\[5pt]
+
+This first revision served as a functional learning platform while exposing
+practical improvements for protection, test access, connector planning,
+packaging, and future instrumentation.
+};
+
+% Bottom left — engineering takeaways
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-5.18in)$)
+    rectangle
+    ($(current page.north west)+(5.34in,-7.30in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-5.18in)$)
+    rectangle
+    ($(current page.north west)+(5.34in,-7.30in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(0.68in,-5.36in)$)
+{ENGINEERING TAKEAWAYS};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.42in,
+    text=Ink,
+    font=\fontsize{6.25}{7.25}\selectfont
+]
+at ($(current page.north west)+(0.68in,-5.65in)$)
+{
+\textbf{Architecture first.}
+Defining interfaces before routing reduced late-stage changes and simplified integration.\\[4pt]
+
+\textbf{Datasheets are the design language.}
+Selection required verifying voltage, current, package, thermal, and control requirements rather than relying on names alone.\\[4pt]
+
+\textbf{Manufacturability shapes electronics.}
+Stock, assembly, access, solderability, and testability directly influenced the final circuit.\\[4pt]
+
+\textbf{First revisions are learning tools.}
+Bring-up revealed improvements for protection, debug access, and packaging.
+};
+
+% Bottom right — future platform
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(5.56in,-5.18in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.30in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(5.56in,-5.18in)$)
+    rectangle
+    ($(current page.north west)+(5.66in,-7.30in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(5.86in,-5.36in)$)
+{FUTURE LEARNING PLATFORM};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.58in,
+    text=Ink,
+    font=\fontsize{6.25}{7.25}\selectfont
+]
+at ($(current page.north west)+(5.86in,-5.65in)$)
+{
+The controller was intentionally conceived as more than a single-purpose
+gearbox driver. Future revisions can add torque sensing, motor-current
+measurement, temperature monitoring, improved output-speed sensing,
+and additional analog or digital sensors.\\[5pt]
+
+Those additions would support system identification, efficiency studies,
+closed-loop speed control, comparison between predicted and measured
+gear ratios, and the development of kinetic as well as kinematic models.
+The existing PCB, enclosure, display, and modular mechanical platform
+provide the foundation for those experiments.
+};
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ PCB ARCHITECTURE};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{GEARBOX CONTROLLER \hspace{6pt} 3 / 3};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{NEXT PROJECT \faArrowRight};
+
+\end{tikzpicture}
+
+\input{romi}
+\clearpage

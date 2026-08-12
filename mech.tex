@@ -1,0 +1,195 @@
+%==============================================================
+% MECHATRONICS DIVIDER PAGE
+%==============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{mechatronics}{}
+
+\begin{tikzpicture}[remember picture,overlay]
+
+%--------------------------------------------------------------
+% Background
+%--------------------------------------------------------------
+
+\fill[white]
+(current page.south west)
+rectangle
+(current page.north east);
+
+% Top bar
+
+\fill[DeepGreen]
+(current page.north west)
+rectangle
+($(current page.north east)+(0,-0.10in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0,-0.10in)$)
+rectangle
+($(current page.north east)+(0,-0.14in)$);
+
+% Bottom bar
+
+\fill[DeepGreen]
+(current page.south west)
+rectangle
+($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+($(current page.south west)+(0,0.36in)$)
+rectangle
+($(current page.south east)+(0,0.40in)$);
+
+%--------------------------------------------------------------
+% Large section number
+%--------------------------------------------------------------
+
+\node[
+anchor=north west,
+text=SoftGreen,
+font=\bfseries\fontsize{96}{96}\selectfont
+]
+at ($(current page.north west)+(0.70in,-0.90in)$)
+{02};
+
+%--------------------------------------------------------------
+% Section Title
+%--------------------------------------------------------------
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\bfseries\fontsize{30}{32}\selectfont
+]
+at ($(current page.north west)+(2.15in,-1.05in)$)
+{MECHATRONICS};
+
+%--------------------------------------------------------------
+% Subtitle
+%--------------------------------------------------------------
+
+\node[
+anchor=north west,
+text=PolyGold,
+font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+]
+at ($(current page.north west)+(2.18in,-1.62in)$)
+{Embedded Systems \& Robotic Control};
+
+% Gold rule
+
+\fill[PolyGold]
+($(current page.north west)+(2.20in,-1.83in)$)
+rectangle
+($(current page.north west)+(4.8in,-1.79in)$);
+
+%--------------------------------------------------------------
+% Description
+%--------------------------------------------------------------
+
+\node[
+anchor=north west,
+align=left,
+text width=6.65in,
+font=\fontsize{12}{15}\selectfont,
+text=Ink
+]
+at ($(current page.north west)+(2.18in,-2.05in)$)
+{
+This section presents mechatronic systems that combine custom electronics,
+embedded programming, sensing, feedback control, robotic motion, and
+hardware--software integration. The projects emphasize complete system
+development from circuit and mechanism design through implementation,
+testing, diagnosis, and refinement.
+};
+
+%--------------------------------------------------------------
+% Project Roadmap
+%--------------------------------------------------------------
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{11}{12}\selectfont
+]
+at ($(current page.north west)+(2.18in,-3.25in)$)
+{PROJECTS};
+
+\node[
+anchor=north west,
+align=left,
+text width=7.35in,
+font=\fontsize{13}{20}\selectfont,
+text=Ink
+]
+at ($(current page.north west)+(2.18in,-3.60in)$)
+{
+
+\textcolor{PolyGold}{\textbf{06}}
+\hspace{0.15in}
+Custom Gearbox Control PCB
+
+\vspace{0.18in}
+
+\textcolor{PolyGold}{\textbf{07}}
+\hspace{0.15in}
+Romi Autonomous Differential-Drive Robot
+
+\vspace{0.18in}
+
+\textcolor{PolyGold}{\textbf{08}}
+\hspace{0.15in}
+Kinect-Guided Autonomous Drone
+
+\vspace{0.18in}
+
+\textcolor{PolyGold}{\textbf{09}}
+\hspace{0.15in}
+Assembly Programming, FSMs \& Hardware Interaction
+
+\vspace{0.18in}
+
+\textcolor{PolyGold}{\textbf{10}}
+\hspace{0.15in}
+Robotics Methods: Vision, Kinematics \& Trajectory Planning
+
+};
+
+%--------------------------------------------------------------
+% Navigation
+%--------------------------------------------------------------
+
+\node[
+anchor=south west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+]
+at ($(current page.south west)+(0.70in,0.65in)$)
+{\hyperlink{overview}{\faArrowLeft\ Portfolio Overview}};
+
+\node[
+anchor=south east,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+]
+at ($(current page.south east)+(-0.70in,0.65in)$)
+{\hyperlink{gearboxpcb}{Custom Gearbox Control PCB \faArrowRight}};
+
+%--------------------------------------------------------------
+% Footer
+%--------------------------------------------------------------
+
+\node[
+anchor=east,
+text=white,
+font=\sffamily\fontsize{8}{9}\selectfont
+]
+at ($(current page.south east)+(-0.45in,0.18in)$)
+{02 MECHATRONICS};
+
+\end{tikzpicture}
+\input{gearbox}
+
+% First project in the section
+\clearpage

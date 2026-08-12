@@ -1,0 +1,1063 @@
+
+% ============================================================
+% TORO COVER — THREE-PAGE PORTFOLIO CASE STUDY
+% Pages 3–5 of the complete portfolio
+%
+% IMPORTANT:
+% 1. This file must NOT contain \documentclass, \begin{document},
+%    \end{document}, or \input{toro}.
+% 2. In main.tex, place \input{toro} before \end{document}.
+% 3. Image references use the original Overleaf base filenames
+%    without extensions.
+% ============================================================
+
+
+
+% ============================================================
+% CLICKABLE PROJECT RESOURCES
+% All links use the exact Google Drive resources supplied.
+% ============================================================
+\providecommand{\ToroDrawingLink}{https://drive.google.com/file/d/1A7-7wMnRNLuQDaTgxeuUCBsGNqyXzOGV/view?usp=sharing}
+\providecommand{\ToroDimensionsLink}{https://drive.google.com/file/d/13sw3BNJvE8GdzlRffxoF2n5r9Gzxide7/view?usp=sharing}
+\providecommand{\ToroProblemLink}{https://drive.google.com/file/d/1zHtl8zrb13F1yeN74ptawpfS5UM_xsuw/view?usp=drive_link}
+\providecommand{\ToroReportLink}{https://drive.google.com/file/d/1ULZ-P46lFsC2x29ZfmRVIKgYnr9o8hMt/view?usp=drive_link}
+\providecommand{\ToroPosterLink}{https://drive.google.com/file/d/1vKiKaJUcHQb_db-FkZnRF6EvtuM4hKyS/view?usp=drive_link}
+\providecommand{\ToroDeploymentLink}{https://drive.google.com/file/d/1XJx34o80_mZPTl7xy93HtWAgtS3ThhvY/view?usp=drive_link}
+\providecommand{\ToroRemovalLink}{https://drive.google.com/file/d/1O7xYeyB67NUwT-j1B1HeiCcHnZDYjk6_/view?usp=drive_link}
+
+% ============================================================
+% PAGE 1 — PROJECT OVERVIEW, OWNERSHIP, AND ARCHITECTURE
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{toro}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% Background
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+% Page bars
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% Header
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{01 COMPOSITES \hspace{5pt}/\hspace{5pt} PROJECT 01};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{23.5}{24.5}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{TORO CARBON FIBER SAFETY COVER};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.4}{9.2}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly Composites Laboratory \hspace{7pt}\textbullet\hspace{7pt}
+Team Project \hspace{7pt}\textbullet\hspace{7pt}
+Fall--Spring 2026 \hspace{7pt}\textbullet\hspace{7pt}
+San Luis Obispo, California};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.37in)$)
+    rectangle
+    ($(current page.north west)+(6.1in,-1.325in)$);
+
+% Challenge text
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.1}{8.8}\selectfont
+]
+at ($(current page.north west)+(0.43in,-1.61in)$)
+{THE CHALLENGE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.47in,
+    text=Ink,
+    font=\fontsize{8.05}{9.65}\selectfont
+]
+at ($(current page.north west)+(0.43in,-1.84in)$)
+{
+Develop a lightweight cover for a 6 ft by 6 ft in-ground spa
+that could be deployed by one person, stored compactly,
+provide insulation, resist a poolside environment, and maintain
+a refined appearance. The sponsor supplied an ambitious but
+intentionally broad project statement, requiring the team to
+define the product architecture, priorities, manufacturing
+strategy, and realistic path toward future commercialization.
+};
+
+% Role box
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-2.88in)$)
+    rectangle
+    ($(current page.north west)+(4.98in,-4.58in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-2.88in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-4.58in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.1}{8.8}\selectfont
+]
+at ($(current page.north west)+(0.66in,-3.02in)$)
+{MY ROLE — DESIGN \& MANUFACTURING LEAD};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.02in,
+    text=Ink,
+    font=\fontsize{7.05}{8.15}\selectfont
+]
+at ($(current page.north west)+(0.66in,-3.27in)$)
+{
+\textbullet\ Modeled every custom part and the complete assembly\\[1.5pt]
+\textbullet\ Produced the engineering drawing package independently\\[1.5pt]
+\textbullet\ Developed the composite-panel manufacturing process\\[1.5pt]
+\textbullet\ Created all waterjet DXFs and manufacturing geometry\\[1.5pt]
+\textbullet\ Trained teammates in wet layup and vacuum bagging\\[1.5pt]
+\textbullet\ Presented feasibility, scope, and tradeoffs to the sponsor
+};
+
+% Large deployed foam-model image
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(8.00in,-3.04in)$)
+{
+    \includegraphics[
+        width=5.55in,
+        height=2.78in,
+        keepaspectratio
+    ]{deployed_functional_prototype}
+};
+
+\draw[DeepGreen,line width=0.8pt,rounded corners=7pt]
+    ($(current page.north west)+(5.16in,-1.61in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-4.47in)$);
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{6.2}{6.9}\selectfont
+]
+at ($(current page.north west)+(5.18in,-4.54in)$)
+{Functional foam model deployed over the sponsor's in-ground spa.};
+
+% Image-strip title
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.1}{8.8}\selectfont
+]
+at ($(current page.north west)+(0.43in,-4.78in)$)
+{PRODUCT DEVELOPMENT AND FINAL ARCHITECTURE};
+
+% Five-image development strip — CAD-first sequence
+% Image 1: topside CAD
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(1.47in,-5.73in)$)
+{
+    \includegraphics[
+        width=1.92in,
+        height=1.30in,
+        keepaspectratio
+    ]{Toro_Cover_topside_Cad}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(0.43in,-5.04in)$)
+    rectangle
+    ($(current page.north west)+(2.51in,-6.43in)$);
+
+% Image 2: underside CAD
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(3.66in,-5.73in)$)
+{
+    \includegraphics[
+        width=1.92in,
+        height=1.30in,
+        keepaspectratio
+    ]{toro_cover_underside_cad}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(2.62in,-5.04in)$)
+    rectangle
+    ($(current page.north west)+(4.70in,-6.43in)$);
+
+% Image 3: folded CAD
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(5.85in,-5.73in)$)
+{
+    \includegraphics[
+        width=1.92in,
+        height=1.30in,
+        keepaspectratio
+    ]{\detokenize{Toro_Cover_folded Configuration}}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(4.81in,-5.04in)$)
+    rectangle
+    ($(current page.north west)+(6.89in,-6.43in)$);
+
+% Image 4: dual-use product concept
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(8.04in,-5.73in)$)
+{
+    \includegraphics[
+        width=1.92in,
+        height=1.30in,
+        keepaspectratio
+    ]{generative_AI_concept_toro_cover_art}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(7.00in,-5.04in)$)
+    rectangle
+    ($(current page.north west)+(9.08in,-6.43in)$);
+
+% Image 5: folded foam functional prototype
+% The portrait photograph is deliberately clipped to the landscape frame
+% so the ottoman fills the card without extending beyond its border.
+\begin{scope}
+\clip[rounded corners=4pt]
+    ($(current page.north west)+(9.19in,-5.04in)$)
+    rectangle
+    ($(current page.north east)+(-0.43in,-6.43in)$);
+
+% Keep the original image proportions and center it within the existing card.
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(9.88in,-5.735in)$)
+{
+    \includegraphics[
+        width=1.58in,
+        height=1.28in,
+        keepaspectratio
+    ]{foam_model_folded_backyard_image}
+};
+\end{scope}
+
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(9.19in,-5.04in)$)
+    rectangle
+    ($(current page.north east)+(-0.43in,-6.43in)$);
+
+% Larger captions
+\node[anchor=north,align=center,text width=1.95in,text=Muted,
+      font=\sffamily\fontsize{6.8}{7.4}\selectfont]
+at ($(current page.north west)+(1.47in,-6.49in)$)
+{Topside panel architecture};
+
+\node[anchor=north,align=center,text width=1.95in,text=Muted,
+      font=\sffamily\fontsize{6.8}{7.4}\selectfont]
+at ($(current page.north west)+(3.66in,-6.49in)$)
+{Underside hinge architecture};
+
+\node[anchor=north,align=center,text width=1.95in,text=Muted,
+      font=\sffamily\fontsize{6.8}{7.4}\selectfont]
+at ($(current page.north west)+(5.85in,-6.49in)$)
+{Folded CAD configuration};
+
+\node[anchor=north,align=center,text width=1.95in,text=Muted,
+      font=\sffamily\fontsize{6.8}{7.4}\selectfont]
+at ($(current page.north west)+(8.04in,-6.49in)$)
+{Dual-use product vision};
+
+\node[anchor=north,align=center,text width=1.95in,text=Muted,
+      font=\sffamily\fontsize{6.8}{7.4}\selectfont]
+at ($(current page.north west)+(9.88in,-6.49in)$)
+{Folded foam prototype};
+
+% Page 1 resource bar — centered and non-repeated resources
+\fill[Panel,rounded corners=4pt]
+    ($(current page.north west)+(0.43in,-7.05in)$)
+    rectangle
+    ($(current page.north east)+(-0.43in,-7.64in)$);
+\draw[RuleGray,line width=0.5pt,rounded corners=4pt]
+    ($(current page.north west)+(0.43in,-7.05in)$)
+    rectangle
+    ($(current page.north east)+(-0.43in,-7.64in)$);
+
+\node[
+    anchor=center,
+    align=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.9}{7.5}\selectfont
+]
+at ($(current page.north)+(0,-7.345in)$)
+{\href{\ToroDrawingLink}{\faDraftingCompass\ DRAWING PACKAGE}
+\hspace{24pt}
+\href{\ToroDimensionsLink}{\faImage\ DIMENSION STUDY}
+\hspace{24pt}
+\href{\ToroProblemLink}{\faFileImage\ PROBLEM STATEMENT}};
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\hyperlink{composites}{\faArrowLeft\ COMPOSITES}};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{TORO COVER \hspace{6pt} 1 / 3};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{MANUFACTURING-DRIVEN DESIGN \faArrowRight};
+
+\end{tikzpicture}
+
+
+% ============================================================
+% PAGE 2 — MANUFACTURING-DRIVEN DESIGN
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{toro-manufacturing}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% Background and bars
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% Header
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{TORO COVER \hspace{5pt}/\hspace{5pt} DESIGN FOR MANUFACTURABILITY};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{23}{24}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{THE ENVELOPE METHOD};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.7}{9.6}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{A one-layup process developed for unusually thick insulated composite sandwich panels};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(5.30in,-1.315in)$);
+
+% Process explanation
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.61in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-2.90in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.61in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-2.90in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.9}{8.6}\selectfont
+]
+at ($(current page.north west)+(0.67in,-1.76in)$)
+{PROCESS INNOVATION};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=9.55in,
+    text=Ink,
+    font=\fontsize{7.35}{8.75}\selectfont
+]
+at ($(current page.north west)+(0.67in,-2.02in)$)
+{
+Weight reduction and insulation were both essential, leading to the selection of an
+XPS foam core. Because XPS could not tolerate composite heat-cure temperatures, prepreg
+processing was not practical and the panels had to be manufactured by wet layup with a
+room-temperature cure. To simplify this process, I waterjet-cut XPS perimeter strips from
+excess foam and placed them around each core inside the vacuum enclosure. Under vacuum,
+the top and bottom carbon skins met along the panel sides and compressed against this
+border, eliminating a separate edge-banding layup and reducing corner pleating.
+};
+
+% Workflow title
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.43in,-3.06in)$)
+{MANUFACTURING WORKFLOW};
+
+% Row 1 image 1
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(2.07in,-4.105in)$)
+{
+    \includegraphics[
+        width=3.10in,
+        height=1.40in,
+        keepaspectratio
+    ]{waterjet_foam}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(0.43in,-3.36in)$)
+    rectangle
+    ($(current page.north west)+(3.71in,-4.85in)$);
+
+% Row 1 image 2
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(5.50in,-4.105in)$)
+{
+    \includegraphics[
+        width=3.10in,
+        height=1.40in,
+        keepaspectratio
+    ]{group_layup}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(3.86in,-3.36in)$)
+    rectangle
+    ($(current page.north west)+(7.14in,-4.85in)$);
+
+% Row 1 image 3
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(8.935in,-4.105in)$)
+{
+    \includegraphics[
+        width=3.10in,
+        height=1.40in,
+        keepaspectratio
+    ]{blue_perforrated_film_layup}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(7.29in,-3.36in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-4.85in)$);
+
+% Row 1 captions
+\node[anchor=north,text=Muted,font=\sffamily\fontsize{6.7}{7.3}\selectfont]
+at ($(current page.north west)+(2.07in,-4.90in)$)
+{1. Waterjet-cut core and perimeter geometry};
+
+\node[anchor=north,text=Muted,font=\sffamily\fontsize{6.7}{7.3}\selectfont]
+at ($(current page.north west)+(5.50in,-4.90in)$)
+{2. Team wet layup under my process guidance};
+
+\node[anchor=north,text=Muted,font=\sffamily\fontsize{6.7}{7.3}\selectfont]
+at ($(current page.north west)+(8.935in,-4.90in)$)
+{3. Perforated film, breather, and vacuum enclosure};
+
+% Row 2 image 1
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(2.07in,-5.875in)$)
+{
+    \includegraphics[
+        width=3.10in,
+        height=1.40in,
+        keepaspectratio
+    ]{completed_layup}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(0.43in,-5.13in)$)
+    rectangle
+    ($(current page.north west)+(3.71in,-6.62in)$);
+
+% Row 2 image 2 — oven chamber used only as a reliable vacuum enclosure; no heat applied
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(5.50in,-5.875in)$)
+{
+    \includegraphics[
+        width=3.10in,
+        height=1.40in,
+        keepaspectratio
+    ]{layups_in_composite_oven_under_vacuumPressure}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(3.86in,-5.13in)$)
+    rectangle
+    ($(current page.north west)+(7.14in,-6.62in)$);
+
+% Row 2 image 3
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(8.935in,-5.875in)$)
+{
+    \includegraphics[
+        width=3.10in,
+        height=1.40in,
+        keepaspectratio
+    ]{garage_sanding}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(7.29in,-5.13in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-6.62in)$);
+
+% Row 2 captions
+\node[anchor=north,text=Muted,font=\sffamily\fontsize{6.7}{7.3}\selectfont]
+at ($(current page.north west)+(2.07in,-6.67in)$)
+{4. Fully saturated carbon skin and foam sandwich};
+
+\node[anchor=north,text=Muted,font=\sffamily\fontsize{6.7}{7.3}\selectfont]
+at ($(current page.north west)+(5.50in,-6.67in)$)
+{5. Room-temperature cure under continuous vacuum};
+
+\node[anchor=north,text=Muted,font=\sffamily\fontsize{6.7}{7.3}\selectfont]
+at ($(current page.north west)+(8.935in,-6.67in)$)
+{6. Post-processing and surface preparation};
+
+% Bottom callouts
+\fill[Panel,rounded corners=4pt]
+    ($(current page.north west)+(0.43in,-6.95in)$)
+    rectangle
+    ($(current page.north west)+(5.48in,-7.60in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(0.43in,-6.95in)$)
+    rectangle
+    ($(current page.north west)+(5.48in,-7.60in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.north west)+(0.63in,-7.08in)$)
+{FROM THREE LAYUPS TO ONE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.56in,
+    text=Ink,
+    font=\fontsize{6.45}{7.45}\selectfont
+]
+at ($(current page.north west)+(0.63in,-7.29in)$)
+{
+The Envelope Method reduced labor, cure cycles, handling,
+alignment risk, and time spent forming numerous vacuum-bag
+pleats around the 1.5-inch-thick XPS panels.
+};
+
+\fill[Panel,rounded corners=4pt]
+    ($(current page.north west)+(5.68in,-6.95in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.60in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(5.68in,-6.95in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.60in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.north west)+(5.88in,-7.08in)$)
+{WHY SURFACE-BONDED HARDWARE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.55in,
+    text=Ink,
+    font=\fontsize{6.45}{7.45}\selectfont
+]
+at ($(current page.north west)+(5.88in,-7.29in)$)
+{
+Adhesively bonded hinges and fixtures preserved the clean
+composite exterior and avoided drilled inserts, foam-core
+crushing, added stress concentrations, and new leak paths.
+};
+
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ PRODUCT ARCHITECTURE};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{TORO COVER \hspace{6pt} 2 / 3};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{VALIDATION \& TAKEAWAYS \faArrowRight};
+
+\end{tikzpicture}
+
+
+% ============================================================
+% PAGE 3 — FINISHING, VALIDATION, AND TAKEAWAYS
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{toro-results}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% Background and bars
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+% Header
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{TORO COVER \hspace{5pt}/\hspace{5pt} VALIDATION AND ENGINEERING TAKEAWAYS};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{22.5}{23.5}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{FROM PROTOTYPE TO PRODUCT PATHWAY};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.7}{9.6}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Environmental protection, usability testing, scope decisions, and lessons from technical leadership};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(5.8in,-1.315in)$);
+
+% Finishing title
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.43in,-1.62in)$)
+{OUTDOOR FINISHING AND ENVIRONMENTAL PROTECTION};
+
+% Image 1
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(1.705in,-2.655in)$)
+{
+    \includegraphics[
+        width=2.35in,
+        height=1.40in,
+        keepaspectratio
+    ]{spray_topcoat_prep}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(0.43in,-1.91in)$)
+    rectangle
+    ($(current page.north west)+(2.98in,-3.40in)$);
+
+% Image 2
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(4.375in,-2.655in)$)
+{
+    \includegraphics[
+        width=2.35in,
+        height=1.40in,
+        keepaspectratio
+    ]{spraying_topcoat}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(3.10in,-1.91in)$)
+    rectangle
+    ($(current page.north west)+(5.65in,-3.40in)$);
+
+% Image 3
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(7.045in,-2.655in)$)
+{
+    \includegraphics[
+        width=2.35in,
+        height=1.40in,
+        keepaspectratio
+    ]{topcoat_setup_apparatus}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(5.77in,-1.91in)$)
+    rectangle
+    ($(current page.north west)+(8.32in,-3.40in)$);
+
+% Image 4
+\node[anchor=center,inner sep=0pt]
+at ($(current page.north west)+(9.50in,-2.655in)$)
+{
+    \includegraphics[
+        width=2.35in,
+        height=1.40in,
+        keepaspectratio
+    ]{refined_final_toro_cover_partial_carbon_model}
+};
+\draw[RuleGray,line width=0.55pt,rounded corners=4pt]
+    ($(current page.north west)+(8.44in,-1.91in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-3.40in)$);
+
+% Captions
+\node[anchor=north,text=Muted,font=\sffamily\fontsize{6.7}{7.3}\selectfont]
+at ($(current page.north west)+(1.705in,-3.45in)$)
+{Topcoat material preparation};
+
+\node[anchor=north,text=Muted,font=\sffamily\fontsize{6.7}{7.3}\selectfont]
+at ($(current page.north west)+(4.375in,-3.45in)$)
+{Automotive-booth topcoat application};
+
+\node[anchor=north,text=Muted,font=\sffamily\fontsize{6.7}{7.3}\selectfont]
+at ($(current page.north west)+(7.045in,-3.45in)$)
+{Coated panels drying after application};
+
+\node[anchor=north,text=Muted,font=\sffamily\fontsize{6.7}{7.3}\selectfont]
+at ($(current page.north west)+(9.50in,-3.45in)$)
+{Partial carbon manufacturing model};
+
+% Environmental rationale
+\fill[SoftGold,rounded corners=4pt]
+    ($(current page.north west)+(0.43in,-3.73in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-4.76in)$);
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=9.75in,
+    text=Ink,
+    font=\fontsize{7.05}{8.25}\selectfont
+]
+at ($(current page.north west)+(0.65in,-3.89in)$)
+{
+Because the sponsor required a carbon-fiber cover for outdoor use near chlorinated water,
+environmental protection became a functional requirement rather than a cosmetic finish.
+I selected and personally sprayed a UV-resistant Sunshield topcoat to seal minor laminate
+porosity, reduce moisture ingress, preserve the carbon appearance, limit UV degradation of
+the epoxy matrix, and isolate the composite surface from nearby metallic hardware.
+};
+
+% Results title
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.43in,-4.94in)$)
+{FUNCTIONAL PROTOTYPE RESULTS};
+
+% ------------------------------------------------------------
+% Matched lower panels — larger type and improved allocation
+% ------------------------------------------------------------
+
+% Left results panel
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(0.43in,-5.22in)$)
+    rectangle
+    ($(current page.north west)+(5.98in,-7.39in)$);
+
+\draw[RuleGray,line width=0.65pt,rounded corners=5pt]
+    ($(current page.north west)+(0.43in,-5.22in)$)
+    rectangle
+    ($(current page.north west)+(5.98in,-7.39in)$);
+
+\fill[DeepGreen,rounded corners=5pt]
+    ($(current page.north west)+(0.43in,-5.22in)$)
+    rectangle
+    ($(current page.north west)+(5.98in,-5.58in)$);
+
+\fill[DeepGreen]
+    ($(current page.north west)+(0.43in,-5.40in)$)
+    rectangle
+    ($(current page.north west)+(5.98in,-5.58in)$);
+
+\node[anchor=west,text=white,
+      font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.north west)+(0.66in,-5.40in)$)
+{SPECIFICATION};
+
+\node[anchor=west,text=white,
+      font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.north west)+(3.02in,-5.40in)$)
+{RESULT};
+
+\node[anchor=east,text=white,
+      font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.north west)+(5.55in,-5.40in)$)
+{STATUS};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.15in,
+    text=Ink,
+    font=\bfseries\fontsize{7.15}{8.55}\selectfont
+]
+at ($(current page.north west)+(0.66in,-5.72in)$)
+{
+Deployment time\\[3.4pt]
+Removal time\\[3.4pt]
+Single-user operation\\[3.4pt]
+Single-side operation\\[3.4pt]
+Deployment steps\\[3.4pt]
+Removal steps\\[3.4pt]
+Weight\\[3.4pt]
+Folded storage
+};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=1.45in,
+    text=Ink,
+    font=\fontsize{7.15}{8.55}\selectfont
+]
+at ($(current page.north west)+(3.02in,-5.72in)$)
+{
+25.51 seconds\\[3.4pt]
+37.22 seconds\\[3.4pt]
+100\% successful\\[3.4pt]
+75\% successful\\[3.4pt]
+6.4 average\\[3.4pt]
+9 average\\[3.4pt]
+17 lb\\[3.4pt]
+2.9' x 2.9' x 1.7'
+};
+
+\node[
+    anchor=north east,
+    align=right,
+    text width=1.05in,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.05}{8.55}\selectfont
+]
+at ($(current page.north west)+(5.55in,-5.72in)$)
+{
+PASS\\[3.4pt]
+PASS\\[3.4pt]
+PASS\\[3.4pt]
+NEAR TARGET\\[3.4pt]
+PASS\\[3.4pt]
+PASS\\[3.4pt]
+NEAR TARGET\\[3.4pt]
+PASS
+};
+
+% Right takeaways panel — widened for easier reading
+\fill[SoftGreen,rounded corners=5pt]
+    ($(current page.north west)+(6.14in,-5.22in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.39in)$);
+
+\draw[RuleGray,line width=0.65pt,rounded corners=5pt]
+    ($(current page.north west)+(6.14in,-5.22in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.39in)$);
+
+\fill[DeepGreen,rounded corners=5pt]
+    ($(current page.north west)+(6.14in,-5.22in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.58in)$);
+
+\fill[DeepGreen]
+    ($(current page.north west)+(6.14in,-5.40in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.58in)$);
+
+\node[anchor=west,text=white,
+      font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.north west)+(6.38in,-5.40in)$)
+{ENGINEERING TAKEAWAYS};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.02in,
+    text=Ink,
+    font=\fontsize{6.75}{7.85}\selectfont
+]
+at ($(current page.north west)+(6.38in,-5.72in)$)
+{
+\textbf{Manufacturing first.}
+Composite manufacturing constraints should guide the product architecture from the beginning.\\[4.5pt]
+\textbf{Prioritize deliberately.}
+Competing requirements must be balanced intentionally instead of maximizing every objective.\\[4.5pt]
+\textbf{Lead through the process.}
+Clear procedures, calm communication, and respect for teammates' strengths were essential during fabrication.\\[4.5pt]
+\textbf{Next iteration.}
+Reduce weight, refine the fabric-hinge fold lines, and improve panel-edge clearance.
+};
+
+% Compact concluding pathway
+\node[
+    anchor=center,
+    align=center,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{6.3}{6.9}\selectfont
+]
+at ($(current page.north)+(3.06in,-7.18in)$)
+{PROTOTYPE \faArrowRight\ DESIGN REFINEMENT
+\faArrowRight\ REPEATABLE MANUFACTURING
+\faArrowRight\ PRODUCT};
+
+% Validation resources
+\node[
+    anchor=north,
+    align=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.6}{7.2}\selectfont
+]
+at ($(current page.north)+(0,-7.58in)$)
+{\href{\ToroDeploymentLink}{\faPlayCircle\ DEPLOYMENT}
+\hspace{18pt}
+\href{\ToroRemovalLink}{\faPlayCircle\ REMOVAL / FOLDING}
+\hspace{18pt}
+\href{\ToroPosterLink}{\faFilePdf\ EXPO POSTER}
+\hspace{18pt}
+\href{\ToroReportLink}{\faFilePdf\ FINAL REPORT}};
+
+% Footer
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ MANUFACTURING-DRIVEN DESIGN};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{TORO COVER \hspace{6pt} 3 / 3};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{NEXT PROJECT \faArrowRight};
+
+\end{tikzpicture}
+\input{paddle}
+\clearpage

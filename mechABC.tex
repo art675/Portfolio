@@ -1,0 +1,393 @@
+
+% ============================================================
+% PROJECT 09A — ASSEMBLY PROGRAMMING / FSMs / HARDWARE I/O
+% REDESIGNED IMAGE-DOMINANT PORTFOLIO PAGE
+%
+% Intended to be included from the main portfolio:
+%     \input{project_09A_mechA_redesigned}
+%
+% Main portfolio preamble requirements:
+%     tikz, graphicx, hyperref, fontawesome5, amsmath, amssymb
+% and portfolio colors:
+%     DeepGreen, PolyGold, SoftGold, SoftGreen,
+%     RuleGray, Muted, Ink, Panel
+%
+% Upload these images to Overleaf with the exact base filenames:
+%     Hardware
+%     LED SIGNAL OSCILLOSCOPE PATTERN
+%     MechA Mastermind
+%
+% NOTE:
+%   - Hardware image is rotated 90 degrees clockwise.
+%   - Oscilloscope image is rotated 180 degrees.
+%   - Hello World image has been removed.
+% ============================================================
+
+% ------------------------------------------------------------
+% PROJECT 09A RESOURCE LINKS
+% ------------------------------------------------------------
+
+\providecommand{\MechAPrintCharactersURL}
+{https://drive.google.com/file/d/1jA619HPgH0PJENURi_L-7yJ1mnBQpqUk/view?usp=drive_link}
+
+\providecommand{\MechAReportURL}
+{https://drive.google.com/file/d/1qf21odOSnt2eeS6r1mzpLMUv8UrwoRtb/view?usp=drive_link}
+
+\providecommand{\MechALEDPatternURL}
+{https://drive.google.com/file/d/1edFUaDKKl4PwLnKgnRsApMmoV5XmdxL0/view?usp=drive_link}
+
+\providecommand{\MechAHardwarePrintURL}
+{https://drive.google.com/file/d/13lbooWnQR6LzI5cd-lH01E33kmZrDM-g/view?usp=drive_link}
+
+
+% ============================================================
+% PAGE — PROJECT 09A
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{project09A}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% ------------------------------------------------------------
+% PAGE FOUNDATION
+% ------------------------------------------------------------
+
+\fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+\fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0,-0.095in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+    ($(current page.south west)+(0,0.36in)$)
+    rectangle
+    ($(current page.south east)+(0,0.405in)$);
+
+
+% ------------------------------------------------------------
+% HEADER
+% ------------------------------------------------------------
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{02 MECHATRONICS \hspace{5pt}/\hspace{5pt} PROJECT 09A};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\bfseries\fontsize{21.3}{22.3}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{ASSEMBLY PROGRAMMING \& COOPERATIVE MULTITASKING};
+
+\node[
+    anchor=north west,
+    text=Muted,
+    font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly ME 305 Mechatronics
+\hspace{7pt}\textbullet\hspace{7pt}
+Two-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Spring 2025
+\hspace{7pt}\textbullet\hspace{7pt}
+Assembly Language};
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle
+    ($(current page.north west)+(9.10in,-1.315in)$);
+
+
+% ------------------------------------------------------------
+% HERO LEFT — MASTERMIND FSM
+% ------------------------------------------------------------
+
+\fill[SoftGreen!38,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(7.00in,-5.18in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-1.58in)$)
+    rectangle
+    ($(current page.north west)+(7.00in,-5.18in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(0.70in,-1.78in)$)
+{MASTER COORDINATION FINITE-STATE MACHINE};
+
+\node[
+    anchor=north,
+    inner sep=1.5pt
+]
+at ($(current page.north west)+(3.71in,-2.06in)$)
+{
+    \includegraphics[
+        width=6.10in,
+        height=2.74in,
+        keepaspectratio
+    ]{\detokenize{MechA Mastermind}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=5.95in,
+    text=Muted,
+    font=\sffamily\fontsize{6.08}{6.74}\selectfont
+]
+at ($(current page.north west)+(3.71in,-4.86in)$)
+{Mastermind FSM coordinating function selection, digit entry, backspace handling, and enter events through shared flags};
+
+
+% ------------------------------------------------------------
+% HERO RIGHT — HARDWARE PLATFORM
+% ------------------------------------------------------------
+
+\fill[SoftGreen!44,rounded corners=5pt]
+    ($(current page.north west)+(7.22in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.18in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(7.22in,-1.58in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-5.18in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont
+]
+at ($(current page.north west)+(7.50in,-1.78in)$)
+{LEARNING PLATFORM};
+
+\node[
+    anchor=north,
+    inner sep=2.0pt,
+    draw=DeepGreen,
+    line width=0.58pt,
+    rounded corners=4pt,
+    fill=white
+]
+at ($(current page.north west)+(9.02in,-2.06in)$)
+{
+    \includegraphics[
+        angle=-90,
+        origin=c,
+        width=3.04in,
+        height=2.52in,
+        keepaspectratio
+    ]{\detokenize{Hardware}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=2.92in,
+    text=Muted,
+    font=\sffamily\fontsize{6.08}{6.74}\selectfont
+]
+at ($(current page.north west)+(9.02in,-4.965in)$)
+{Instructor-provided MCU, LCD, keypad, I/O board, and external LED hardware};
+
+
+% ------------------------------------------------------------
+% LOWER LEFT — PROJECT OVERVIEW / TECHNICAL TAKEAWAY
+% ------------------------------------------------------------
+
+\fill[SoftGold,rounded corners=5pt]
+    ($(current page.north west)+(0.42in,-5.42in)$)
+    rectangle
+    ($(current page.north west)+(6.30in,-7.28in)$);
+
+\fill[PolyGold]
+    ($(current page.north west)+(0.42in,-5.42in)$)
+    rectangle
+    ($(current page.north west)+(0.52in,-7.28in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.65}{8.35}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.60in)$)
+{ASSEMBLY SOFTWARE ARCHITECTURE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=5.25in,
+    text=Ink,
+    font=\fontsize{5.80}{6.67}\selectfont
+]
+at ($(current page.north west)+(0.72in,-5.89in)$)
+{
+The program was organized as eight cooperatively scheduled tasks for
+input decoding, keypad servicing, LCD output, two LED pattern generators,
+two independent timing functions, and a 1 ms countdown task. User-entered
+periods were buffered, validated, and assigned to the appropriate LED
+channel while the interface remained responsive.\\[4pt]
+
+The exercise reinforced direct RAM allocation, byte and word handling,
+register-based branching, shared Boolean flags, pointer-based display
+output, and reusable assembly subroutines. Software development was shared
+equally with one partner; the supplied hardware platform kept the focus
+on low-level programming and hardware interaction.
+};
+
+\node[
+    anchor=south west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{5.95}{6.65}\selectfont
+]
+at ($(current page.north west)+(0.72in,-7.10in)$)
+{FSMs \hspace{5pt}\textbullet\hspace{5pt}
+BUFFERS \hspace{5pt}\textbullet\hspace{5pt}
+REGISTERS \hspace{5pt}\textbullet\hspace{5pt}
+POINTERS \hspace{5pt}\textbullet\hspace{5pt}
+COOPERATIVE SCHEDULING};
+
+
+% ------------------------------------------------------------
+% LOWER RIGHT — OSCILLOSCOPE RESULT
+% ------------------------------------------------------------
+
+\fill[SoftGreen!42,rounded corners=5pt]
+    ($(current page.north west)+(6.52in,-5.42in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.28in)$);
+
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+    ($(current page.north west)+(6.52in,-5.42in)$)
+    rectangle
+    ($(current page.north east)+(-0.42in,-7.28in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.55}{8.25}\selectfont
+]
+at ($(current page.north west)+(6.78in,-5.60in)$)
+{INDEPENDENT LED TIMING};
+
+\node[
+    anchor=north,
+    inner sep=2.0pt,
+    draw=RuleGray,
+    line width=0.50pt,
+    rounded corners=3pt,
+    fill=white
+]
+at ($(current page.north west)+(8.74in,-5.90in)$)
+{
+    \includegraphics[
+        angle=180,
+        origin=c,
+        width=3.60in,
+        height=1.08in,
+        keepaspectratio
+    ]{\detokenize{LED SIGNAL OSCILLOSCOPE PATTERN}}
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=3.55in,
+    text=Muted,
+    font=\sffamily\fontsize{6.00}{6.66}\selectfont
+]
+at ($(current page.north west)+(8.74in,-7.04in)$)
+{Two independently timed LED outputs captured on the oscilloscope};
+
+
+% ------------------------------------------------------------
+% RESOURCE BAR
+% ------------------------------------------------------------
+
+\fill[SoftGreen!34,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\draw[RuleGray,line width=0.45pt,rounded corners=4pt]
+    ($(current page.south west)+(0.42in,0.54in)$)
+    rectangle
+    ($(current page.south east)+(-0.42in,0.96in)$);
+
+\node[
+    anchor=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.10}{6.75}\selectfont,
+    align=center
+]
+at ($(current page.south)+(0,0.75in)$)
+{
+\href{\MechAReportURL}{\faFilePdf\ REPORT \& SOURCE CODE}
+\hspace{15pt}
+\href{\MechAPrintCharactersURL}{\faPlayCircle\ PRINT CHARACTERS}
+\hspace{15pt}
+\href{\MechAHardwarePrintURL}{\faPlayCircle\ HARDWARE PRINT DEMO}
+\hspace{15pt}
+\href{\MechALEDPatternURL}{\faPlayCircle\ LED PATTERN DEMO}
+};;
+
+
+% ------------------------------------------------------------
+% FOOTER
+% ------------------------------------------------------------
+
+\node[
+    anchor=south west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ KINECT-GUIDED AUTONOMOUS DRONE};
+
+\node[
+    anchor=south,
+    text=white,
+    font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{ASSEMBLY PROGRAMMING, FSMs \& HARDWARE INTERACTION \hspace{6pt} 09A};
+
+\node[
+    anchor=south east,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{PROJECT 09B \faArrowRight};
+
+\end{tikzpicture}
+\input{mechB}
+\clearpage

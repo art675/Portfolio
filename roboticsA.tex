@@ -1,0 +1,228 @@
+% ============================================================
+% PROJECT 10A — QARM FORWARD KINEMATICS & WRIST CONTROL
+% ME 423 ROBOTICS LABORATORY
+%
+% Intended to be included from the main portfolio:
+%     \input{project_10A_roboticsA}
+%
+% Main portfolio preamble requirements:
+%     tikz, graphicx, hyperref, fontawesome5, amsmath, amssymb
+% and portfolio colors:
+%     DeepGreen, PolyGold, SoftGold, SoftGreen,
+%     RuleGray, Muted, Ink, Panel
+%
+% Upload these images to Overleaf with the exact filenames:
+%     dh table.png
+%     Hero Image Schematic.png
+%     QArm Plot.png
+%     Physical Q Arm.jpg
+% ============================================================
+
+\providecommand{\RoboticsAMemoURL}
+{https://drive.google.com/file/d/1Q6o-cOpTXbXNI5HRYmXWy-a49be91yq3/view?usp=drive_link}
+\providecommand{\RoboticsAInvalidURL}
+{https://drive.google.com/file/d/193oqkwrsxjBAB5ChAEsmLkw3sdgO_RqC/view?usp=drive_link}
+\providecommand{\RoboticsAModeOneURL}
+{https://drive.google.com/file/d/1qKWAAejP6dJGwNqt1MohVfw-zpxknYGg/view?usp=drive_link}
+\providecommand{\RoboticsAModeTwoURL}
+{https://drive.google.com/file/d/1jmsSuUzLVZCl0BX5BeqRhcKeH5TN8gxD/view?usp=drive_link}
+\providecommand{\RoboticsAModeThreeURL}
+{https://drive.google.com/file/d/1kioVb3deyh3o-F2Zdtuajz3qs-fEcXCJ/view?usp=drive_link}
+\providecommand{\RoboticsAFrameAnimationURL}
+{https://drive.google.com/file/d/1MpNHoxBMbmnyC0dJSu8pYFatpGHtrx_-/view?usp=drive_link}
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{project10A}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+% HEADER
+\node[anchor=north west,text=PolyGold,font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{02 MECHATRONICS \hspace{5pt}/\hspace{5pt} PROJECT 10A};
+
+\node[anchor=north west,text=DeepGreen,font=\bfseries\fontsize{21.4}{22.4}\selectfont]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{QARM FORWARD KINEMATICS \& WRIST CONTROL};
+
+\node[anchor=north west,text=Muted,font=\sffamily\fontsize{8.15}{8.95}\selectfont]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly ME 423 Robotics Laboratory
+\hspace{7pt}\textbullet\hspace{7pt}
+Three-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Winter 2026
+\hspace{7pt}\textbullet\hspace{7pt}
+Quanser QArm};
+
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north west)+(9.12in,-1.315in)$);
+
+% HERO LEFT — SCHEMATIC
+\fill[SoftGreen!38,rounded corners=5pt]
+($(current page.north west)+(0.42in,-1.58in)$)
+rectangle
+($(current page.north west)+(6.55in,-4.72in)$);
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+($(current page.north west)+(0.42in,-1.58in)$)
+rectangle
+($(current page.north west)+(6.55in,-4.72in)$);
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont]
+at ($(current page.north west)+(0.70in,-1.77in)$)
+{DENAVIT--HARTENBERG FRAME DEFINITION};
+
+\node[anchor=north,inner sep=1.6pt]
+at ($(current page.north west)+(3.49in,-2.02in)$)
+{\includegraphics[width=5.72in,height=2.32in,keepaspectratio]{\detokenize{Hero Image Schematic.png}}};
+
+\node[anchor=north,align=center,text width=5.62in,text=Muted,font=\sffamily\fontsize{6.02}{6.70}\selectfont]
+at ($(current page.north west)+(3.49in,-4.45in)$)
+{Assigned QArm joint frames and link geometry used to construct the forward-kinematics model};
+
+% HERO RIGHT — PHYSICAL QARM
+\fill[SoftGreen!42,rounded corners=5pt]
+($(current page.north west)+(6.77in,-1.58in)$)
+rectangle
+($(current page.north east)+(-0.42in,-4.72in)$);
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+($(current page.north west)+(6.77in,-1.58in)$)
+rectangle
+($(current page.north east)+(-0.42in,-4.72in)$);
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.85}{8.55}\selectfont]
+at ($(current page.north west)+(7.05in,-1.77in)$)
+{PHYSICAL QARM};
+
+\node[anchor=north,inner sep=2.0pt,draw=DeepGreen,line width=0.58pt,rounded corners=4pt,fill=white]
+at ($(current page.north west)+(9.00in,-2.01in)$)
+{\includegraphics[width=3.58in,height=2.28in,keepaspectratio]{\detokenize{Physical Q Arm.jpg}}};
+
+\node[anchor=north,align=center,text width=3.40in,text=Muted,font=\sffamily\fontsize{6.02}{6.70}\selectfont]
+at ($(current page.north west)+(9.00in,-4.43in)$)
+{Quanser QArm used to verify predicted end-effector motion and evaluate wrist-joint tracking};
+
+% LOWER LEFT — OVERVIEW
+\fill[SoftGold,rounded corners=5pt]
+($(current page.north west)+(0.42in,-4.97in)$)
+rectangle
+($(current page.north west)+(4.54in,-7.27in)$);
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-4.97in)$)
+rectangle
+($(current page.north west)+(0.52in,-7.27in)$);
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.58}{8.28}\selectfont]
+at ($(current page.north west)+(0.72in,-5.16in)$)
+{KINEMATICS TO HARDWARE};
+
+\node[anchor=north west,align=left,text width=3.52in,text=Ink,font=\fontsize{5.67}{6.52}\selectfont]
+at ($(current page.north west)+(0.72in,-5.45in)$)
+{
+This laboratory connected classical robot kinematics to physical joint motion. A four-link Denavit--Hartenberg model was developed for the QArm so commanded joint angles could be mapped to end-effector position and orientation. The home configuration was checked analytically and then implemented in MATLAB as a reusable forward-kinematics function.\\[4pt]
+
+The model was extended into a 3D animation that continuously recomputed the end-effector transform while the arm moved through representative joint configurations. Physical motion of the QArm was then compared qualitatively against the predicted sweep and frame orientation.\\[4pt]
+
+Later tasks used Simulink and the real hardware to explore command modes, safety logic, RGB status feedback, and closed-loop PWM wrist control, bridging geometric modeling with practical actuator behavior.
+};
+
+\node[anchor=south west,text=PolyGold,font=\sffamily\bfseries\fontsize{5.82}{6.52}\selectfont]
+at ($(current page.north west)+(0.72in,-7.08in)$)
+{DH MODELING \hspace{4pt}\textbullet\hspace{4pt} FORWARD KINEMATICS \hspace{4pt}\textbullet\hspace{4pt} PWM CONTROL};
+
+% LOWER CENTER — DH TABLE
+\fill[SoftGreen!38,rounded corners=5pt]
+($(current page.north west)+(4.76in,-4.97in)$)
+rectangle
+($(current page.north west)+(7.43in,-7.27in)$);
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+($(current page.north west)+(4.76in,-4.97in)$)
+rectangle
+($(current page.north west)+(7.43in,-7.27in)$);
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.45}{8.15}\selectfont]
+at ($(current page.north west)+(5.02in,-5.16in)$)
+{SYMBOLIC DH TABLE};
+
+\node[anchor=north,inner sep=1.5pt]
+at ($(current page.north west)+(6.10in,-5.49in)$)
+{\includegraphics[width=2.36in,height=1.18in,keepaspectratio]{\detokenize{dh table.png}}};
+
+\node[anchor=north,align=center,text width=2.24in,text=Muted,font=\sffamily\fontsize{5.72}{6.35}\selectfont]
+at ($(current page.north west)+(6.10in,-6.78in)$)
+{Four-link parameterization used to generate each homogeneous transform};
+
+% LOWER RIGHT — MATLAB ANIMATION
+\fill[SoftGreen!38,rounded corners=5pt]
+($(current page.north west)+(7.65in,-4.97in)$)
+rectangle
+($(current page.north east)+(-0.42in,-7.27in)$);
+\draw[RuleGray,line width=0.55pt,rounded corners=5pt]
+($(current page.north west)+(7.65in,-4.97in)$)
+rectangle
+($(current page.north east)+(-0.42in,-7.27in)$);
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.45}{8.15}\selectfont]
+at ($(current page.north west)+(7.91in,-5.16in)$)
+{MATLAB FRAME ANIMATION};
+
+\node[anchor=north,inner sep=1.5pt,draw=RuleGray,line width=0.48pt,rounded corners=3pt,fill=white]
+at ($(current page.north west)+(9.20in,-5.47in)$)
+{\includegraphics[width=3.00in,height=1.20in,keepaspectratio]{\detokenize{QArm Plot.png}}};
+
+\node[anchor=north,align=center,text width=2.92in,text=Muted,font=\sffamily\fontsize{5.72}{6.35}\selectfont]
+at ($(current page.north west)+(9.1in,-6.79in)$)
+{3D link sweep with continuously updated end-effector frame};
+
+% RESOURCE BAR
+\fill[SoftGreen!34,rounded corners=4pt]
+($(current page.south west)+(0.42in,0.54in)$)
+rectangle
+($(current page.south east)+(-0.42in,0.96in)$);
+\draw[RuleGray,line width=0.45pt,rounded corners=4pt]
+($(current page.south west)+(0.42in,0.54in)$)
+rectangle
+($(current page.south east)+(-0.42in,0.96in)$);
+
+\node[anchor=center,text=DeepGreen,font=\sffamily\bfseries\fontsize{5.90}{6.55}\selectfont,align=center]
+at ($(current page.south)+(0,0.75in)$)
+{
+\href{\RoboticsAMemoURL}{\faFilePdf\ ROBOTICSA MEMO}
+\hspace{10pt}
+\href{\RoboticsAFrameAnimationURL}{\faPlayCircle\ FRAME ANIMATION}
+\hspace{10pt}
+\href{\RoboticsAInvalidURL}{\faPlayCircle\ INVALID MODE}
+\hspace{10pt}
+\href{\RoboticsAModeOneURL}{\faPlayCircle\ MODE 1}
+\hspace{10pt}
+\href{\RoboticsAModeTwoURL}{\faPlayCircle\ MODE 2}
+\hspace{10pt}
+\href{\RoboticsAModeThreeURL}{\faPlayCircle\ MODE 3}
+};
+
+% FOOTER
+\node[anchor=south west,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ PROJECT 09C};
+
+\node[anchor=south,text=white,font=\sffamily\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.south)+(0,0.17in)$)
+{ROBOTICS METHODS: VISION, KINEMATICS \& TRAJECTORY PLANNING \hspace{6pt} 10A};
+
+\node[anchor=south east,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{PROJECT 10B \faArrowRight};
+
+\end{tikzpicture}
+% \input{roboticsB} % moved to mechC.tex to avoid TeX input nesting limit
+\clearpage
