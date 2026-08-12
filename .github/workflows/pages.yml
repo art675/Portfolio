@@ -1,4 +1,4 @@
-name: Build and Deploy Portfolio
+name: Deploy Portfolio
 
 on:
   push:
@@ -23,37 +23,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Install Pandoc
+      - name: Create site
         run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc
+          mkdir -p _site
+          cp index.html _site/index.html
 
-      - name: Create site directory
-        run: mkdir -p _site
-
-      - name: Convert LaTeX portfolio to HTML
-        run: |
-          pandoc main.tex \
-            --from=latex \
-            --to=html5 \
-            --standalone \
-            --resource-path=. \
-            --output=_site/index.html
-
-      - name: Copy portfolio assets
-        run: |
-          find . -maxdepth 1 -type f \( \
-            -iname "*.png" -o \
-            -iname "*.jpg" -o \
-            -iname "*.jpeg" -o \
-            -iname "*.gif" -o \
-            -iname "*.svg" \
-          \) -exec cp {} _site/ \;
-
-      - name: Configure GitHub Pages
+      - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload website
+      - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:
           path: _site
@@ -67,6 +45,6 @@ jobs:
     needs: build
 
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
