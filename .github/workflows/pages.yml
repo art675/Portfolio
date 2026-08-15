@@ -23,7 +23,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Configure Pages
+      - name: Create assets folder
+        run: |
+          mkdir -p web/assets
+
+      - name: Copy portfolio images into web assets
+        run: |
+          find . -maxdepth 1 -type f \( \
+            -iname "*.png" -o \
+            -iname "*.jpg" -o \
+            -iname "*.jpeg" -o \
+            -iname "*.gif" -o \
+            -iname "*.svg" -o \
+            -iname "*.webp" \
+          \) -exec cp -v {} web/assets/ \;
+
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Upload website
