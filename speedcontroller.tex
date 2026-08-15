@@ -1,0 +1,1100 @@
+% ============================================================
+% PROJECT 12 — PERCEPTION-DRIVEN SPEED CONTROLLER
+% AUTONOMY SECTION
+% ============================================================
+
+\providecommand{\SpeedTrackTwoVideo}
+{https://drive.google.com/file/d/1q9dXysGagFLCrRGcoJlnZpKEo-vEsKa8/view?usp=drive_link}
+\providecommand{\SpeedHighBayVideo}
+{https://drive.google.com/file/d/17PIPECBLT7-KBo4zy6U4n8nx9SuUaWT9/view?usp=drive_link}
+\providecommand{\SpeedOdometryVideo}
+{https://drive.google.com/file/d/1EiGmT3-yIDDGuL3vISSR79SOYPB33dNt/view?usp=drive_link}
+\providecommand{\SpeedControllerReport}
+{https://example.com/replace-with-project-report}
+\providecommand{\SpeedControllerNotebook}
+{https://example.com/replace-with-colab-or-github}
+\providecommand{\PerceptionDrivenSpeedDemo}
+{https://drive.google.com/file/d/1OkIOGdNTr7oCtNros2mvDmoaIpru46zc/view?usp=drive_link}
+\providecommand{\YOLOFrameAccumulationVideo}
+{https://drive.google.com/file/d/1aGjLG5hGJ0lx6gqRmn9o2sD6sj1AY_Fw/view?usp=drive_link}
+
+% ============================================================
+% PAGE 1 — PROBLEM FRAMING
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{speedcontroller}{}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+\node[anchor=north west,text=PolyGold,font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 12};
+
+\node[anchor=north west,text=DeepGreen,font=\bfseries\fontsize{21.4}{22.4}\selectfont]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{PERCEPTION-DRIVEN SPEED CONTROLLER};
+
+\node[anchor=north west,text=Muted,font=\sffamily\fontsize{8.15}{8.95}\selectfont]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Cal Poly Autonomous Vehicles Laboratory
+\hspace{7pt}\textbullet\hspace{7pt}
+Three-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Spring 2026
+\hspace{7pt}\textbullet\hspace{7pt}
+San Luis Obispo, California};
+
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+\node[anchor=north west,align=left,text width=10.05in,text=Ink,font=\fontsize{7.05}{8.20}\selectfont]
+at ($(current page.north west)+(0.48in,-1.60in)$)
+{
+This project extended the road-following vehicle from \textbf{lane perception} into
+\textbf{scene-aware speed control}. Rather than commanding speed from a single
+visual feature, the controller interpreted traffic signs and signal states from a
+custom-trained \textbf{YOLO} detector, estimated when each object should affect the
+vehicle using its apparent image height, and reproduced the expected speed profile
+with deterministic control logic.
+};
+
+\node[anchor=north west,inner sep=2.2pt,draw=DeepGreen,line width=0.72pt,rounded corners=4pt]
+at ($(current page.north west)+(0.48in,-2.13in)$)
+{\includegraphics[width=3.05in,height=4.05in,keepaspectratio]{\detokenize{TrafficSigns.jpg}}};
+
+\fill[DeepGreen]
+($(current page.north west)+(0.63in,-2.32in)$)
+rectangle
+($(current page.north west)+(2.83in,-2.05in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.6}{7.2}\selectfont]
+at ($(current page.north west)+(0.75in,-2.18in)$)
+{PHYSICAL TRAFFIC-CONTROL TARGETS};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.2}{8.9}\selectfont]
+at ($(current page.north west)+(3.78in,-2.11in)$)
+{FROM IMAGE HEIGHT TO VEHICLE BEHAVIOR};
+
+\node[anchor=north west,inner sep=1.4pt,draw=RuleGray,line width=0.50pt]
+at ($(current page.north west)+(3.78in,-2.39in)$)
+{\includegraphics[width=6.85in,keepaspectratio]{\detokenize{SignDetectionHeightOverFrames.png}}};
+
+\node[anchor=north west,align=left,text width=6.9in,text=Ink,font=\fontsize{6.35}{7.30}\selectfont]
+at ($(current page.north west)+(3.78in,-5.42in)$)
+{
+As a traffic-control target approached the vehicle, its detected bounding-box height
+increased. The controller used this image-height trend as a practical trigger for
+changing the commanded speed. Detection class, object height, temporal hold, and
+release logic then determined when an action became active and when normal motion
+could resume.
+};
+
+% ------------------------------------------------------------
+% LOWER LEFT — DESIGN INTENT
+% ------------------------------------------------------------
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(0.48in,-6.38in)$)
+rectangle
+($(current page.north west)+(3.48in,-7.76in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0.48in,-6.38in)$)
+rectangle
+($(current page.north west)+(0.58in,-7.76in)$);
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{7.5}{8.2}\selectfont
+]
+at ($(current page.north west)+(0.78in,-6.54in)$)
+{DESIGN INTENT};
+
+\node[
+anchor=north west,
+align=left,
+text width=2.38in,
+text=Ink,
+font=\fontsize{6.00}{6.90}\selectfont
+]
+at ($(current page.north west)+(0.78in,-6.84in)$)
+{
+The desired speed trace was treated as the reference behavior for the controller.
+Rather than copying it directly, the project recreated that behavior with explicit
+logic built from detection class, apparent object height, temporal hold, sign
+priority, and release conditions.
+};
+
+% ------------------------------------------------------------
+% LOWER RIGHT — CONTROL-TARGET EMULATION
+% Same visual width as SignDetectionHeightOverFrames above.
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+inner sep=1.4pt,
+draw=RuleGray,
+line width=0.50pt
+]
+at ($(current page.north west)+(3.78in,-6.08in)$)
+{
+\includegraphics[
+width=6.85in,
+keepaspectratio
+]{\detokenize{GroundTruthEmulationAlgorithm.png}}
+};
+
+% Banner sits directly on the plot.
+\fill[DeepGreen]
+($(current page.north west)+(3.70in,-6.21in)$)
+rectangle
+($(current page.north west)+(5.36in,-5.94in)$);
+
+\node[
+anchor=west,
+text=white,
+font=\sffamily\bfseries\fontsize{6.6}{7.2}\selectfont
+]
+at ($(current page.north west)+(3.86in,-6.075in)$)
+{THE CONTROL TARGET};
+
+\node[anchor=south west,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\hyperlink{roadfollowing}{\faArrowLeft\ PROJECT 11}};
+\node[anchor=south,text=white,font=\sffamily\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.south)+(0,0.17in)$)
+{12 PERCEPTION-DRIVEN SPEED CONTROL \hspace{6pt} 1 / 7};
+\node[anchor=south east,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{TRACK 2 \faArrowRight};
+\end{tikzpicture}
+
+% ============================================================
+% PAGE 2 — TRACK 2 GALLERY
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+\node[anchor=north west,text=PolyGold,font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 12 \hspace{5pt}/\hspace{5pt} TRACK 2};
+\node[anchor=north west,text=DeepGreen,font=\bfseries\fontsize{20.0}{21.0}\selectfont]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{OBJECT DETECTION ON THE SECOND TEST TRACK};
+\node[anchor=north west,text=Muted,font=\sffamily\fontsize{8.15}{8.95}\selectfont]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Lane-boundary detections
+\hspace{7pt}\textbullet\hspace{7pt}
+Traffic-control classes
+\hspace{7pt}\textbullet\hspace{7pt}
+Confidence-scored scene understanding};
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+\node[anchor=north west,align=left,text width=10.04in,text=Ink,font=\fontsize{6.8}{7.9}\selectfont]
+at ($(current page.north west)+(0.48in,-1.59in)$)
+{
+The trained detector was first examined on a second recorded course containing
+lane markings and several traffic-control objects. These six frames show the same
+perception stack identifying the road corridor while independently classifying the
+object that should modify vehicle speed.
+};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(0.24in,-2.08in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{crosswalkAhead_track2.png}}};
+\fill[DeepGreen] ($(current page.north west)+(0.36in,-2.23in)$) rectangle ($(current page.north west)+(1.72in,-1.98in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(0.46in,-2.105in)$) {CROSSWALK AHEAD};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(3.78in,-2.08in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{greenlight_track2.png}}};
+\fill[DeepGreen] ($(current page.north west)+(3.90in,-2.23in)$) rectangle ($(current page.north west)+(5.16in,-1.98in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(4.00in,-2.105in)$) {GREEN LIGHT};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(7.32in,-2.08in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{noEntrysign_track2.png}}};
+\fill[DeepGreen] ($(current page.north west)+(7.44in,-2.23in)$) rectangle ($(current page.north west)+(8.67in,-1.98in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(7.54in,-2.105in)$) {NO ENTRY};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(0.24in,-4.48in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{redlight_track2.png}}};
+\fill[DeepGreen] ($(current page.north west)+(0.36in,-4.63in)$) rectangle ($(current page.north west)+(1.58in,-4.38in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(0.46in,-4.505in)$) {RED LIGHT};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(3.78in,-4.48in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{speedLimit5_track2.png}}};
+\fill[DeepGreen] ($(current page.north west)+(3.90in,-4.63in)$) rectangle ($(current page.north west)+(5.27in,-4.38in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(4.00in,-4.505in)$) {SPEED LIMIT 5};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(7.32in,-4.48in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{stopsign_track2.png}}};
+\fill[DeepGreen] ($(current page.north west)+(7.44in,-4.63in)$) rectangle ($(current page.north west)+(8.59in,-4.38in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(7.54in,-4.505in)$) {STOP SIGN};
+
+\draw[RuleGray,line width=0.45pt]
+($(current page.north west)+(0.48in,-6.84in)$)
+-- ($(current page.north east)+(-0.48in,-6.84in)$);
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(0.50in,-7.02in)$)
+{WHAT THIS RUN ESTABLISHED};
+\node[anchor=north west,align=left,text width=6.65in,text=Ink,font=\fontsize{6.25}{7.2}\selectfont]
+at ($(current page.north west)+(0.50in,-7.29in)$)
+{
+The network maintained simultaneous awareness of \textbf{lane geometry} and
+\textbf{traffic-control objects}. The controller could therefore separate the
+question ``where should I steer?'' from ``how fast should I be traveling?'' while
+using the same camera stream.
+};
+
+\fill[SoftGreen!62,rounded corners=4pt]
+($(current page.north west)+(7.45in,-7.04in)$)
+rectangle
+($(current page.north east)+(-0.42in,-7.83in)$);
+\node[anchor=center,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.1}{7.8}\selectfont]
+at ($(current page.north west)+(9.18in,-7.43in)$)
+{\href{\SpeedTrackTwoVideo}{\faPlayCircle\ VIEW FULL TRACK 2 FOXGLOVE RUN}};
+
+\node[anchor=south west,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ CONTROL TARGET};
+\node[anchor=south,text=white,font=\sffamily\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.south)+(0,0.17in)$)
+{12 PERCEPTION-DRIVEN SPEED CONTROL \hspace{6pt} 2 / 7};
+\node[anchor=south east,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{HIGH BAY \faArrowRight};
+\end{tikzpicture}
+
+% ============================================================
+% PAGE 3 — CP HIGH BAY GALLERY
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+\node[anchor=north west,text=PolyGold,font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 12 \hspace{5pt}/\hspace{5pt} HIGH BAY};
+\node[anchor=north west,text=DeepGreen,font=\bfseries\fontsize{20.0}{21.0}\selectfont]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{GENERALIZING THE DETECTOR TO THE CP HIGH BAY};
+\node[anchor=north west,text=Muted,font=\sffamily\fontsize{8.15}{8.95}\selectfont]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{New lighting
+\hspace{7pt}\textbullet\hspace{7pt}
+New viewpoint
+\hspace{7pt}\textbullet\hspace{7pt}
+Same perception classes and control logic};
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+\node[anchor=north west,align=left,text width=10.04in,text=Ink,font=\fontsize{6.8}{7.9}\selectfont]
+at ($(current page.north west)+(0.48in,-1.59in)$)
+{
+The same detector was then exercised on the Cal Poly High Bay course. The
+environment changed substantially, but the perception output retained the same
+interface: class label, confidence, bounding box, and lane evidence. This was the
+more important test of whether the trained visual vocabulary transferred beyond a
+single recording.
+};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(0.24in,-2.08in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{crosswalk_aheadsign_highbay.png}}};
+\fill[DeepGreen] ($(current page.north west)+(0.36in,-2.23in)$) rectangle ($(current page.north west)+(1.71in,-1.98in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(0.46in,-2.105in)$) {CROSSWALK AHEAD};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(3.78in,-2.08in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{end_speed_limitsign_cphighbay.png}}};
+\fill[DeepGreen] ($(current page.north west)+(3.90in,-2.23in)$) rectangle ($(current page.north west)+(5.44in,-1.98in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(4.00in,-2.105in)$) {END SPEED LIMIT};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(7.32in,-2.08in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{no_entrysign_cphighbay.png}}};
+\fill[DeepGreen] ($(current page.north west)+(7.44in,-2.23in)$) rectangle ($(current page.north west)+(8.67in,-1.98in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(7.54in,-2.105in)$) {NO ENTRY};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(0.24in,-4.48in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{speedlimit5_cphighbay.png}}};
+\fill[DeepGreen] ($(current page.north west)+(0.36in,-4.63in)$) rectangle ($(current page.north west)+(1.73in,-4.38in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(0.46in,-4.505in)$) {SPEED LIMIT 5};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(3.78in,-4.48in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{stop_sign_cphighbay.png}}};
+\fill[DeepGreen] ($(current page.north west)+(3.90in,-4.63in)$) rectangle ($(current page.north west)+(5.02in,-4.38in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(4.00in,-4.505in)$) {STOP SIGN};
+
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.48pt]
+at ($(current page.north west)+(7.32in,-4.48in)$)
+{\includegraphics[width=3.39in,height=2.17in,keepaspectratio]{\detokenize{traffic_ligh_red_cphighbay.png}}};
+\fill[DeepGreen] ($(current page.north west)+(7.44in,-4.63in)$) rectangle ($(current page.north west)+(8.64in,-4.38in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont]
+at ($(current page.north west)+(7.54in,-4.505in)$) {RED LIGHT};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(0.50in,-6.92in)$)
+{WHAT CHANGED — AND WHAT DID NOT};
+\node[anchor=north west,align=left,text width=6.55in,text=Ink,font=\fontsize{6.25}{7.2}\selectfont]
+at ($(current page.north west)+(0.50in,-7.20in)$)
+{
+Lighting, surrounding geometry, and viewpoint changed, but the detector still
+returned the same semantic classes needed by the speed controller. That consistency
+allowed the downstream logic to remain independent of the specific test course.
+};
+
+\fill[SoftGreen!62,rounded corners=4pt]
+($(current page.north west)+(7.56in,-7.18in)$)
+rectangle
+($(current page.north east)+(-0.42in,-7.83in)$);
+\node[anchor=center,text=DeepGreen,font=\sffamily\bfseries\fontsize{6.95}{7.6}\selectfont]
+at ($(current page.north west)+(9.20in,-7.51in)$)
+{\href{\SpeedHighBayVideo}{\faPlayCircle\ VIEW FULL HIGH-BAY FOXGLOVE RUN}};
+
+\node[anchor=south west,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ TRACK 2};
+\node[anchor=south,text=white,font=\sffamily\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.south)+(0,0.17in)$)
+{12 PERCEPTION-DRIVEN SPEED CONTROL \hspace{6pt} 3 / 7};
+\node[anchor=south east,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{MODEL METRICS \faArrowRight};
+\end{tikzpicture}
+
+% ============================================================
+% PAGE 4 — MODEL EVALUATION I
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+\node[anchor=north west,text=PolyGold,font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 12 \hspace{5pt}/\hspace{5pt} MODEL EVALUATION};
+\node[anchor=north west,text=DeepGreen,font=\bfseries\fontsize{20.2}{21.2}\selectfont]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{QUANTIFYING WHAT THE DETECTOR LEARNED};
+\node[anchor=north west,text=Muted,font=\sffamily\fontsize{8.15}{8.95}\selectfont]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Custom-labeled YOLO dataset
+\hspace{7pt}\textbullet\hspace{7pt}
+Confusion matrix
+\hspace{7pt}\textbullet\hspace{7pt}
+Precision--recall performance};
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+\node[anchor=north west,align=left,text width=10.05in,text=Ink,font=\fontsize{6.8}{7.9}\selectfont]
+at ($(current page.north west)+(0.48in,-1.58in)$)
+{
+Because the model was trained from our own labeled road-scene data, the evaluation
+had to answer two questions: \textbf{which classes were being separated correctly?}
+and \textbf{how stable was detection as the confidence threshold changed?}
+};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(0.48in,-2.08in)$)
+{CLASS SEPARATION};
+\node[anchor=north west,inner sep=1.5pt,draw=RuleGray,line width=0.5pt]
+at ($(current page.north west)+(0.48in,-2.35in)$)
+{\includegraphics[width=5.55in,height=4.52in,keepaspectratio]{\detokenize{ConfusionMatrix.png}}};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(6.85in,-2.08in)$)
+{PRECISION--RECALL};
+\node[anchor=north west,inner sep=1.5pt,draw=RuleGray,line width=0.5pt]
+at ($(current page.north west)+(6.85in,-2.35in)$)
+{\includegraphics[width=5.50in,height=2.42in,keepaspectratio]{\detokenize{PrecisionRecallConfidence.png}}};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(6.85in,-5.09in)$)
+{F1 VS. CONFIDENCE};
+\node[anchor=north west,inner sep=1.5pt,draw=RuleGray,line width=0.5pt]
+at ($(current page.north west)+(6.85in,-5.36in)$)
+{\includegraphics[width=5.50in,height=2.42in,keepaspectratio]{\detokenize{F-1Confidence.png}}};
+
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(0.48in,-6.98in)$)
+rectangle
+($(current page.north west)+(6.06in,-7.78in)$);
+\fill[PolyGold]
+($(current page.north west)+(0.48in,-6.98in)$)
+rectangle
+($(current page.north west)+(0.58in,-7.78in)$);
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.4}{8.1}\selectfont]
+at ($(current page.north west)+(0.77in,-7.10in)$)
+{READING THE METRICS};
+\node[anchor=north west,align=left,text width=4.95in,text=Ink,font=\fontsize{5.95}{6.8}\selectfont]
+at ($(current page.north west)+(0.77in,-7.34in)$)
+{
+The matrix reveals where individual classes were confused with one another or with
+background. The precision--recall and F1 curves then show how that behavior changes
+as confidence filtering becomes more aggressive.
+};
+
+\node[anchor=south west,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ HIGH BAY};
+\node[anchor=south,text=white,font=\sffamily\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.south)+(0,0.17in)$)
+{12 PERCEPTION-DRIVEN SPEED CONTROL \hspace{6pt} 4 / 7};
+\node[anchor=south east,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{THRESHOLD BEHAVIOR \faArrowRight};
+\end{tikzpicture}
+
+
+% ============================================================
+% PAGE 5 — MODEL EVALUATION II
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+\node[anchor=north west,text=PolyGold,font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 12 \hspace{5pt}/\hspace{5pt} THRESHOLD BEHAVIOR};
+
+\node[anchor=north west,text=DeepGreen,font=\bfseries\fontsize{19.8}{20.8}\selectfont]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{CONFIDENCE, CLASS BALANCE, AND FAILURE MODES};
+
+\node[anchor=north west,text=Muted,font=\sffamily\fontsize{8.15}{8.95}\selectfont]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Precision threshold
+\hspace{7pt}\textbullet\hspace{7pt}
+Recall threshold
+\hspace{7pt}\textbullet\hspace{7pt}
+Class representation
+\hspace{7pt}\textbullet\hspace{7pt}
+Visual failure review};
+
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont]
+at ($(current page.north west)+(6.85in,-1.62in)$)
+{PRECISION VS. CONFIDENCE};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont]
+at ($(current page.north west)+(6.85in,-4.48in)$)
+{RECALL VS. CONFIDENCE};
+
+\node[anchor=north west,inner sep=1.4pt,draw=RuleGray,line width=0.48pt]
+at ($(current page.north west)+(6.85in,-1.88in)$)
+{\includegraphics[width=5.50in,height=2.42in,keepaspectratio]{\detokenize{PrecisionConfidence.png}}};
+
+\node[anchor=north west,inner sep=1.4pt,draw=RuleGray,line width=0.48pt]
+at ($(current page.north west)+(6.85in,-4.74in)$)
+{\includegraphics[width=5.50in,height=2.42in,keepaspectratio]{\detokenize{RecallConfidence.png}}};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{DATASET REPRESENTATION};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont]
+at ($(current page.north west)+(3.66in,-1.62in)$)
+{A FAILURE CASE THE METRICS CANNOT HIDE};
+
+\node[anchor=north west,inner sep=1.4pt,draw=RuleGray,line width=0.48pt]
+at ($(current page.north west)+(0.48in,-1.88in)$)
+{\includegraphics[width=3.05in,height=3.15in,keepaspectratio]{\detokenize{instancesPerClass.png}}};
+
+\node[anchor=north west,inner sep=1.4pt,draw=DeepGreen,line width=0.52pt]
+at ($(current page.north west)+(3.66in,-1.88in)$)
+{\includegraphics[width=3.00in,height=3.15in,keepaspectratio]{\detokenize{mislabel_stopsign.png}}};
+
+\fill[SoftGreen!58,rounded corners=4pt]
+($(current page.north west)+(0.48in,-5.28in)$)
+rectangle
+($(current page.north west)+(6.66in,-7.16in)$);
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.35}{8.05}\selectfont]
+at ($(current page.north west)+(0.76in,-5.43in)$)
+{MODEL REVIEW};
+
+\node[anchor=north west,align=left,text width=5.50in,text=Ink,font=\fontsize{5.95}{6.85}\selectfont]
+at ($(current page.north west)+(0.76in,-5.72in)$)
+{
+Class imbalance helps explain why some categories were learned more reliably than others. The mislabeled stop-sign example is equally important: a strong aggregate score does not guarantee that every individual frame is safe to trust. Visual inspection remained part of the validation process.
+};
+
+\node[anchor=south west,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ MODEL METRICS};
+
+\node[anchor=south,text=white,font=\sffamily\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.south)+(0,0.17in)$)
+{12 PERCEPTION-DRIVEN SPEED CONTROL \hspace{6pt} 5 / 7};
+
+\node[anchor=south east,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{CONTROL RESPONSE \faArrowRight};
+\end{tikzpicture}
+
+
+% ============================================================
+% PAGE 6 — PERCEPTION TO SPEED COMMAND
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+
+% ------------------------------------------------------------
+% PAGE BACKGROUND + PORTFOLIO BARS
+% ------------------------------------------------------------
+\fill[white]
+(current page.south west)
+rectangle
+(current page.north east);
+
+\fill[DeepGreen]
+(current page.north west)
+rectangle
+($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0,-0.095in)$)
+rectangle
+($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+(current page.south west)
+rectangle
+($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+($(current page.south west)+(0,0.36in)$)
+rectangle
+($(current page.south east)+(0,0.405in)$);
+
+% ------------------------------------------------------------
+% HEADER
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+text=PolyGold,
+font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 12
+\hspace{5pt}/\hspace{5pt} CONTROL RESPONSE};
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\bfseries\fontsize{20.0}{21.0}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{TURNING DETECTIONS INTO SPEED COMMANDS};
+
+\node[
+anchor=north west,
+text=Muted,
+font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Detection class
+\hspace{7pt}\textbullet\hspace{7pt}
+Height gating
+\hspace{7pt}\textbullet\hspace{7pt}
+Temporal hold
+\hspace{7pt}\textbullet\hspace{7pt}
+Priority logic};
+
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+% ------------------------------------------------------------
+% PAGE INTRODUCTION
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+align=left,
+text width=10.05in,
+text=Ink,
+font=\fontsize{6.8}{7.9}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.58in)$)
+{
+Once the detector had been validated, the final speed controller was kept
+deliberately interpretable. Each recognized traffic-control class entered
+a small rule set that decided \textbf{when the object was close enough to
+matter}, \textbf{how long its command should remain active}, and
+\textbf{which command should win when multiple detections appeared}.
+};
+
+% ------------------------------------------------------------
+% DECISION PIPELINE
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.48in,-2.16in)$)
+{SPEED-CONTROL DECISION PIPELINE};
+
+% Box 1
+\draw[DeepGreen,line width=0.65pt,rounded corners=3pt]
+($(current page.north west)+(0.48in,-2.48in)$)
+rectangle
+($(current page.north west)+(2.12in,-3.20in)$);
+
+\node[
+anchor=north,
+align=center,
+text width=1.40in,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.7}{7.2}\selectfont
+]
+at ($(current page.north west)+(1.30in,-2.62in)$)
+{DETECTION};
+
+\node[
+anchor=north,
+align=center,
+text width=1.40in,
+text=Ink,
+font=\sffamily\fontsize{5.9}{6.5}\selectfont
+]
+at ($(current page.north west)+(1.30in,-2.88in)$)
+{Class + confidence};
+
+% Box 2
+\draw[DeepGreen,line width=0.65pt,rounded corners=3pt]
+($(current page.north west)+(2.52in,-2.48in)$)
+rectangle
+($(current page.north west)+(4.16in,-3.20in)$);
+
+\node[
+anchor=north,
+align=center,
+text width=1.40in,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.7}{7.2}\selectfont
+]
+at ($(current page.north west)+(3.34in,-2.62in)$)
+{HEIGHT GATE};
+
+\node[
+anchor=north,
+align=center,
+text width=1.40in,
+text=Ink,
+font=\sffamily\fontsize{5.9}{6.5}\selectfont
+]
+at ($(current page.north west)+(3.34in,-2.88in)$)
+{Object close enough?};
+
+% Box 3
+\draw[DeepGreen,line width=0.65pt,rounded corners=3pt]
+($(current page.north west)+(4.56in,-2.48in)$)
+rectangle
+($(current page.north west)+(6.20in,-3.20in)$);
+
+\node[
+anchor=north,
+align=center,
+text width=1.40in,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.7}{7.2}\selectfont
+]
+at ($(current page.north west)+(5.38in,-2.62in)$)
+{TEMPORAL HOLD};
+
+\node[
+anchor=north,
+align=center,
+text width=1.40in,
+text=Ink,
+font=\sffamily\fontsize{5.9}{6.5}\selectfont
+]
+at ($(current page.north west)+(5.38in,-2.88in)$)
+{Persist command};
+
+% Box 4
+\draw[DeepGreen,line width=0.65pt,rounded corners=3pt]
+($(current page.north west)+(6.60in,-2.48in)$)
+rectangle
+($(current page.north west)+(8.24in,-3.20in)$);
+
+\node[
+anchor=north,
+align=center,
+text width=1.40in,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.7}{7.2}\selectfont
+]
+at ($(current page.north west)+(7.42in,-2.62in)$)
+{PRIORITY};
+
+\node[
+anchor=north,
+align=center,
+text width=1.40in,
+text=Ink,
+font=\sffamily\fontsize{5.9}{6.5}\selectfont
+]
+at ($(current page.north west)+(7.42in,-2.88in)$)
+{Resolve conflicts};
+
+% Box 5
+\draw[DeepGreen,line width=0.65pt,rounded corners=3pt]
+($(current page.north west)+(8.64in,-2.48in)$)
+rectangle
+($(current page.north west)+(10.58in,-3.20in)$);
+
+\node[
+anchor=north,
+align=center,
+text width=1.40in,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.7}{7.2}\selectfont
+]
+at ($(current page.north west)+(9.61in,-2.62in)$)
+{SPEED CMD};
+
+\node[
+anchor=north,
+align=center,
+text width=1.40in,
+text=Ink,
+font=\sffamily\fontsize{5.9}{6.5}\selectfont
+]
+at ($(current page.north west)+(9.61in,-2.88in)$)
+{Publish target};
+
+% Pipeline arrows
+\draw[->,PolyGold,line width=1.0pt]
+($(current page.north west)+(2.15in,-2.84in)$)
+--
+($(current page.north west)+(2.47in,-2.84in)$);
+
+\draw[->,PolyGold,line width=1.0pt]
+($(current page.north west)+(4.19in,-2.84in)$)
+--
+($(current page.north west)+(4.51in,-2.84in)$);
+
+\draw[->,PolyGold,line width=1.0pt]
+($(current page.north west)+(6.23in,-2.84in)$)
+--
+($(current page.north west)+(6.55in,-2.84in)$);
+
+\draw[->,PolyGold,line width=1.0pt]
+($(current page.north west)+(8.27in,-2.84in)$)
+--
+($(current page.north west)+(8.59in,-2.84in)$);
+
+% ------------------------------------------------------------
+% LEFT — CONTROL BEHAVIOR
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.48in,-3.52in)$)
+{CONTROL BEHAVIOR};
+
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(0.48in,-3.80in)$)
+rectangle
+($(current page.north west)+(4.92in,-6.44in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0.48in,-3.80in)$)
+rectangle
+($(current page.north west)+(0.58in,-6.44in)$);
+
+\node[
+anchor=north west,
+align=left,
+text width=3.92in,
+text=Ink,
+font=\fontsize{6.15}{7.20}\selectfont
+]
+at ($(current page.north west)+(0.78in,-4.02in)$)
+{
+\textbf{Height gating.}
+Bounding-box height acted as a proxy for distance, preventing far-away
+signs from changing the speed too early.\\[5pt]
+
+\textbf{Temporal hold.}
+Stop, red-light, no-entry, and crosswalk commands remained active across
+multiple frames so a brief missed detection could not immediately cancel
+the maneuver.\\[5pt]
+
+\textbf{Priority.}
+Safety-critical detections overrode normal speed-limit behavior, while a
+green-light detection could release a held red-light stop.\\[5pt]
+
+\textbf{Return logic.}
+An end-speed-limit detection restored the nominal commanded speed after
+the constrained section.
+};
+
+% ------------------------------------------------------------
+% RIGHT — UNIQUE SPEED TRACE
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(5.22in,-3.52in)$)
+{COMMANDED SPEED ON THE VEHICLE};
+
+\node[
+anchor=north west,
+inner sep=1.5pt,
+draw=DeepGreen,
+line width=0.52pt
+]
+at ($(current page.north west)+(5.22in,-3.80in)$)
+{
+\includegraphics[
+width=5.32in,
+height=2.34in,
+keepaspectratio
+]{\detokenize{ackerman_plot.png}}
+};
+
+\node[
+anchor=north west,
+align=left,
+text width=5.18in,
+text=Ink,
+font=\fontsize{5.95}{6.90}\selectfont
+]
+at ($(current page.north west)+(5.22in,-6.28in)$)
+{
+The commanded-speed trace shows the controller repeatedly slowing or
+stopping for detected scene elements before returning to a moving state.
+This provides the transition from semantic perception into the final
+vehicle-motion analysis on the following page.
+};
+
+% ------------------------------------------------------------
+% RESOURCE LINKS — KEPT ABOVE FOOTER
+% ------------------------------------------------------------
+\fill[SoftGreen!58,rounded corners=4pt]
+($(current page.north west)+(0.48in,-7.16in)$)
+rectangle
+($(current page.north east)+(-0.42in,-7.62in)$);
+
+\node[
+anchor=center,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.65}{7.3}\selectfont
+]
+at ($(current page.north)+(0,-7.39in)$)
+{
+\href{\SpeedControllerReport}{\faFilePdf\ PROJECT REPORT}
+\hspace{17pt}
+\href{\SpeedControllerNotebook}{\faCode\ COLAB / GITHUB}
+\hspace{17pt}
+\href{\PerceptionDrivenSpeedDemo}{\faPlayCircle\ PERCEPTION SPEED DEMO}
+\hspace{17pt}
+\href{\YOLOFrameAccumulationVideo}{\faPlayCircle\ YOLO FRAME ACCUMULATION}
+};
+
+% ------------------------------------------------------------
+% FOOTER
+% ------------------------------------------------------------
+\node[
+anchor=south west,
+text=white,
+font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ THRESHOLD BEHAVIOR};
+
+\node[
+anchor=south,
+text=white,
+font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{12 PERCEPTION-DRIVEN SPEED CONTROL \hspace{6pt} 6 / 7};
+
+\node[
+anchor=south east,
+text=white,
+font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{ODOMETRY \faArrowRight};
+
+\end{tikzpicture}
+
+% ============================================================
+% PAGE 7 — ODOMETRY / ACKERMANN VALIDATION
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+\fill[white] (current page.south west) rectangle (current page.north east);
+\fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+\fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+\fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+\fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+
+\node[anchor=north west,text=PolyGold,font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 12 \hspace{5pt}/\hspace{5pt} VEHICLE MOTION};
+\node[anchor=north west,text=DeepGreen,font=\bfseries\fontsize{19.8}{20.8}\selectfont]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{RECONCILING IMU ODOMETRY WITH ACKERMANN MOTION};
+\node[anchor=north west,text=Muted,font=\sffamily\fontsize{8.15}{8.95}\selectfont]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{IMU odometry
+\hspace{7pt}\textbullet\hspace{7pt}
+Ackermann kinematic reconstruction
+\hspace{7pt}\textbullet\hspace{7pt}
+Gain correction};
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+\node[anchor=north west,align=left,text width=10.05in,text=Ink,font=\fontsize{6.8}{7.9}\selectfont]
+at ($(current page.north west)+(0.48in,-1.58in)$)
+{
+The final analysis returned to the High Bay racetrack and compared two descriptions
+of vehicle motion. The first came from onboard \textbf{IMU / odometry data}; the
+second reconstructed the path using an \textbf{Ackermann steering model}. The
+comparison exposed a systematic scale disagreement that could be corrected with a
+gain adjustment.
+};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(0.24in,-2.10in)$)
+{1 \hspace{4pt} IMU / ODOMETRY PATH};
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.52pt]
+at ($(current page.north west)+(0.24in,-2.36in)$)
+{\includegraphics[width=3.38in,height=3.12in,keepaspectratio]{\detokenize{IMUodometryPlot.png}}};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(3.78in,-2.10in)$)
+{2 \hspace{4pt} ORIGINAL ACKERMANN RECONSTRUCTION};
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.52pt]
+at ($(current page.north west)+(3.78in,-2.36in)$)
+{\includegraphics[width=3.38in,height=3.12in,keepaspectratio]{\detokenize{OriginalAckermannPlot.png}}};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(7.32in,-2.10in)$)
+{3 \hspace{4pt} GAIN-CORRECTED ACKERMANN PATH};
+\node[anchor=north west,inner sep=1.5pt,draw=DeepGreen,line width=0.52pt]
+at ($(current page.north west)+(7.32in,-2.36in)$)
+{\includegraphics[width=3.38in,height=3.12in,keepaspectratio]{\detokenize{ProperAckermannGainAdjustment.png}}};
+
+\draw[RuleGray,line width=0.45pt]
+($(current page.north west)+(0.48in,-5.72in)$)
+-- ($(current page.north east)+(-0.48in,-5.72in)$);
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(0.48in,-5.94in)$)
+{WHAT THE COMPARISON REVEALED};
+\node[anchor=north west,align=left,text width=6.52in,text=Ink,font=\fontsize{6.35}{7.35}\selectfont]
+at ($(current page.north west)+(0.48in,-6.22in)$)
+{
+The original kinematic reconstruction reproduced the overall course shape but did
+not match the odometry scale closely enough. Applying a gain to the steering-model
+response brought the reconstructed path into substantially better agreement with
+the onboard motion estimate. The exercise connected perception-driven commands to
+the physical vehicle model rather than ending the analysis at the camera output.
+};
+
+\fill[SoftGreen!62,rounded corners=4pt]
+($(current page.north west)+(7.34in,-6.04in)$)
+rectangle
+($(current page.north east)+(-0.42in,-7.82in)$);
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.55}{8.25}\selectfont]
+at ($(current page.north west)+(7.65in,-6.20in)$)
+{FOXGLOVE MOTION REVIEW};
+\node[anchor=north west,align=left,text width=2.84in,text=Ink,font=\fontsize{6.0}{6.95}\selectfont]
+at ($(current page.north west)+(7.65in,-6.49in)$)
+{
+The recorded visualization shows the steering-angle and vehicle-motion signals used
+for the comparison and makes it possible to inspect how commanded steering evolved
+throughout the lap.
+};
+\node[anchor=center,text=DeepGreen,font=\sffamily\bfseries\fontsize{6.65}{7.3}\selectfont]
+at ($(current page.north west)+(9.08in,-7.52in)$)
+{\href{\SpeedOdometryVideo}{\faPlayCircle\ ODOMETRY / STEERING FOXGLOVE VIDEO}};
+
+\node[anchor=south west,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ CONTROL RESPONSE};
+\node[anchor=south,text=white,font=\sffamily\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.south)+(0,0.17in)$)
+{12 PERCEPTION-DRIVEN SPEED CONTROL \hspace{6pt} 7 / 7};
+\node[anchor=south east,text=white,font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{PROJECT 13 \faArrowRight};
+\end{tikzpicture}

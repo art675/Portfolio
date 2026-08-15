@@ -159,6 +159,8 @@
         {#5};
 
     % Navigation
+    % VIEW PROJECTS — jumps directly to the opening page of the
+    % section specified by argument #1.
     \node[
         anchor=south east,
         text=PolyGreen,
@@ -178,13 +180,21 @@
 
 \begin{document}
 
-% Temporary internal targets.
-% Move these to the actual section pages later.
-
-\hypertarget{composites}{}
-\hypertarget{mechatronics}{}
-\hypertarget{autonomy}{}
-
+% ============================================================
+% SECTION JUMP TARGETS
+% ============================================================
+% COMPOSITES:
+% The composites divider does not currently expose a reliable named
+% hypertarget, so the cover shortcuts use Hyperref's built-in PDF
+% page anchor "page.2". Because composites.tex is the first page
+% after this one-page portfolio cover, page.2 is the composites
+% section divider.
+%
+% MECHATRONICS / AUTONOMY:
+% These continue using their working named targets:
+%   mechatronics
+%   autonomy
+%
 \begin{tikzpicture}[
     remember picture,
     overlay,
@@ -446,7 +456,7 @@
 ]
     at ($(current page.south west)+(1.76in,4.505in)$)
     {
-        \hyperlink{composites}{\textbf{01 COMPOSITES}}
+        \hyperlink{page.2}{\textbf{01 COMPOSITES}}
         \hspace{0.25in}
         \textcolor{PolyGold}{\faChevronRight}
         \hspace{0.25in}
@@ -475,7 +485,7 @@
 ]
 
 \sectioncard
-{composites}
+{page.2}
 {01}
 {COMPOSITES}
 {Design for Manufacturability \textbullet\
@@ -538,7 +548,7 @@ Robotics Methods: Vision, Kinematics \& Trajectory Planning
 \end{scope}
 
 % ============================================================
-% AUTONOMY CARD — 3 PROJECTS
+% AUTONOMY CARD — 5 PROJECTS
 % ============================================================
 
 \begin{scope}[
@@ -555,19 +565,19 @@ Robotics Methods: Vision, Kinematics \& Trajectory Planning
  Autonomous Navigation}
 {
 \textcolor{PolyGold}{\textbf{11}} \;
-\textbf{Vision-Based Road-Following Vehicle}\\[7pt]
+\textbf{Vision-Based Road Following \& Steering Control}\\[4pt]
 
 \textcolor{PolyGold}{\textbf{12}} \;
-Autonomous Parallel-Parking System\\[7pt]
+Perception-Driven Speed \& Traffic Response\\[4pt]
 
 \textcolor{PolyGold}{\textbf{13}} \;
-U-Net Semantic Segmentation for Road-Scene Perception\\[11pt]
+Smart Parallel Parking \& Odometry\\[4pt]
 
-{\sffamily
- \fontsize{6.7}{7.7}\selectfont
- \color{Muted}
- Perception, planning, control implementation,
- testing, and autonomous vehicle behavior.}
+\textcolor{PolyGold}{\textbf{14}} \;
+U-Net Semantic Lane Segmentation\\[4pt]
+
+\textcolor{PolyGold}{\textbf{15}} \;
+PilotNet End-to-End Steering
 }
 
 \end{scope}
@@ -650,7 +660,8 @@ U-Net Semantic Segmentation for Road-Scene Perception\\[11pt]
 % =========================
 % Composites Section
 % =========================
-
+% This divider is PDF page 2, so the cover-page Composites shortcuts
+% point to Hyperref's built-in destination: page.2
 \input{composites.tex}
 \input{toro.tex}
 \input{paddle.tex}
@@ -658,6 +669,11 @@ U-Net Semantic Segmentation for Road-Scene Perception\\[11pt]
 \input{fuselage.tex}
 \input{coupons.tex}
 
+% =========================
+% Mechatronics Section
+% =========================
+% mech.tex must contain on its opening page:
+% \hypertarget{mechatronics}{}
 \input{mech.tex}
 \input{gearbox.tex}
 \input{romi.tex}
@@ -670,8 +686,15 @@ U-Net Semantic Segmentation for Road-Scene Perception\\[11pt]
 \input{roboticsC.tex}
 \input{roboticsD.tex}
 
+% =========================
+% Autonomy Section
+% =========================
+% autonomy.tex must contain on its opening page:
+% \hypertarget{autonomy}{}
 \input{autonomy.tex}
 \input{roadfollower.tex}
-
-
+\input{speedcontroller.tex}
+\input{smartparking.tex}
+\input{unet.tex}
+\input{pilotnet.tex}
 \end{document}

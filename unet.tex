@@ -1,0 +1,920 @@
+%==============================================================
+% PROJECT 14 — U-NET SEMANTIC LANE SEGMENTATION
+% BRAND-NEW 6-PAGE AUTONOMY REDESIGN
+%==============================================================
+%
+% DESIGN GOALS
+% -------------------------------------------------------------
+% • Explain semantic segmentation to a non-ML engineer before showing metrics.
+% • Never reuse an image.
+% • Keep annotation quality, class histograms, IoU, loss, and predictions
+%   next to the evidence they explain.
+% • Avoid dense LaTeX tables; use simple visual scorecards instead.
+% • Match the modern header/footer language used by Projects 11–13.
+%
+% REQUIRED IMAGE FILES — EACH USED EXACTLY ONCE
+% -------------------------------------------------------------
+% behind_shot.jpg
+% intanceType.png
+% histogram1.png
+% annotationMask1.png
+% lossANDiou1.png
+% histogram2.png
+% lossANDiou2.png
+% lossANDiou3.png
+% lossANDiou4.png
+% annotationMask2.png
+% annotationMask3.png
+% annotationMask4.png
+% physical_framework.jpg
+%
+% Assumes the portfolio already defines:
+% DeepGreen, PolyGold, SoftGreen, SoftGold, Muted, Ink, RuleGray
+% and loads TikZ, graphicx, hyperref, fontawesome5.
+%==============================================================
+
+\newcommand{\UNPageBase}{%
+    \fill[white] (current page.south west) rectangle (current page.north east);
+    \fill[DeepGreen] (current page.north west) rectangle ($(current page.north east)+(0,-0.095in)$);
+    \fill[PolyGold] ($(current page.north west)+(0,-0.095in)$) rectangle ($(current page.north east)+(0,-0.14in)$);
+    \fill[DeepGreen] (current page.south west) rectangle ($(current page.south east)+(0,0.36in)$);
+    \fill[PolyGold] ($(current page.south west)+(0,0.36in)$) rectangle ($(current page.south east)+(0,0.405in)$);
+}
+
+\newcommand{\UNHeader}[3]{%
+    \node[anchor=north west,text=PolyGold,font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont]
+    at ($(current page.north west)+(0.42in,-0.39in)$)
+    {03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 14
+    \ifx&#1&\else \hspace{5pt}/\hspace{5pt} #1 \fi};
+
+    \node[anchor=north west,text=DeepGreen,font=\bfseries\fontsize{21.0}{22.0}\selectfont]
+    at ($(current page.north west)+(0.40in,-0.67in)$) {#2};
+
+    \node[anchor=north west,text=Muted,font=\sffamily\fontsize{8.15}{8.95}\selectfont]
+    at ($(current page.north west)+(0.42in,-1.12in)$) {#3};
+
+    \fill[PolyGold]
+    ($(current page.north west)+(0.42in,-1.36in)$)
+    rectangle ($(current page.north east)+(-0.42in,-1.315in)$);
+}
+
+\newcommand{\UNFooter}[3]{%
+    \node[anchor=south west,text=white,font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont]
+    at ($(current page.south west)+(0.42in,0.17in)$) {#1};
+    \node[anchor=south,text=white,font=\sffamily\fontsize{7.0}{7.6}\selectfont]
+    at ($(current page.south)+(0,0.17in)$) {14 U-NET LANE SEGMENTATION \hspace{6pt} #2};
+    \node[anchor=south east,text=white,font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont]
+    at ($(current page.south east)+(-0.42in,0.17in)$) {#3};
+}
+
+\newcommand{\UNMetric}[6]{%
+    \fill[SoftGreen,rounded corners=3pt]
+    ($(current page.north west)+(#1,#2)$) rectangle ++(#3,-0.78in);
+    \node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{6.8}{7.4}\selectfont]
+    at ($(current page.north west)+(#1+0.16in,#2-0.12in)$) {#4};
+    \node[anchor=north west,text=Ink,font=\bfseries\fontsize{13.0}{13.5}\selectfont]
+    at ($(current page.north west)+(#1+0.16in,#2-0.36in)$) {#5};
+    \node[anchor=north west,text=Muted,font=\sffamily\fontsize{5.9}{6.5}\selectfont]
+    at ($(current page.north west)+(#1+0.16in,#2-0.61in)$) {#6};
+}
+
+%==============================================================
+% PAGE 1 — WHAT SEMANTIC SEGMENTATION IS
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{unet}{}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+\UNPageBase
+\UNHeader
+{}
+{U-NET SEMANTIC LANE SEGMENTATION}
+{Cal Poly Autonomous Vehicles Laboratory \hspace{7pt}\textbullet\hspace{7pt} Three-Person Team \hspace{7pt}\textbullet\hspace{7pt} Spring 2026 \hspace{7pt}\textbullet\hspace{7pt} San Luis Obispo, California}
+
+\node[anchor=north west,align=left,text width=10.00in,text=Ink,font=\fontsize{8.2}{9.5}\selectfont]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{This project asked a different perception question than object detection: instead of locating a sign with one bounding box, a \textbf{U-Net convolutional neural network} classified \textbf{every pixel} in the camera image as \texttt{line\_left}, \texttt{line\_right}, or \texttt{background}. That pixel-level output can preserve the shape and continuity of road markings, making it useful for downstream lane understanding.};
+
+\node[anchor=north west,inner sep=1.7pt,draw=DeepGreen,line width=0.7pt]
+at ($(current page.north west)+(0.48in,-2.28in)$)
+{\includegraphics[width=6.05in,height=4.65in,keepaspectratio]{\detokenize{behind_shot.jpg}}};
+
+\fill[DeepGreen] ($(current page.north west)+(0.65in,-2.50in)$) rectangle ($(current page.north west)+(2.73in,-2.23in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.6}{7.2}\selectfont]
+at ($(current page.north west)+(0.78in,-2.365in)$) {PHYSICAL CAMERA PLATFORM};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.4}{9.1}\selectfont]
+at ($(current page.north west)+(6.48in,-2.28in)$) {ONE IMAGE BECOMES A PIXEL MAP};
+\node[anchor=north west,align=left,text width=3.90in,text=Ink,font=\fontsize{7.5}{8.7}\selectfont]
+at ($(current page.north west)+(6.48in,-2.66in)$)
+{The training label is not a single category for the whole image. It is an image-sized mask in which each pixel carries one class ID. During inference, U-Net predicts the same kind of mask from a new camera frame.};
+
+% Three semantic classes arranged in one horizontal row
+\foreach \xx/\num/\ttl/\desc in {
+6.48/01/LEFT LANE/\texttt{line\_left},
+7.80/02/RIGHT LANE/\texttt{line\_right},
+9.12/03/OTHER PIXELS/\texttt{background}}
+{
+\fill[SoftGreen,rounded corners=3pt]
+($(current page.north west)+(\xx in,-3.38in)$)
+rectangle
+($(current page.north west)+(\xx in+1.22in,-4.08in)$);
+
+\node[anchor=north west,text=PolyGold,font=\sffamily\bfseries\fontsize{6.4}{7.0}\selectfont]
+at ($(current page.north west)+(\xx in+0.12in,-3.56in)$) {\num};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{6.5}{7.1}\selectfont]
+at ($(current page.north west)+(\xx in+0.36in,-3.51in)$) {\ttl};
+
+\node[anchor=north west,text=Muted,font=\sffamily\fontsize{5.8}{6.4}\selectfont]
+at ($(current page.north west)+(\xx in+0.36in,-3.78in)$) {\desc};
+}
+
+\node[anchor=north west,inner sep=1.2pt,draw=RuleGray,line width=0.45pt]
+at ($(current page.north west)+(6.48in,-4.14in)$)
+{\includegraphics[width=3.94in]{\detokenize{intanceType.png}}};
+
+\UNMetric{0.48in}{-7.28in}{2.77in}{LEFT-LANE PIXELS}{1.25\%}{of all labeled pixels}
+\UNMetric{3.46in}{-7.28in}{2.77in}{RIGHT-LANE PIXELS}{0.78\%}{of all labeled pixels}
+\UNMetric{6.44in}{-7.28in}{3.98in}{BACKGROUND PIXELS}{97.97\%}{expected majority in full-frame masks}
+\UNFooter{\hyperlink{parallelparking}{\faArrowLeft\ PROJECT 13}}{1 / 6}{DATA QUALITY \faArrowRight}
+\end{tikzpicture}
+
+%==============================================================
+%==============================================================
+% PAGE 2 — BAD LABEL -> BAD STATISTICS -> BASELINE TRAINING
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{unet-data}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\UNPageBase
+\UNHeader{DATA QUALITY}{ONE BAD MASK CAN DISTORT AN ENTIRE DATASET}
+{Annotation review
+\hspace{7pt}\textbullet\hspace{7pt}
+Pixel-count distributions
+\hspace{7pt}\textbullet\hspace{7pt}
+Baseline IoU + loss}
+
+% -------------------------------------------------------------
+% Narrative
+% -------------------------------------------------------------
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    text=Ink,
+    font=\fontsize{8.0}{9.3}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{
+Before changing the neural network, the dataset itself was audited.
+A histogram of labeled pixels revealed \textbf{three extreme right-lane outliers}.
+Inspection traced them to one incorrectly annotated frame and its augmented copies.
+The page therefore follows a simple sequence:
+\textbf{distribution anomaly $\rightarrow$ bad mask $\rightarrow$ baseline training behavior}.
+};
+
+% -------------------------------------------------------------
+% TOP ROW — HISTOGRAM + BAD MASK
+% -------------------------------------------------------------
+
+% Left image: histogram
+\node[
+    anchor=north west,
+    inner sep=1.2pt,
+    draw=DeepGreen,
+    line width=0.55pt
+]
+at ($(current page.north west)+(0.48in,-2.14in)$)
+{
+\includegraphics[
+    width=4.78in,
+    height=3.02in,
+    keepaspectratio
+]{\detokenize{histogram1.png}}
+};
+
+% Left banner over image
+\fill[DeepGreen]
+($(current page.north west)+(0.62in,-2.32in)$)
+rectangle
+($(current page.north west)+(2.30in,-2.04in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{6.6}{7.1}\selectfont
+]
+at ($(current page.north west)+(0.76in,-2.18in)$)
+{PIXEL OUTLIERS};
+
+% Right image: bad annotation mask
+\node[
+    anchor=north west,
+    inner sep=1.2pt,
+    draw=DeepGreen,
+    line width=0.55pt
+]
+at ($(current page.north west)+(5.56in,-2.14in)$)
+{
+\includegraphics[
+    width=4.86in,
+    height=3.02in,
+    keepaspectratio
+]{\detokenize{annotationMask1.png}}
+};
+
+% Right banner over image
+\fill[DeepGreen]
+($(current page.north west)+(5.70in,-2.32in)$)
+rectangle
+($(current page.north west)+(7.45in,-2.04in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{6.6}{7.1}\selectfont
+]
+at ($(current page.north west)+(5.84in,-2.18in)$)
+{BAD ANNOTATION};
+
+% Short explanation directly beneath both images
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.72in,
+    text=Ink,
+    font=\fontsize{7.0}{8.2}\selectfont
+]
+at ($(current page.north west)+(0.50in,-5.3in)$)
+{
+\textbf{\textcolor{DeepGreen}{What the histogram revealed.}}
+Most right-lane masks occupied a compact pixel-count range, but three samples
+contained dramatically more labeled pixels than the rest of the dataset.
+};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.78in,
+    text=Ink,
+    font=\fontsize{7.0}{8.2}\selectfont
+]
+at ($(current page.north west)+(5.58in,-4.78in)$)
+{
+\textbf{\textcolor{DeepGreen}{Why those outliers existed.}}
+One frame incorrectly labeled a large image region as \texttt{line\_right}.
+Augmented copies inherited the same error, turning one annotation mistake into three outliers.
+};
+
+% -------------------------------------------------------------
+% LOWER ROW — BASELINE TRAINING
+% -------------------------------------------------------------
+\draw[RuleGray,line width=0.5pt]
+($(current page.north west)+(0.48in,-5.76in)$)
+--
+($(current page.north west)+(10.42in,-5.76in)$);
+
+% Loss + IoU figure, moved up and enlarged
+\node[
+    anchor=north west,
+    inner sep=1.2pt,
+    draw=DeepGreen,
+    line width=0.55pt
+]
+at ($(current page.north west)+(0.48in,-5.96in)$)
+{
+\includegraphics[
+    width=6.82in,
+    height=2.02in,
+    keepaspectratio
+]{\detokenize{lossANDiou1.png}}
+};
+
+% Banner over the plot
+\fill[DeepGreen]
+($(current page.north west)+(0.62in,-6.14in)$)
+rectangle
+($(current page.north west)+(2.52in,-5.86in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{6.5}{7.0}\selectfont
+]
+at ($(current page.north west)+(0.76in,-6.00in)$)
+{BASELINE TRAINING};
+
+
+% Compact conclusion moved into the open right-side space
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.86in,
+    text=Ink,
+    font=\fontsize{6.7}{7.8}\selectfont
+]
+at ($(current page.north west)+(7.55in,-5.90in)$)
+{
+\textbf{\textcolor{PolyGold}{WHY THIS MATTERED}}\\[3pt]
+The model could still report reasonable aggregate metrics while learning from a flawed label distribution.
+Cleaning the annotations therefore had to come \textbf{before} comparing architectures or hyperparameters.
+};
+
+% Metrics to the right
+\UNMetric{7.55in}{-6.72in}{1.30in}{VAL IoU}{0.8628}{validation overlap}
+\UNMetric{9.02in}{-6.72in}{1.40in}{TEST IoU}{0.8479}{unseen data}
+
+% Compact training note below metrics, kept safely above footer
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.87in,
+    text=Ink,
+    font=\fontsize{6.8}{7.8}\selectfont
+]
+at ($(current page.north west)+(7.55in,-7.51in)$)
+{
+\textbf{Training setup}\\
+Batch 4, learning rate 0.001, maximum 100 epochs.
+Early stopping ended the run at 34 epochs after validation loss stopped improving.
+};
+
+
+\UNFooter
+{\faArrowLeft\ INTRODUCTION}
+{2 / 6}
+{CLEANED DATA \faArrowRight}
+
+\end{tikzpicture}
+
+% PAGE 3 — CLEANED DATA + BEST IOU RUN
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{unet-clean}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+\UNPageBase
+
+\UNHeader
+{CLEANED DATA}
+{FIX THE LABELS FIRST, THEN JUDGE THE MODEL}
+{Outlier removal
+\hspace{7pt}\textbullet\hspace{7pt}
+Cleaned class distribution
+\hspace{7pt}\textbullet\hspace{7pt}
+Controlled retraining}
+
+% -------------------------------------------------------------
+% PAGE NARRATIVE
+% -------------------------------------------------------------
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    text=Ink,
+    font=\fontsize{8.0}{9.3}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{
+The mislabeled frame and its augmented copies were removed before the next
+training run. The purpose was not simply to improve the reported score, but to
+restore a physically plausible right-lane distribution. The cleaned dataset was
+then retrained with the \textbf{same batch size and learning rate}, allowing the
+effect of correcting the labels to be evaluated directly.
+};
+
+% =============================================================
+% STEP 1 — CLEANED PIXEL DISTRIBUTION
+% =============================================================
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.48in,-2.10in)$)
+{AFTER REMOVING THE OUTLIERS};
+
+\node[
+    anchor=north west,
+    inner sep=1.2pt,
+    draw=DeepGreen,
+    line width=0.55pt
+]
+at ($(current page.north west)+(0.48in,-2.42in)$)
+{
+\includegraphics[
+    width=5.25in,
+    height=2.63in,
+    keepaspectratio
+]{\detokenize{histogram2.png}}
+};
+
+% Extended substantially leftward toward histogram; right edge remains fixed at 10.42in.
+\fill[
+    SoftGreen,
+    rounded corners=4pt
+]
+($(current page.north west)+(4.48in,-2.42in)$)
+rectangle
+($(current page.north west)+(10.42in,-4.84in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(4.76in,-2.70in)$)
+{WHAT CHANGED?};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=5.32in,
+    text=Ink,
+    font=\fontsize{7.3}{8.5}\selectfont
+]
+at ($(current page.north west)+(4.76in,-3.10in)$)
+{
+The three extreme right-lane samples are gone. Instead of extending to nearly
+15,000 labeled pixels, the cleaned \texttt{line\_right} distribution now occupies
+a range comparable to the left-lane samples.
+
+\vspace{7pt}
+
+\textbf{This changes what the experiment means.}
+The network is no longer being evaluated against a label distribution distorted
+by one annotation error and its augmented copies.
+
+\vspace{7pt}
+
+The next run therefore asks a controlled question:
+\textbf{what happens when the same model is trained on cleaner data?}
+};
+
+% =============================================================
+% DIVIDER
+% =============================================================
+
+\draw[
+    RuleGray,
+    line width=0.5pt
+]
+($(current page.north west)+(0.48in,-5.19in)$)
+--
+($(current page.north west)+(10.42in,-5.19in)$);
+
+% =============================================================
+% STEP 2 — RETRAIN ON CLEANED DATA
+% =============================================================
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.48in,-5.48in)$)
+{RETRAINING THE SAME MODEL ON CLEANER DATA};
+
+\node[
+    anchor=north west,
+    inner sep=1.2pt,
+    draw=RuleGray,
+    line width=0.45pt
+]
+at ($(current page.north west)+(0.48in,-5.80in)$)
+{
+\includegraphics[
+    width=6.62in,
+    height=2.10in,
+    keepaspectratio
+]{\detokenize{lossANDiou2.png}}
+};
+
+% =============================================================
+% CLEAN-DATA RESULTS
+% =============================================================
+
+\UNMetric
+{7.40in}
+{-5.80in}
+{1.45in}
+{VAL IoU}
+{0.8714}
+{highest of 4 runs}
+
+\UNMetric
+{8.97in}
+{-5.80in}
+{1.45in}
+{TEST IoU}
+{0.8508}
+{highest of 4 runs}
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=3.02in,
+    text=Ink,
+    font=\fontsize{6.9}{7.9}\selectfont
+]
+at ($(current page.north west)+(7.40in,-6.76in)$)
+{
+\textbf{Same basic training setup, cleaner labels.}
+
+Batch 4, LR 0.001, with early stopping at 41 epochs.
+This run produced the strongest validation and test IoU of the four experiments.
+
+The remaining question was whether a good aggregate IoU also produced a
+\textbf{visually trustworthy lane mask}.
+};
+
+\UNFooter
+{\faArrowLeft\ DATA QUALITY}
+{3 / 6}
+{EXPERIMENTS \faArrowRight}
+
+\end{tikzpicture}
+
+%==============================================================
+% PAGE 4 — WHY MORE TRAINING WAS TESTED
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{unet-experiments}{}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+\UNPageBase
+\UNHeader{MODEL EXPERIMENTS}{WAS THE FALSE-POSITIVE ARTIFACT JUST OVERFITTING?}
+{Batch-size experiment \hspace{7pt}\textbullet\hspace{7pt} Short vs. longer training \hspace{7pt}\textbullet\hspace{7pt} IoU + loss interpretation}
+
+\node[anchor=north west,align=left,text width=10.00in,text=Ink,font=\fontsize{8.0}{9.3}\selectfont]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{A test prediction still contained small false-positive right-lane pixels. To investigate whether this came from excessive training, batch size was increased from 4 to 8 and two additional training lengths were examined. The key question was whether reducing training would remove the artifact without sacrificing useful lane segmentation.};
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.1}{8.8}\selectfont]
+at ($(current page.north west)+(0.48in,-2.38in)$) {RUN 3 — BATCH 8, 20 EPOCHS};
+\node[anchor=north west,inner sep=1.2pt,draw=DeepGreen,line width=0.55pt]
+at ($(current page.north west)+(0.48in,-2.72in)$)
+{\includegraphics[width=4.82in,height=2.58in,keepaspectratio]{\detokenize{lossANDiou3.png}}};
+\UNMetric{0.48in}{-4.64in}{2.22in}{TEST IoU}{0.8223}{model still improving}
+\UNMetric{2.86in}{-4.64in}{2.44in}{TEST LOSS}{0.0183}{not yet converged}
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.1}{8.8}\selectfont]
+at ($(current page.north west)+(5.60in,-2.38in)$) {RUN 4 — BATCH 8, EARLY STOP AT 47 EPOCHS};
+\node[anchor=north west,inner sep=1.2pt,draw=DeepGreen,line width=0.55pt]
+at ($(current page.north west)+(5.60in,-2.72in)$)
+{\includegraphics[width=4.82in,height=2.58in,keepaspectratio]{\detokenize{lossANDiou4.png}}};
+\UNMetric{5.60in}{-4.64in}{2.22in}{TEST IoU}{0.8421}{recovered overlap}
+\UNMetric{7.98in}{-4.64in}{2.44in}{TEST LOSS}{0.0159}{lowest clean-run test loss}
+
+\fill[SoftGold,rounded corners=4pt] ($(current page.north west)+(0.48in,-5.48in)$) rectangle ($(current page.north west)+(10.42in,-7.31in)$);
+\fill[PolyGold] ($(current page.north west)+(0.48in,-5.48in)$) rectangle ($(current page.north west)+(0.58in,-7.31in)$);
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(0.78in,-6.02in)$) {WHAT THE EXPERIMENT SHOWED};
+\node[anchor=north west,align=left,text width=9.18in,text=Ink,font=\fontsize{7.3}{8.5}\selectfont]
+at ($(current page.north west)+(0.78in,-6.40in)$)
+{The 20-epoch model had not finished improving, while the 47-epoch model recovered much of the IoU and reduced test loss. Because the same visible artifact persisted even when the training length changed, the evidence did \textbf{not} support the simple explanation that overfitting alone caused the false-positive lane fragments. Visual inspection still mattered alongside the metrics.};
+% RESOURCE BAR — formatted consistently with the rest of the portfolio
+% Replace the two placeholder URLs below when the final resources are ready.
+\fill[SoftGreen!34,rounded corners=4pt]
+($(current page.south west)+(0.46in,0.58in)$)
+rectangle
+($(current page.south east)+(-0.46in,1.08in)$);
+
+\draw[RuleGray,line width=0.45pt,rounded corners=4pt]
+($(current page.south west)+(0.46in,0.58in)$)
+rectangle
+($(current page.south east)+(-0.46in,1.08in)$);
+
+\node[
+anchor=center,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.9}{7.7}\selectfont,
+align=center
+]
+at ($(current page.south)+(0,0.83in)$)
+{
+\href{https://example.com/project-report.pdf}
+{\faFilePdf\ PROJECT REPORT}
+\hspace{18pt}
+\href{https://colab.research.google.com/}
+{\faCode\ COLAB / GITHUB}
+};
+
+\UNFooter
+{\faArrowLeft\ CLEANED DATA}
+{4 / 6}
+{PREDICTIONS \faArrowRight}
+\end{tikzpicture}
+
+%==============================================================
+% PAGE 5 — SAME SCENE, THREE MODEL PREDICTIONS
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{unet-predictions}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+\UNPageBase
+
+\UNHeader
+{PREDICTIONS}
+{WHAT THE NETWORK ACTUALLY PAINTED}
+{Same test scene
+\hspace{7pt}\textbullet\hspace{7pt}
+Ground truth vs. prediction
+\hspace{7pt}\textbullet\hspace{7pt}
+Qualitative comparison}
+
+% -------------------------------------------------------------
+% INTRODUCTION
+% -------------------------------------------------------------
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    text=Ink,
+    font=\fontsize{8.0}{9.3}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{
+IoU and loss summarize millions of pixel decisions into single numbers.
+These prediction images show what those numbers can hide: the dominant lane
+structure is usually recovered, while small right-lane fragments can appear
+near reflective or high-contrast regions. Viewing the same scene across the
+three runs makes the progression easier to judge.
+};
+
+% =============================================================
+% LEFT COLUMN — THREE PREDICTION IMAGES
+% =============================================================
+
+% ----------------------------- RUN 1 ---------------------------
+\node[
+    anchor=north west,
+    inner sep=1.0pt,
+    draw=DeepGreen,
+    line width=0.55pt
+]
+at ($(current page.north west)+(0.52in,-2.40in)$)
+{
+\includegraphics[
+    width=6.15in,
+    height=1.68in,
+    keepaspectratio
+]{\detokenize{annotationMask2.png}}
+};
+
+% compact overlay banner
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(0.66in,-2.56in)$)
+rectangle
+($(current page.north west)+(2.46in,-2.36in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{5.9}{6.4}\selectfont
+]
+at ($(current page.north west)+(0.80in,-2.46in)$)
+{RUN 1 \hspace{5pt} UNMODIFIED DATA};
+
+% ----------------------------- RUN 2 ---------------------------
+\node[
+    anchor=north west,
+    inner sep=1.0pt,
+    draw=DeepGreen,
+    line width=0.55pt
+]
+at ($(current page.north west)+(0.52in,-4.18in)$)
+{
+\includegraphics[
+    width=6.15in,
+    height=1.68in,
+    keepaspectratio
+]{\detokenize{annotationMask3.png}}
+};
+
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(0.66in,-4.34in)$)
+rectangle
+($(current page.north west)+(2.93in,-4.14in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{5.9}{6.4}\selectfont
+]
+at ($(current page.north west)+(0.80in,-4.24in)$)
+{RUN 2 \hspace{5pt} CLEAN DATA / BEST IoU};
+
+% ----------------------------- RUN 3 ---------------------------
+\node[
+    anchor=north west,
+    inner sep=1.0pt,
+    draw=DeepGreen,
+    line width=0.55pt
+]
+at ($(current page.north west)+(0.52in,-5.96in)$)
+{
+\includegraphics[
+    width=6.15in,
+    height=1.68in,
+    keepaspectratio
+]{\detokenize{annotationMask4.png}}
+};
+
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(0.66in,-6.12in)$)
+rectangle
+($(current page.north west)+(2.73in,-5.92in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{5.9}{6.4}\selectfont
+]
+at ($(current page.north west)+(0.80in,-6.02in)$)
+{RUN 3 \hspace{5pt} SHORT BATCH-8 TEST};
+
+% =============================================================
+% RIGHT COLUMN — INTERPRETATION
+% =============================================================
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(5.79in,-2.42in)$)
+{HOW TO READ THESE IMAGES};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.41in,
+    text=Ink,
+    font=\fontsize{7.2}{8.4}\selectfont
+]
+at ($(current page.north west)+(5.79in,-2.78in)$)
+{
+The cleaned 41-epoch model gives the strongest lane overlap numerically,
+but the shorter batch-8 experiment does not eliminate the false-positive
+artifact.
+
+\vspace{6pt}
+
+The report attributes part of the erroneous right-lane prediction to glare
+in the scene. That makes the qualitative comparison essential:
+\textbf{good segmentation is not only a high score, but a physically sensible mask.}
+};
+
+% -------------------------------------------------------------
+% WHAT IoU MEANS HERE — same-width right-column panel
+% -------------------------------------------------------------
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(5.71in,-4.55in)$)
+rectangle
+($(current page.north west)+(10.42in,-7.64in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(5.99in,-4.83in)$)
+{WHAT IoU MEANS HERE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.08in,
+    text=Ink,
+    font=\fontsize{6.75}{7.75}\selectfont
+]
+at ($(current page.north west)+(5.99in,-5.20in)$)
+{
+\textbf{Intersection over Union (IoU)} measures the overlap between a predicted
+segmentation mask and the labeled ground truth. A higher IoU means the model is
+assigning more pixels to the correct class while avoiding unnecessary
+false-positive regions.
+
+\vspace{6pt}
+
+For semantic segmentation, IoU is more informative than raw accuracy because
+the \textbf{background class dominates most of the image}. A model could achieve
+high pixel accuracy by predicting background nearly everywhere while still
+missing the lane markings that matter for autonomy.
+
+\vspace{6pt}
+
+\textbf{Training loss} describes how strongly the network is penalized during
+optimization, while \textbf{validation loss} checks whether that learned behavior
+generalizes to data it did not directly train on. When training improves but
+validation performance stops improving, the model may be beginning to
+\textbf{overfit}.
+
+\vspace{6pt}
+
+These images also show why quantitative metrics need a qualitative check.
+Two runs can produce similar IoU values while making very different mistakes.
+A small false-positive fragment can be numerically minor but still physically
+misleading if it appears where no lane exists.
+
+\vspace{6pt}
+
+\textbf{Key machine-learning ideas shown here:}
+class imbalance, semantic segmentation, train/validation behavior,
+generalization, early stopping, overfitting, and qualitative model validation.
+};
+
+% =============================================================
+% FOOTER
+% =============================================================
+\UNFooter
+{\faArrowLeft\ EXPERIMENTS}
+{5 / 6}
+{RESULTS \faArrowRight}
+
+\end{tikzpicture}
+
+%==============================================================
+% PAGE 6 — SIMPLE RESULTS + PHYSICAL CONTEXT + RESOURCES
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{unet-results}{}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+\UNPageBase
+\UNHeader{PROJECT RESULT}{FROM LABELED PIXELS TO A ROAD-SCENE PERCEPTION MODEL}
+{Dataset diagnosis \hspace{7pt}\textbullet\hspace{7pt} U-Net training \hspace{7pt}\textbullet\hspace{7pt} Physical lane-perception context}
+
+\node[anchor=north west,align=left,text width=10.00in,text=Ink,font=\fontsize{8.0}{9.3}\selectfont]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{The final comparison did not produce one universally ``best'' model. The clean-data batch-4 run achieved the strongest IoU, while the longer batch-8 run achieved the lowest test loss among the cleaned-data experiments and reduced the visible artifact. The useful conclusion was therefore a \textbf{model-selection tradeoff}, not simply a ranking.};
+
+% simplified table-style results
+\fill[SoftGreen,rounded corners=5pt] ($(current page.north west)+(0.48in,-2.34in)$) rectangle ($(current page.north west)+(6.56in,-5.84in)$);
+\fill[DeepGreen,rounded corners=5pt] ($(current page.north west)+(0.48in,-2.34in)$) rectangle ($(current page.north west)+(6.56in,-2.78in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.north west)+(0.76in,-2.56in)$) {EXPERIMENT};
+\node[anchor=center,text=white,font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.north west)+(4.33in,-2.56in)$) {TEST IoU};
+\node[anchor=east,text=white,font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.north west)+(6.25in,-2.56in)$) {TEST LOSS};
+
+\foreach \yy/\model/\iou/\loss/\tag in {
+3.10/Unmodified · B4 · 34 ep/0.8479/0.0165/BASELINE,
+3.72/Clean · B4 · 41 ep/0.8508/0.0186/BEST IoU,
+4.34/Clean · B8 · 20 ep/0.8223/0.0183/UNDERTRAINED,
+4.96/Clean · B8 · 47 ep/0.8421/0.0159/LOWEST CLEAN LOSS}
+{
+\node[anchor=west,text=Ink,font=\fontsize{6.9}{7.6}\selectfont] at ($(current page.north west)+(0.76in,-\yy in)$) {\model};
+\node[anchor=center,text=Ink,font=\bfseries\fontsize{7.0}{7.6}\selectfont] at ($(current page.north west)+(4.33in,-\yy in)$) {\iou};
+\node[anchor=east,text=Ink,font=\bfseries\fontsize{7.0}{7.6}\selectfont] at ($(current page.north west)+(6.25in,-\yy in)$) {\loss};
+\node[anchor=west,text=DeepGreen,font=\sffamily\bfseries\fontsize{5.8}{6.3}\selectfont] at ($(current page.north west)+(0.76in,-\yy in-0.23in)$) {\tag};
+}
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont]
+at ($(current page.north west)+(6.86in,-2.34in)$) {PHYSICAL CONTEXT};
+\node[anchor=north west,inner sep=1.4pt,draw=DeepGreen,line width=0.55pt]
+at ($(current page.north west)+(6.86in,-2.68in)$)
+{\includegraphics[width=3.56in,height=2.72in,keepaspectratio]{\detokenize{physical_framework.jpg}}};
+\node[anchor=north west,align=left,text width=3.56in,text=Ink,font=\fontsize{6.9}{8.0}\selectfont]
+at ($(current page.north west)+(6.86in,-5.50in)$)
+{The segmentation study was developed for the same physical autonomous-vehicle environment: camera imagery becomes a lane mask that can support higher-level road interpretation and control.};
+
+\draw[RuleGray,line width=0.5pt] ($(current page.north west)+(0.48in,-6.28in)$) -- ($(current page.north west)+(10.42in,-6.28in)$);
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{8.1}{8.8}\selectfont]
+at ($(current page.north west)+(0.48in,-6.55in)$) {WHAT THIS PROJECT DEMONSTRATED};
+
+\foreach \xx/\ttl/\txt in {
+0.48/DATA QUALITY/Histogram analysis exposed a labeling failure before model metrics hid it.,
+3.78/MODEL EVALUATION/IoU + loss were compared with visual prediction quality rather than used alone.,
+7.08/ENGINEERING WORKFLOW/Clean labels → train → diagnose predictions → adjust experiment → compare again.}
+{
+\fill[SoftGold,rounded corners=3pt] ($(current page.north west)+(\xx in,-6.92in)$) rectangle ++(3.02in,-1.03in);
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont] at ($(current page.north west)+(\xx in+0.18in,-7.12in)$) {\ttl};
+\node[anchor=north west,align=left,text width=2.64in,text=Ink,font=\fontsize{6.5}{7.4}\selectfont] at ($(current page.north west)+(\xx in+0.18in,-7.43in)$) {\txt};
+}
+
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont]
+at ($(current page.north west)+(0.50in,-8.18in)$)
+{\faLaptopCode\ \ U-NET COLAB NOTEBOOK \hspace{0.55in} \faFilePdf\ \ PROJECT REPORT};
+
+\UNFooter{\faArrowLeft\ PREDICTIONS}{6 / 6}{PROJECT 15 \faArrowRight}
+\end{tikzpicture}
+
+
+\clearpage
