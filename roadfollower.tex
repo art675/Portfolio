@@ -1,8 +1,25 @@
+
 %==============================================================
 % PROJECT 11 — VISION-BASED ROAD FOLLOWING
-%==============================================================
-% Required image files:
+% 9-PAGE BALANCED-WIDTH VERSION
 %
+% DESIGN INTENT
+% -------------------------------------------------------------
+% - First page uses the same project-header language as Projects 10A–10D:
+%     03 AUTONOMY / PROJECT 11
+%     large project title
+%     Cal Poly lab • Three-Person Team • Spring 2026 • San Luis Obispo, California
+%     gold divider rule
+%
+% - Later pages KEEP the same top-bar / eyebrow / title / gold-rule structure,
+%   but the gray subheader line changes to fit the page topic.
+%
+% - Footer/navigation is protected. All body content ends above y = -8.95 in.
+% - Layouts intentionally vary page-to-page to keep the Autonomy section modern.
+% - Images are given more space. Any border around an image is tight to the image.
+%
+% REQUIRED IMAGE FILES
+% -------------------------------------------------------------
 % AV1of5.png
 % AV2of5.png
 % AV3of5.png
@@ -17,7 +34,8 @@
 % state_transition.png
 % FSM_PDcontroller.png
 %
-% Optional supporting images:
+% OPTIONAL / SUPPORTING IMAGES USED HERE
+% -------------------------------------------------------------
 % GoodAlgorithmHistogram.png
 % BadAlgorithmHistogram.png
 % HighPixelCountFrame.png
@@ -25,1414 +43,1265 @@
 % Static_Canny_Detection.png
 % CannyEdgePlotNoiseDemo.png
 %
-% Replace placeholder links near the end when resources are ready.
+% Assumes main portfolio already loads:
+% tikz, graphicx, hyperref, fontawesome5
+%
+% Assumes colors already exist:
+% DeepGreen, PolyGold, SoftGreen, SoftGold, RuleGray, Muted, Ink
 %==============================================================
 
 
 %==============================================================
-% PAGE 11A — PLATFORM + PROJECT INTRODUCTION
+% SHARED PROJECT FRAME
+%==============================================================
+
+\newcommand{\RFPageBase}{%
+    \fill[white]
+    (current page.south west)
+    rectangle
+    (current page.north east);
+
+    % top project bars
+    \fill[DeepGreen]
+    (current page.north west)
+    rectangle
+    ($(current page.north east)+(0,-0.10in)$);
+
+    \fill[PolyGold]
+    ($(current page.north west)+(0,-0.10in)$)
+    rectangle
+    ($(current page.north east)+(0,-0.14in)$);
+
+    % footer bars
+    \fill[DeepGreen]
+    (current page.south west)
+    rectangle
+    ($(current page.south east)+(0,0.38in)$);
+
+    \fill[PolyGold]
+    ($(current page.south west)+(0,0.38in)$)
+    rectangle
+    ($(current page.south east)+(0,0.42in)$);
+}
+
+% Standard project-page header matching Projects 10A–10D
+\newcommand{\RFHeader}[3]{%
+    % #1 eyebrow suffix, e.g. PERCEPTION DEVELOPMENT
+    % #2 main page title
+    % #3 gray metadata / descriptor line
+
+    \node[
+        anchor=north west,
+        text=PolyGold,
+        font=\sffamily\bfseries\fontsize{8.2}{9.0}\selectfont
+    ]
+    at ($(current page.north west)+(0.44in,-0.42in)$)
+    {03 AUTONOMY
+    \hspace{6pt}/\hspace{6pt}
+    PROJECT 11
+    \ifx&#1&\else
+    \hspace{6pt}/\hspace{6pt}
+    #1
+    \fi};
+
+    \node[
+        anchor=north west,
+        text=DeepGreen,
+        font=\bfseries\fontsize{21.5}{23.5}\selectfont
+    ]
+    at ($(current page.north west)+(0.44in,-0.72in)$)
+    {#2};
+
+    \node[
+        anchor=north west,
+        text=Muted,
+        font=\sffamily\fontsize{8.15}{8.95}\selectfont
+    ]
+    at ($(current page.north west)+(0.46in,-1.22in)$)
+    {#3};
+
+    \fill[PolyGold]
+    ($(current page.north west)+(0.44in,-1.43in)$)
+    rectangle
+    ($(current page.north west)+(10.54in,-1.395in)$);
+}
+
+\newcommand{\RFFooter}[3]{%
+    % #1 left nav
+    % #2 page count
+    % #3 right nav
+
+    \node[
+        anchor=west,
+        text=white,
+        font=\sffamily\bfseries\fontsize{6.2}{7.0}\selectfont
+    ]
+    at ($(current page.south west)+(0.52in,0.19in)$)
+    {#1};
+
+    \node[
+        anchor=center,
+        text=white,
+        font=\sffamily\fontsize{6.2}{7.0}\selectfont
+    ]
+    at ($(current page.south)+(0,0.19in)$)
+    {11 ROAD FOLLOWING \hspace{7pt} #2};
+
+    \node[
+        anchor=east,
+        text=white,
+        font=\sffamily\bfseries\fontsize{6.2}{7.0}\selectfont
+    ]
+    at ($(current page.south east)+(-0.52in,0.19in)$)
+    {#3};
+}
+
+
+%==============================================================
+% PAGE 11A — PROJECT INTRODUCTION + HERO
 %==============================================================
 
 \clearpage
 \thispagestyle{empty}
 \hypertarget{roadfollowing}{}
+\null
 
 \begin{tikzpicture}[remember picture,overlay]
 
-%--------------------------------------------------------------
-% Background + portfolio bars
-%--------------------------------------------------------------
+\RFPageBase
 
-\fill[white]
-(current page.south west)
-rectangle
-(current page.north east);
+\RFHeader
+{}
+{VISION-BASED ROAD FOLLOWING}
+{Cal Poly Autonomous Vehicles Laboratory
+\hspace{7pt}\textbullet\hspace{7pt}
+Three-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Spring 2026
+\hspace{7pt}\textbullet\hspace{7pt}
+San Luis Obispo, California}
 
-\fill[DeepGreen]
-(current page.north west)
-rectangle
-($(current page.north east)+(0,-0.10in)$);
-
-\fill[PolyGold]
-($(current page.north west)+(0,-0.10in)$)
-rectangle
-($(current page.north east)+(0,-0.14in)$);
-
-\fill[DeepGreen]
-(current page.south west)
-rectangle
-($(current page.south east)+(0,0.36in)$);
-
-\fill[PolyGold]
-($(current page.south west)+(0,0.36in)$)
-rectangle
-($(current page.south east)+(0,0.40in)$);
-
-
-%--------------------------------------------------------------
-% Project number
-%--------------------------------------------------------------
-
+% Main opening statement
 \node[
-anchor=north west,
-text=SoftGreen,
-font=\bfseries\fontsize{58}{58}\selectfont
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    font=\fontsize{8.2}{9.5}\selectfont,
+    text=Ink
 ]
-at ($(current page.north west)+(0.68in,-0.52in)$)
-{11};
-
-
-%--------------------------------------------------------------
-% Title
-%--------------------------------------------------------------
-
-\node[
-anchor=north west,
-text=DeepGreen,
-font=\bfseries\fontsize{25}{27}\selectfont
-]
-at ($(current page.north west)+(1.70in,-0.60in)$)
-{VISION-BASED ROAD FOLLOWING};
-
-\node[
-anchor=north west,
-text=PolyGold,
-font=\sffamily\bfseries\fontsize{9.5}{10.5}\selectfont
-]
-at ($(current page.north west)+(1.72in,-1.12in)$)
-{PERCEPTION $\rightarrow$ STATE ESTIMATION $\rightarrow$ STEERING CONTROL};
-
-\fill[PolyGold]
-($(current page.north west)+(1.72in,-1.35in)$)
-rectangle
-($(current page.north west)+(6.55in,-1.31in)$);
-
-
-%--------------------------------------------------------------
-% Intro paragraph
-%--------------------------------------------------------------
-
-\node[
-anchor=north west,
-align=left,
-text width=8.35in,
-font=\fontsize{10.5}{13.2}\selectfont,
-text=Ink
-]
-at ($(current page.north west)+(0.72in,-1.60in)$)
+at ($(current page.north west)+(0.46in,-1.72in)$)
 {
-This project developed an autonomous road-following controller for a
-sensor-equipped research vehicle. Camera imagery was processed to identify
-track boundaries, classify the local road geometry, and command steering
+This project developed an autonomous road-following controller for the
+MXcarkit research vehicle. Forward camera imagery was processed to identify
+painted track boundaries, estimate local road geometry, and command steering
 without continuous driver input. Development progressed from a
 \textbf{Canny edge-based} perception method to a more robust
-\textbf{left/right lane segmentation} strategy coupled to a
+\textbf{left/right lane-state} strategy coupled to a
 \textbf{finite-state machine (FSM)}.
 };
 
-
-%--------------------------------------------------------------
-% Section label
-%--------------------------------------------------------------
-
+% large hero image — deliberately dominant
 \node[
-anchor=north west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{10.5}{11.5}\selectfont
+    anchor=north west,
+    inner sep=0pt,
+    draw=DeepGreen,
+    line width=0.85pt
 ]
-at ($(current page.north west)+(0.72in,-2.48in)$)
-{AUTONOMOUS VEHICLE LEARNING PLATFORM};
-
-
-%--------------------------------------------------------------
-% Hardware image grid
-% Top row — common overhead profile
-%--------------------------------------------------------------
-
-\node[
-anchor=north west,
-inner sep=0pt
-]
-at ($(current page.north west)+(0.72in,-2.80in)$)
-{\includegraphics[width=4.35in,height=2.47in,keepaspectratio]{AV1of5.png}};
-
-\node[
-anchor=north east,
-inner sep=0pt
-]
-at ($(current page.north east)+(-0.72in,-2.80in)$)
-{\includegraphics[width=4.35in,height=2.47in,keepaspectratio]{AV2of5.png}};
-
-
-% Small labels over images
-
-\node[
-anchor=north west,
-fill=DeepGreen,
-text=white,
-inner xsep=7pt,
-inner ysep=4pt,
-font=\sffamily\bfseries\fontsize{7.5}{8}\selectfont
-]
-at ($(current page.north west)+(0.82in,-2.90in)$)
-{COMPUTE + NETWORK};
-
-\node[
-anchor=north west,
-fill=DeepGreen,
-text=white,
-inner xsep=7pt,
-inner ysep=4pt,
-font=\sffamily\bfseries\fontsize{7.5}{8}\selectfont
-]
-at ($(current page.north west)+(5.30in,-2.90in)$)
-{PERCEPTION};
-
-
-%--------------------------------------------------------------
-% Bottom row — common side profile
-%--------------------------------------------------------------
-
-\node[
-anchor=north west,
-inner sep=0pt
-]
-at ($(current page.north west)+(0.72in,-5.40in)$)
-{\includegraphics[width=4.35in,height=2.34in,keepaspectratio]{AV3of5.png}};
-
-\node[
-anchor=north east,
-inner sep=0pt
-]
-at ($(current page.north east)+(-0.72in,-5.40in)$)
-{\includegraphics[width=4.35in,height=2.34in,keepaspectratio]{AV5of5.png}};
-
-\node[
-anchor=north west,
-fill=DeepGreen,
-text=white,
-inner xsep=7pt,
-inner ysep=4pt,
-font=\sffamily\bfseries\fontsize{7.5}{8}\selectfont
-]
-at ($(current page.north west)+(0.82in,-5.50in)$)
-{LOW-LEVEL I/O};
-
-\node[
-anchor=north west,
-fill=DeepGreen,
-text=white,
-inner xsep=7pt,
-inner ysep=4pt,
-font=\sffamily\bfseries\fontsize{7.5}{8}\selectfont
-]
-at ($(current page.north west)+(5.30in,-5.50in)$)
-{POWER + ACTUATION};
-
-
-%--------------------------------------------------------------
-% Hardware summary strip
-%--------------------------------------------------------------
-
-\fill[SoftGreen]
-($(current page.north west)+(0.72in,-7.91in)$)
-rectangle
-($(current page.north east)+(-0.72in,-8.66in)$);
-
-\node[
-anchor=west,
-align=left,
-text width=8.35in,
-font=\sffamily\fontsize{8.5}{10.7}\selectfont,
-text=DeepGreen
-]
-at ($(current page.north west)+(0.92in,-8.285in)$)
+at ($(current page.north west)+(0.46in,-2.44in)$)
 {
-\textbf{NVIDIA Jetson} edge computer
-\hspace{0.13in}$\bullet$\hspace{0.13in}
-\textbf{Intel RealSense} camera
-\hspace{0.13in}$\bullet$\hspace{0.13in}
-RPLidar
-\hspace{0.13in}$\bullet$\hspace{0.13in}
-IMU
-\hspace{0.13in}$\bullet$\hspace{0.13in}
-Ultrasonic sensing
-\hspace{0.13in}$\bullet$\hspace{0.13in}
-VESC motor control
+\includegraphics[
+    width=7.02in
+]{AV4of5.png}
 };
 
+% tight green banner on hero
+\node[
+    anchor=south west,
+    fill=DeepGreen,
+    text=white,
+    inner xsep=8pt,
+    inner ysep=4.5pt,
+    font=\sffamily\bfseries\fontsize{7.5}{6.5}\selectfont
+]
+at ($(current page.north west)+(0.64in,-2.72in)$)
+{MXCARKIT AUTONOMOUS VEHICLE PLATFORM};
 
-%--------------------------------------------------------------
-% Toolchain / role
-%--------------------------------------------------------------
+% Right-side project logic
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{8.2}{7.2}\selectfont
+]
+at ($(current page.north west)+(7.72in,-2.50in)$)
+{PROJECT EVOLUTION};
+
+\draw[DeepGreen,line width=1.0pt]
+($(current page.north west)+(7.72in,-2.86in)$) --
+($(current page.north west)+(10.54in,-2.86in)$);
+
+\foreach \y/\num/\ttl/\sub in {
+3.14/01/PLATFORM/Camera + embedded compute,
+3.68/02/BASELINE/Canny edges + pixel windows,
+4.22/03/DIAGNOSIS/Noise + viewpoint failures,
+4.76/04/REFINEMENT/Left-right lane evidence,
+5.30/05/CONTROL/FSM + PD steering
+}{
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.55in
+]
+at ($(current page.north west)+(7.72in,-\y in)$)
+{
+{\textcolor{PolyGold}{\sffamily\bfseries\fontsize{7.1}{6.2}\selectfont \num}}
+\hspace{5pt}
+{\textcolor{DeepGreen}{\sffamily\bfseries\fontsize{7.4}{6.5}\selectfont \ttl}}\\[2pt]
+{\textcolor{Muted}{\sffamily\fontsize{8.0}{5.5}\selectfont \sub}}
+};
+}
+
+% bottom project summary band
+\fill[SoftGreen,rounded corners=3pt]
+($(current page.north west)+(0.46in,-6.48in)$)
+rectangle
+($(current page.north west)+(10.54in,-7.92in)$);
 
 \node[
-anchor=north west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9.5}{10.5}\selectfont
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.1}{7.2}\selectfont
 ]
-at ($(current page.north west)+(0.72in,-8.91in)$)
+at ($(current page.north west)+(0.72in,-6.73in)$)
 {DEVELOPMENT STACK};
 
 \node[
-anchor=north west,
-align=left,
-text width=8.3in,
-font=\fontsize{9.2}{11.7}\selectfont,
-text=Ink
+    anchor=north west,
+    align=left,
+    text width=9.55in,
+    font=\fontsize{7.4}{7.0}\selectfont,
+    text=Ink
 ]
-at ($(current page.north west)+(0.72in,-9.18in)$)
+at ($(current page.north west)+(0.72in,-7.09in)$)
 {
 \textbf{Python} for perception and control development,
 \textbf{Google Colab} for offline image/data analysis, and
 \textbf{Foxglove} for inspection and visualization of recorded robotics data.
-The final controller combined visual lane information with discrete driving
+The final controller combined visual lane information with discrete road
 states and closed-loop steering commands.
 };
 
-
-%--------------------------------------------------------------
-% Navigation
-%--------------------------------------------------------------
-
-\node[
-anchor=south west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
-]
-at ($(current page.south west)+(0.70in,0.64in)$)
-{\hyperlink{autonomy}{\faArrowLeft\ Autonomy}};
-
-\node[
-anchor=south east,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
-]
-at ($(current page.south east)+(-0.70in,0.64in)$)
-{\hyperlink{roadfollowing-canny}{Initial Perception \faArrowRight}};
-
-\node[
-anchor=east,
-text=white,
-font=\sffamily\fontsize{8}{9}\selectfont
-]
-at ($(current page.south east)+(-0.45in,0.18in)$)
-{11 ROAD FOLLOWING};
+\RFFooter
+{\hyperlink{autonomy}{\faArrowLeft\ AUTONOMY}}
+{1 / 8}
+{\hyperlink{roadfollowing-platform}{PLATFORM \faArrowRight}}
 
 \end{tikzpicture}
 
 
+%==============================================================
+% PAGE 11B — LEARNING PLATFORM
+%==============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{roadfollowing-platform}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\RFPageBase
+\RFHeader
+{LEARNING PLATFORM}
+{THE AUTONOMOUS-VEHICLE HARDWARE STACK}
+{Compute, perception, low-level I/O, vehicle power, and actuation architecture}
+
+% Dense 2x2 image mosaic with tight spacing
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(0.94in,-1.68in)$)
+{\includegraphics[width=4.52in]{AV1of5.png}};
+
+\node[
+    anchor=north west,
+    fill=DeepGreen,
+    text=white,
+    inner xsep=7pt,
+    inner ysep=4pt,
+    font=\sffamily\bfseries\fontsize{7.2}{6.2}\selectfont
+]
+at ($(current page.north west)+(1.06in,-1.81in)$)
+{COMPUTE + NETWORK};
+
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(5.54in,-1.68in)$)
+{\includegraphics[width=4.52in]{AV2of5.png}};
+
+\node[
+    anchor=north west,
+    fill=DeepGreen,
+    text=white,
+    inner xsep=7pt,
+    inner ysep=4pt,
+    font=\sffamily\bfseries\fontsize{7.2}{6.2}\selectfont
+]
+at ($(current page.north west)+(5.66in,-1.81in)$)
+{FORWARD PERCEPTION};
+
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(0.94in,-4.53in)$)
+{\includegraphics[width=4.52in]{AV3of5.png}};
+
+\node[
+    anchor=north west,
+    fill=DeepGreen,
+    text=white,
+    inner xsep=7pt,
+    inner ysep=4pt,
+    font=\sffamily\bfseries\fontsize{7.2}{6.2}\selectfont
+]
+at ($(current page.north west)+(1.06in,-4.66in)$)
+{LOW-LEVEL I/O};
+
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(5.54in,-4.53in)$)
+{\includegraphics[width=4.52in]{AV5of5.png}};
+
+\node[
+    anchor=north west,
+    fill=DeepGreen,
+    text=white,
+    inner xsep=7pt,
+    inner ysep=4pt,
+    font=\sffamily\bfseries\fontsize{7.2}{6.2}\selectfont
+]
+at ($(current page.north west)+(5.66in,-4.66in)$)
+{POWER + ACTUATION};
+
+% compact summary and architecture strip
+\draw[RuleGray,line width=0.55pt]
+($(current page.north west)+(0.46in,-7.27in)$) --
+($(current page.north west)+(10.54in,-7.27in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{7.1}\selectfont
+]
+at ($(current page.north west)+(0.46in,-7.35in)$)
+{ROAD-FOLLOWER SIGNAL PATH};
+
+\node[
+    anchor=north west,
+    align=center,
+    text width=10.08in,
+    font=\sffamily\bfseries\fontsize{7.7}{7.3}\selectfont,
+    text=DeepGreen
+]
+at ($(current page.north west)+(0.46in,-7.7in)$)
+{
+\textbf{INTEL REALSENSE}
+\hspace{7pt}$\rightarrow$\hspace{7pt}
+\textbf{NVIDIA JETSON / PYTHON}
+\hspace{7pt}$\rightarrow$\hspace{7pt}
+PERCEPTION LOGIC
+\hspace{7pt}$\rightarrow$\hspace{7pt}
+STEERING COMMAND
+};
+
+
+\RFFooter
+{\hyperlink{roadfollowing}{\faArrowLeft\ OVERVIEW}}
+{2 / 8}
+{\hyperlink{roadfollowing-canny}{INITIAL PERCEPTION \faArrowRight}}
+
+\end{tikzpicture}
+
 
 %==============================================================
-% PAGE 11B — INITIAL CANNY EDGE APPROACH
+% PAGE 11C — CANNY EDGE BASELINE
 %==============================================================
 
 \clearpage
 \thispagestyle{empty}
 \hypertarget{roadfollowing-canny}{}
+\null
 
 \begin{tikzpicture}[remember picture,overlay]
 
-%--------------------------------------------------------------
-% Base
-%--------------------------------------------------------------
+\RFPageBase
+\RFHeader
+{PERCEPTION DEVELOPMENT}
+{FINDING THE ROAD WITH EDGES}
+{Baseline vision pipeline
+\hspace{7pt}\textbullet\hspace{7pt}
+\textbf{Python} + \textbf{Google Colab}
+\hspace{7pt}\textbullet\hspace{7pt}
+Canny edge detection + ROI tuning}
 
-\fill[white]
-(current page.south west)
-rectangle
-(current page.north east);
-
-\fill[DeepGreen]
-(current page.north west)
-rectangle
-($(current page.north east)+(0,-0.10in)$);
-
-\fill[PolyGold]
-($(current page.north west)+(0,-0.10in)$)
-rectangle
-($(current page.north east)+(0,-0.14in)$);
-
-\fill[DeepGreen]
-(current page.south west)
-rectangle
-($(current page.south east)+(0,0.36in)$);
-
-\fill[PolyGold]
-($(current page.south west)+(0,0.36in)$)
-rectangle
-($(current page.south east)+(0,0.40in)$);
-
-
-%--------------------------------------------------------------
-% Header
-%--------------------------------------------------------------
-
+% Narrative setup
 \node[
-anchor=north west,
-text=PolyGold,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    font=\fontsize{8.0}{9.4}\selectfont,
+    text=Ink
 ]
-at ($(current page.north west)+(0.72in,-0.55in)$)
-{PROJECT 11 \hspace{0.08in}/\hspace{0.08in} PERCEPTION DEVELOPMENT};
-
-\node[
-anchor=north west,
-text=DeepGreen,
-font=\bfseries\fontsize{24}{26}\selectfont
-]
-at ($(current page.north west)+(0.72in,-0.85in)$)
-{01 \hspace{0.15in} Finding the Road with Edges};
-
-\node[
-anchor=north west,
-align=left,
-text width=8.55in,
-font=\fontsize{10.4}{13}\selectfont,
-text=Ink
-]
-at ($(current page.north west)+(0.72in,-1.42in)$)
+at ($(current page.north west)+(0.46in,-1.60in)$)
 {
-The first approach treated road following as an
-\textbf{image-processing problem}. Each camera frame was filtered and reduced
-to the features most likely to represent the painted track boundaries.
-A \textbf{Canny edge detector} provided a lightweight way to extract these
-high-contrast features before evaluating a smaller region of interest.
+The first road-following strategy reduced each camera frame to a simpler
+question: \textbf{where are the strongest track-boundary edges?} The image
+was preprocessed, converted to Canny edges, masked to a smaller region of
+interest, and then summarized by the number of usable white pixels inside
+that window. This provided a fast baseline that could be tuned on recorded
+frames before returning to the physical vehicle.
 };
 
-
-%--------------------------------------------------------------
-% Pipeline
-%--------------------------------------------------------------
-
+% Pipeline band
 \node[
-anchor=north west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.1}{9.0}\selectfont
 ]
-at ($(current page.north west)+(0.72in,-2.28in)$)
-{INITIAL PERCEPTION PIPELINE};
+at ($(current page.north west)+(0.46in,-2.28in)$)
+{BASELINE PERCEPTION PIPELINE};
 
-% pipeline boxes
-
-\foreach \x/\title/\sub in {
-0.72/CAMERA/Frame,
+\foreach \x/\ttl/\sub in {
+0.46/CAMERA/Raw frame,
 2.56/PREPROCESS/Blur + mask,
-4.40/CANNY/Edge extraction,
-6.24/ROI/Pixel window,
-8.08/CONTROL/Steering input
+4.66/CANNY/Extract edges,
+6.76/ROI/Count lane pixels,
+8.86/STEERING/Use visual error
 }{
 \node[
-anchor=north west,
-draw=DeepGreen,
-line width=0.7pt,
-rounded corners=2pt,
-minimum width=1.52in,
-minimum height=0.68in,
-align=center,
-text=DeepGreen
+    anchor=north west,
+    draw=DeepGreen,
+    rounded corners=2pt,
+    line width=0.60pt,
+    minimum width=1.68in,
+    minimum height=0.66in,
+    align=center,
+    text=DeepGreen
 ]
-at ($(current page.north west)+(\x in,-2.63in)$)
+at ($(current page.north west)+(\x in,-2.55in)$)
 {
-{\sffamily\bfseries\fontsize{8}{9}\selectfont \title}\\[-1pt]
-{\sffamily\fontsize{6.8}{8}\selectfont \sub}
+{\sffamily\bfseries\fontsize{6.7}{7.4}\selectfont \ttl}\\[1pt]
+{\sffamily\fontsize{6.2}{7.0}\selectfont \sub}
 };
 }
 
-% pipeline arrows
-\draw[->,line width=1.0pt,PolyGold]
-($(current page.north west)+(2.27in,-2.97in)$) --
-($(current page.north west)+(2.50in,-2.97in)$);
+\foreach \xa/\xb in {2.16/2.51,4.26/4.61,6.36/6.71,8.46/8.81}{
+\draw[->,PolyGold,line width=1.0pt]
+($(current page.north west)+(\xa in,-2.88in)$) --
+($(current page.north west)+(\xb in,-2.88in)$);
+}
 
-\draw[->,line width=1.0pt,PolyGold]
-($(current page.north west)+(4.11in,-2.97in)$) --
-($(current page.north west)+(4.34in,-2.97in)$);
-
-\draw[->,line width=1.0pt,PolyGold]
-($(current page.north west)+(5.95in,-2.97in)$) --
-($(current page.north west)+(6.18in,-2.97in)$);
-
-\draw[->,line width=1.0pt,PolyGold]
-($(current page.north west)+(7.79in,-2.97in)$) --
-($(current page.north west)+(8.02in,-2.97in)$);
-
-
-%--------------------------------------------------------------
-% Main Canny visual
-%--------------------------------------------------------------
-
+% Main processing figure, full width and easy to read
 \node[
-anchor=north west,
-inner sep=0pt
+    anchor=north west,
+    inner sep=0pt,
+    draw=DeepGreen,
+    line width=0.55pt
 ]
-at ($(current page.north west)+(0.72in,-3.58in)$)
-{\includegraphics[width=8.85in,height=2.25in,keepaspectratio]{CannyEdgeDetectionMethod.png}};
-
-\node[
-anchor=north west,
-align=left,
-text width=8.8in,
-font=\sffamily\fontsize{7.7}{9.6}\selectfont,
-text=Ink
-]
-at ($(current page.north west)+(0.72in,-5.72in)$)
+at ($(current page.north west)+(0.46in,-3.28in)$)
 {
-\textbf{Image reduction.}
-Canny edges identify intensity boundaries; thresholding and masking suppress
-large portions of the scene so that the controller evaluates a constrained
-road region rather than every detected feature.
+\includegraphics[width=10.08in]{CannyEdgeDetectionMethod.png}
+};
+
+% Larger baseline explanation, kept directly beneath the figure
+\draw[RuleGray,line width=0.45pt]
+($(current page.north west)+(0.46in,-5.13in)$) --
+($(current page.north west)+(10.54in,-5.13in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.4}{9.2}\selectfont
+]
+at ($(current page.north west)+(0.46in,-5.34in)$)
+{WHAT THE BASELINE WAS DOING};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    font=\fontsize{8.0}{9.35}\selectfont,
+    text=Ink
+]
+at ($(current page.north west)+(0.46in,-5.62in)$)
+{
+Canny edge detection exposed high-contrast structure, while thresholding and
+masking suppressed much of the surrounding scene. The controller then evaluated
+a deliberately constrained road region instead of reacting to every visible edge.
+This converted each camera frame into a lightweight visual signal that could be
+tested and tuned rapidly on recorded data before returning to the vehicle.
+};
+
+% Compact transition narrative
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.1}{9.0}\selectfont
+]
+at ($(current page.north west)+(0.46in,-6.48in)$)
+{WHY A SEPARATE TUNING STUDY WAS NEEDED};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    font=\fontsize{7.65}{8.9}\selectfont,
+    text=Ink
+]
+at ($(current page.north west)+(0.46in,-6.78in)$)
+{
+Lighting, viewpoint, curvature, and background clutter changed the detector response
+from frame to frame. The next step therefore compared representative scenes and
+preprocessing settings side-by-side rather than selecting parameters from one image.
 };
 
 
-%--------------------------------------------------------------
-% Parameter exploration
-%--------------------------------------------------------------
-
-\node[
-anchor=north west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{10}{11}\selectfont
-]
-at ($(current page.north west)+(0.72in,-6.18in)$)
-{PARAMETER EXPLORATION};
-
-\node[
-anchor=north west,
-inner sep=0pt
-]
-at ($(current page.north west)+(0.72in,-6.50in)$)
-{\includegraphics[width=5.50in,height=2.86in,keepaspectratio]{KeyFramesVSsettings.png}};
-
-
-% Right-side explanation
-
-\node[
-anchor=north west,
-fill=SoftGreen,
-inner sep=9pt,
-align=left,
-text width=2.77in,
-font=\fontsize{9}{11.4}\selectfont,
-text=Ink
-]
-at ($(current page.north west)+(6.72in,-6.50in)$)
-{
-\textbf{\textcolor{DeepGreen}{What was tuned?}}
-
-\vspace{0.08in}
-
-Canny thresholds, blur method, blur kernel size, and the location of the
-detection window were evaluated across representative frames.
-
-\vspace{0.13in}
-
-\textbf{\textcolor{DeepGreen}{What did pixel count mean?}}
-
-\vspace{0.08in}
-
-The number of white edge pixels inside the selected window acted as a compact
-measure of whether a usable lane feature was present.
-
-\vspace{0.13in}
-
-\textbf{\textcolor{DeepGreen}{Development workflow}}
-
-\vspace{0.08in}
-
-Recorded frames were explored in \textbf{Python} and
-\textbf{Google Colab}, allowing perception parameters to be evaluated before
-running them on the physical vehicle.
-};
-
-
-%--------------------------------------------------------------
-% Takeaway
-%--------------------------------------------------------------
-
-\fill[DeepGreen]
-($(current page.north west)+(0.72in,-9.65in)$)
+% RESOURCE BAR — formatted consistently with the rest of the portfolio
+\fill[SoftGreen!34,rounded corners=4pt]
+($(current page.south west)+(0.46in,0.58in)$)
 rectangle
-($(current page.north east)+(-0.72in,-10.18in)$);
+($(current page.south east)+(-0.46in,1.08in)$);
+
+\draw[RuleGray,line width=0.45pt,rounded corners=4pt]
+($(current page.south west)+(0.46in,0.58in)$)
+rectangle
+($(current page.south east)+(-0.46in,1.08in)$);
 
 \node[
-anchor=west,
-align=left,
-text width=8.3in,
-text=white,
-font=\sffamily\fontsize{8.7}{10.8}\selectfont
+    anchor=center,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.9}{7.7}\selectfont,
+    align=center
 ]
-at ($(current page.north west)+(0.92in,-9.915in)$)
+at ($(current page.south)+(0,0.83in)$)
 {
-\textbf{ENGINEERING TAKEAWAY}
-\hspace{0.12in}
-The method was computationally simple, but reliable steering depended heavily
-on choosing an image region that contained the lane while rejecting unrelated
-edges and visual noise.
+\href{https://drive.google.com/file/d/11rblY0SEngrENpYdcI8bonIHuGg9S97w/view?usp=drive_link}
+{\faPlayCircle\ STATIONARY REMOTE-CONTROLLED DEMO}
+\hspace{18pt}
+\faFilePdf\ PROJECT MEMO
+\hspace{18pt}
+\faCode\ COLAB / GITHUB
 };
 
-
-%--------------------------------------------------------------
-% Navigation
-%--------------------------------------------------------------
-
-\node[
-anchor=south west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
-]
-at ($(current page.south west)+(0.70in,0.64in)$)
-{\hyperlink{roadfollowing}{\faArrowLeft\ Platform}};
-
-\node[
-anchor=south east,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
-]
-at ($(current page.south east)+(-0.70in,0.64in)$)
-{\hyperlink{roadfollowing-improved}{Improved Perception \faArrowRight}};
-
-\node[
-anchor=east,
-text=white,
-font=\sffamily\fontsize{8}{9}\selectfont
-]
-at ($(current page.south east)+(-0.45in,0.18in)$)
-{11 ROAD FOLLOWING};
+\RFFooter
+{\hyperlink{roadfollowing-platform}{\faArrowLeft\ PLATFORM}}
+{3 / 9}
+{\hyperlink{roadfollowing-tuning}{DETECTOR TUNING \faArrowRight}}
 
 \end{tikzpicture}
 
 
+%==============================================================
 
 %==============================================================
-% PAGE 11C — WHY THE INITIAL APPROACH CHANGED
-% + DYNAMIC PERCEPTION / LEFT-RIGHT LANE INFORMATION
+% PAGE 11D — DETECTOR TUNING STUDY
 %==============================================================
 
 \clearpage
 \thispagestyle{empty}
-\hypertarget{roadfollowing-improved}{}
+\hypertarget{roadfollowing-tuning}{}
+\null
 
 \begin{tikzpicture}[remember picture,overlay]
 
-%--------------------------------------------------------------
-% Base
-%--------------------------------------------------------------
+\RFPageBase
+\RFHeader
+{DETECTOR TUNING}
+{TUNING THE DETECTOR ACROSS REPRESENTATIVE FRAMES}
+{Parameter exploration
+\hspace{7pt}\textbullet\hspace{7pt}
+Canny thresholds
+\hspace{7pt}\textbullet\hspace{7pt}
+blur strategy
+\hspace{7pt}\textbullet\hspace{7pt}
+ROI robustness}
 
-\fill[white]
-(current page.south west)
-rectangle
-(current page.north east);
-
-\fill[DeepGreen]
-(current page.north west)
-rectangle
-($(current page.north east)+(0,-0.10in)$);
-
-\fill[PolyGold]
-($(current page.north west)+(0,-0.10in)$)
-rectangle
-($(current page.north east)+(0,-0.14in)$);
-
-\fill[DeepGreen]
-(current page.south west)
-rectangle
-($(current page.south east)+(0,0.36in)$);
-
-\fill[PolyGold]
-($(current page.south west)+(0,0.36in)$)
-rectangle
-($(current page.south east)+(0,0.40in)$);
-
-
-%--------------------------------------------------------------
-% Header
-%--------------------------------------------------------------
-
+% Narrative setup
 \node[
-anchor=north west,
-text=PolyGold,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    font=\fontsize{7.5}{8.9}\selectfont,
+    text=Ink
 ]
-at ($(current page.north west)+(0.72in,-0.55in)$)
-{PROJECT 11 \hspace{0.08in}/\hspace{0.08in} PERCEPTION REFINEMENT};
-
-\node[
-anchor=north west,
-text=DeepGreen,
-font=\bfseries\fontsize{24}{26}\selectfont
-]
-at ($(current page.north west)+(0.72in,-0.85in)$)
-{02 \hspace{0.15in} From Edge Count to Lane State};
-
-
-%--------------------------------------------------------------
-% Problem statement
-%--------------------------------------------------------------
-
-\node[
-anchor=north west,
-align=left,
-text width=8.55in,
-font=\fontsize{10.3}{12.9}\selectfont,
-text=Ink
-]
-at ($(current page.north west)+(0.72in,-1.42in)$)
+at ($(current page.north west)+(0.46in,-1.72in)$)
 {
-A fixed edge window could work in one portion of the track but become less
-reliable as perspective, curvature, and background features changed.
-The controller therefore needed more useful information than a single
-``lane detected'' measurement. The improved approach separately evaluated
-\textbf{left and right lane evidence}, allowing road geometry to become an
-explicit input to the driving logic.
+A detector that looked acceptable in one image could fail a few moments later.
+To avoid tuning by intuition alone, representative frames from different
+sections of the course were processed under several combinations of
+\textbf{Canny thresholds}, \textbf{blur methods}, and \textbf{kernel sizes}.
+The goal was to identify settings that preserved the painted lane boundary
+without amplifying background edges.
+};
+
+% Key-frames tuning comparison — scaled down, centered, and shifted upward
+\node[
+    anchor=north,
+    inner sep=0pt,
+    draw=DeepGreen,
+    line width=0.75pt
+]
+at ($(current page.north)+(0,-2.36in)$)
+{
+\includegraphics[
+    width=7.70in,
+    keepaspectratio
+]{KeyFramesVSsettings.png}
+};
+
+\node[
+    anchor=north west,
+    fill=DeepGreen,
+    text=white,
+    inner xsep=8pt,
+    inner ysep=4.5pt,
+    font=\sffamily\bfseries\fontsize{6.2}{6.9}\selectfont
+]
+at ($(current page.north west)+(1.82in,-2.55in)$)
+{SIDE-BY-SIDE PARAMETER EXPLORATION};
+
+% Bottom interpretation area
+\draw[RuleGray,line width=0.6pt]
+($(current page.north west)+(0.46in,-6.95in)$) --
+($(current page.north west)+(10.54in,-6.95in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.8}\selectfont
+]
+at ($(current page.north west)+(0.46in,-7.22in)$)
+{WHAT THE COMPARISON REVEALED};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.78in,
+    font=\fontsize{7.0}{8.3}\selectfont,
+    text=Ink
+]
+at ($(current page.north west)+(0.46in,-7.58in)$)
+{
+\textbf{\textcolor{PolyGold}{1. Sensitivity to thresholds}}\\[3pt]
+Lower thresholds exposed more edges, but also admitted more background
+structure. Higher thresholds reduced clutter but could erase faint lane
+features.
+};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.78in,
+    font=\fontsize{7.0}{8.3}\selectfont,
+    text=Ink
+]
+at ($(current page.north west)+(5.76in,-7.58in)$)
+{
+\textbf{\textcolor{PolyGold}{2. Preprocessing mattered}}\\[3pt]
+Blur method and kernel size changed which boundaries survived into the Canny
+image. The comparison showed that detector quality depended on the whole
+preprocessing chain, not one threshold in isolation.
 };
 
 
-%--------------------------------------------------------------
-% Before / after comparison
-%--------------------------------------------------------------
+\RFFooter
+{\hyperlink{roadfollowing-canny}{\faArrowLeft\ CANNY BASELINE}}
+{4 / 9}
+{\hyperlink{roadfollowing-failure}{FAILURE ANALYSIS \faArrowRight}}
+
+\end{tikzpicture}
+
+
+% PAGE 11D — FAILURE ANALYSIS
+%==============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{roadfollowing-failure}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\RFPageBase
+\RFHeader
+{PERCEPTION DIAGNOSIS}
+{WHEN THE PIXEL COUNT LIED}
+{Failure modes in recorded frames \hspace{7pt}\textbullet\hspace{7pt}
+scene clutter \hspace{7pt}\textbullet\hspace{7pt}
+viewpoint sensitivity}
+
+% histogram dominates top-left
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(0.46in,-1.75in)$)
+{\includegraphics[width=5.92in,height=3.00in,keepaspectratio]{BadAlgorithmHistogram.png}};
+
+% high-count example top-right
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(6.66in,-1.75in)$)
+{\includegraphics[width=3.88in,height=2.05in,keepaspectratio]{HighPixelCountFrame.png}};
 
 \node[
-anchor=north west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+    anchor=north west,
+    align=left,
+    text width=3.82in,
+    font=\fontsize{7.05}{6.55}\selectfont,
+    text=Ink
 ]
-at ($(current page.north west)+(0.72in,-2.30in)$)
-{WHY A DYNAMIC DETECTION REGION?};
-
-% left image
-\node[
-anchor=north west,
-inner sep=0pt
-]
-at ($(current page.north west)+(0.72in,-2.62in)$)
-{\includegraphics[width=4.27in,height=1.72in,keepaspectratio]{Static_Canny_Detection.png}};
-
-% right image
-\node[
-anchor=north east,
-inner sep=0pt
-]
-at ($(current page.north east)+(-0.72in,-2.62in)$)
-{\includegraphics[width=4.27in,height=1.72in,keepaspectratio]{Dynamic_Canny_Detection.png}};
-
-\node[
-anchor=north west,
-text=Ink,
-font=\sffamily\bfseries\fontsize{7.8}{9}\selectfont
-]
-at ($(current page.north west)+(0.72in,-4.22in)$)
-{STATIC WINDOW};
-
-\node[
-anchor=north west,
-text=Ink,
-font=\sffamily\bfseries\fontsize{7.8}{9}\selectfont
-]
-at ($(current page.north west)+(5.23in,-4.22in)$)
-{DYNAMIC WINDOW};
-
-
-%--------------------------------------------------------------
-% Histogram / validation row
-%--------------------------------------------------------------
-
-\node[
-anchor=north west,
-inner sep=0pt
-]
-at ($(current page.north west)+(0.72in,-4.57in)$)
-{\includegraphics[width=4.55in,height=2.25in,keepaspectratio]{GoodAlgorithmHistogram.png}};
-
-\node[
-anchor=north west,
-fill=SoftGreen,
-inner sep=9pt,
-align=left,
-text width=3.63in,
-font=\fontsize{9.1}{11.4}\selectfont,
-text=Ink
-]
-at ($(current page.north west)+(5.55in,-4.57in)$)
+at ($(current page.north west)+(6.66in,-3.92in)$)
 {
-\textbf{\textcolor{DeepGreen}{Thresholding the detector}}
-
-\vspace{0.08in}
-
-Pixel-count distributions were used to distinguish three practical cases:
-
-\vspace{0.09in}
-
-\textbf{Too few pixels} --- the expected lane feature was not reliably visible.
-
-\vspace{0.07in}
-
-\textbf{Valid range} --- sufficient edge information was present for the
-controller to use.
-
-\vspace{0.07in}
-
-\textbf{Too many pixels} --- the window likely contained excessive scene
-structure or noise.
-
-\vspace{0.12in}
-
-This converted raw image features into discrete detection flags that could
-drive higher-level control logic.
+A high edge count did not automatically mean the lane was well detected.
+Background geometry, reflections, and unrelated high-contrast objects could
+inflate the measurement.
 };
 
-
-%--------------------------------------------------------------
-% Improved representation
-%--------------------------------------------------------------
+% lower visual pair
+\draw[RuleGray,line width=0.55pt]
+($(current page.north west)+(0.46in,-4.51in)$) --
+($(current page.north west)+(10.54in,-4.51in)$);
 
 \node[
-anchor=north west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.3}{7.4}\selectfont
 ]
-at ($(current page.north west)+(0.72in,-7.22in)$)
+at ($(current page.north west)+(0.46in,-4.77in)$)
+{NOISE + VIEWPOINT EFFECTS};
+
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(0.46in,-5.11in)$)
+{\includegraphics[width=5.02in,height=2.10in,keepaspectratio]{CannyEdgePlotNoiseDemo.png}};
+
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(5.76in,-5.11in)$)
+{\includegraphics[width=4.78in,height=2.10in,keepaspectratio]{staticVSdynamicPxlCnt.png}};
+
+% design lesson strip
+\fill[SoftGold,rounded corners=3pt]
+($(current page.north west)+(0.46in,-7.27in)$)
+rectangle
+($(current page.north west)+(10.54in,-7.92in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0.46in,-7.27in)$)
+rectangle
+($(current page.north west)+(0.56in,-7.92in)$);
+
+\node[
+    anchor=west,
+    align=left,
+    text width=9.48in,
+    font=\sffamily\fontsize{7.3}{6.8}\selectfont,
+    text=Ink
+]
+at ($(current page.north west)+(0.76in,-7.595in)$)
+{
+\textbf{\textcolor{DeepGreen}{DESIGN LESSON}}
+\hspace{8pt}
+A single raw edge count mixed perception and control too closely. The next
+design needed to answer a cleaner question:
+\textbf{which lane boundary is actually visible?}
+};
+
+\RFFooter
+{\hyperlink{roadfollowing-canny}{\faArrowLeft\ INITIAL PERCEPTION}}
+{5 / 9}
+{\hyperlink{roadfollowing-dynamic}{REFINED DETECTOR \faArrowRight}}
+
+\end{tikzpicture}
+
+
+%==============================================================
+% PAGE 11E — DYNAMIC DETECTOR
+%==============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{roadfollowing-dynamic}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\RFPageBase
+\RFHeader
+{PERCEPTION REFINEMENT}
+{FROM STATIC WINDOW TO DYNAMIC LANE EVIDENCE}
+{Dynamic region-of-interest logic \hspace{7pt}\textbullet\hspace{7pt}
+pixel-count thresholds \hspace{7pt}\textbullet\hspace{7pt}
+left/right detection flags}
+
+% top image comparison
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(0.46in,-1.76in)$)
+{\includegraphics[width=4.90in,height=2.14in,keepaspectratio]{Static_Canny_Detection.png}};
+
+\node[
+    anchor=north west,
+    fill=DeepGreen,
+    text=white,
+    inner xsep=7pt,
+    inner ysep=4pt,
+    font=\sffamily\bfseries\fontsize{6.9}{5.9}\selectfont
+]
+at ($(current page.north west)+(0.58in,-1.89in)$)
+{STATIC DETECTION WINDOW};
+
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(5.64in,-1.76in)$)
+{\includegraphics[width=4.90in,height=2.14in,keepaspectratio]{Dynamic_Canny_Detection.png}};
+
+\node[
+    anchor=north west,
+    fill=DeepGreen,
+    text=white,
+    inner xsep=7pt,
+    inner ysep=4pt,
+    font=\sffamily\bfseries\fontsize{6.9}{5.9}\selectfont
+]
+at ($(current page.north west)+(5.76in,-1.89in)$)
+{DYNAMIC DETECTION WINDOW};
+
+% mid histograms
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.3}{7.4}\selectfont
+]
+at ($(current page.north west)+(0.46in,-4.13in)$)
+{AFTER REFINEMENT};
+
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(0.46in,-4.46in)$)
+{\includegraphics[width=4.90in,height=2.30in,keepaspectratio]{DynamicCannyHistogram.png}};
+
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(5.64in,-4.46in)$)
+{\includegraphics[width=4.90in,height=2.30in,keepaspectratio]{GoodAlgorithmHistogram.png}};
+
+% bottom explanation
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.82in,
+    font=\fontsize{7.1}{6.6}\selectfont,
+    text=Ink
+]
+at ($(current page.north west)+(0.46in,-6.94in)$)
+{
+The refined detector produced a more useful distribution. Pixel-count
+thresholds could now be interpreted as \textbf{lane evidence} instead of as a
+direct steering command.
+};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.82in,
+    font=\fontsize{7.1}{6.6}\selectfont,
+    text=Ink
+]
+at ($(current page.north west)+(5.64in,-6.94in)$)
+{
+The output became two explicit variables:
+\texttt{LINE\_LEFT\_DETECTED} and
+\texttt{LINE\_RIGHT\_DETECTED}. These flags formed the interface between
+perception and the state machine.
+};
+
+\fill[DeepGreen,rounded corners=3pt]
+($(current page.north west)+(0.46in,-7.72in)$)
+rectangle
+($(current page.north west)+(10.54in,-8.in)$);
+
+\node[
+    anchor=center,
+    text=white,
+    font=\sffamily\bfseries\fontsize{7.5}{7.0}\selectfont
+]
+at ($(current page.north west)+(5.50in,-7.85in)$)
+{
+RAW PIXELS
+\hspace{8pt}$\rightarrow$\hspace{8pt}
+LANE EVIDENCE
+\hspace{8pt}$\rightarrow$\hspace{8pt}
+ROAD STATE
+};
+
+\RFFooter
+{\hyperlink{roadfollowing-failure}{\faArrowLeft\ FAILURE ANALYSIS}}
+{6 / 9}
+{\hyperlink{roadfollowing-state}{ROAD STATE \faArrowRight}}
+
+\end{tikzpicture}
+
+
+%==============================================================
+% PAGE 11F — ROAD STATE REPRESENTATION
+%==============================================================
+
+\clearpage
+\thispagestyle{empty}
+\hypertarget{roadfollowing-state}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\RFPageBase
+\RFHeader
+{ROAD-STATE REPRESENTATION}
+{TURNING LANE EVIDENCE INTO A DRIVING CONDITION}
+{Left/right lane segmentation \hspace{7pt}\textbullet\hspace{7pt}
+road geometry inference \hspace{7pt}\textbullet\hspace{7pt}
+FSM transition evidence}
+
+% hero state-transition image — very tight green border
+\node[
+    anchor=north west,
+    inner sep=0pt,
+    draw=DeepGreen,
+    line width=0.65pt
+]
+at ($(current page.north west)+(0.46in,-1.76in)$)
+{\includegraphics[width=10.08in,height=3.30in,keepaspectratio]{state_transition.png}};
+
+% tight banner — shifted upward toward the top of the image
+\node[
+    anchor=south west,
+    fill=DeepGreen,
+    text=white,
+    inner xsep=8pt,
+    inner ysep=4pt,
+    font=\sffamily\bfseries\fontsize{7.0}{6.1}\selectfont
+]
+at ($(current page.north west)+(0.60in,-2.62in)$)
 {LEFT / RIGHT LANE REPRESENTATION};
 
+% explanatory split
 \node[
-anchor=north west,
-inner sep=0pt
+    anchor=north west,
+    align=left,
+    text width=4.85in,
+    font=\fontsize{7.2}{6.75}\selectfont,
+    text=Ink
 ]
-at ($(current page.north west)+(0.72in,-7.55in)$)
-{\includegraphics[width=5.45in,height=1.65in,keepaspectratio]{state_transition.png}};
-
-
-% Logic panel
-
-\node[
-anchor=north west,
-draw=PolyGold,
-line width=1pt,
-inner sep=10pt,
-align=left,
-text width=3.08in,
-font=\fontsize{8.8}{11}\selectfont,
-text=Ink
-]
-at ($(current page.north west)+(6.38in,-7.55in)$)
+at ($(current page.north west)+(0.46in,-5.36in)$)
 {
-\textbf{\textcolor{DeepGreen}{Perception becomes state information}}
-
-\vspace{0.10in}
-
-\texttt{LINE\_LEFT\_DETECTED}
-
-\texttt{LINE\_RIGHT\_DETECTED}
-
-\vspace{0.09in}
-
-Together, these flags distinguish whether the vehicle sees both lane
-boundaries or has lost one side as the road curves.
-
-\vspace{0.11in}
-
-Instead of directly mapping noisy pixels to steering, the perception layer
-now describes the \textbf{driving situation}.
+In a straight segment, both painted boundaries can be visible. During a
+right-hand curve, the right boundary can disappear from the usable image
+region while the left remains visible; the inverse occurs during a left-hand
+curve.
 };
 
-
-%--------------------------------------------------------------
-% Improved pipeline strip
-%--------------------------------------------------------------
-
-\fill[DeepGreen]
-($(current page.north west)+(0.72in,-9.55in)$)
-rectangle
-($(current page.north east)+(-0.72in,-10.17in)$);
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{7.6}{6.7}\selectfont
+]
+at ($(current page.north west)+(5.76in,-5.36in)$)
+{PERCEPTION FLAGS};
 
 \node[
-anchor=west,
-align=center,
-text width=8.4in,
-text=white,
-font=\sffamily\bfseries\fontsize{8.8}{11}\selectfont
+    anchor=north west,
+    align=left,
+    text width=4.40in,
+    font=\ttfamily\fontsize{7.3}{6.9}\selectfont,
+    text=DeepGreen
 ]
-at ($(current page.north west)+(0.92in,-9.86in)$)
+at ($(current page.north west)+(5.76in,-5.70in)$)
 {
-CAMERA
-\hspace{0.12in}$\rightarrow$\hspace{0.12in}
-EDGE / LANE EXTRACTION
-\hspace{0.12in}$\rightarrow$\hspace{0.12in}
-LEFT + RIGHT DETECTION FLAGS
-\hspace{0.12in}$\rightarrow$\hspace{0.12in}
-FSM
-\hspace{0.12in}$\rightarrow$\hspace{0.12in}
-STEERING
+LINE\_LEFT\_DETECTED\\
+LINE\_RIGHT\_DETECTED\\
+LINE\_LEFT\_MISSING\\
+LINE\_RIGHT\_MISSING
 };
 
-
-%--------------------------------------------------------------
-% Navigation
-%--------------------------------------------------------------
-
-\node[
-anchor=south west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
-]
-at ($(current page.south west)+(0.70in,0.64in)$)
-{\hyperlink{roadfollowing-canny}{\faArrowLeft\ Initial Perception}};
+% State preview row
+\draw[RuleGray,line width=0.55pt]
+($(current page.north west)+(0.46in,-6.40in)$) --
+($(current page.north west)+(10.54in,-6.40in)$);
 
 \node[
-anchor=south east,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.3}{7.4}\selectfont
 ]
-at ($(current page.south east)+(-0.70in,0.64in)$)
-{\hyperlink{roadfollowing-control}{FSM + Control \faArrowRight}};
+at ($(current page.north west)+(0.46in,-6.68in)$)
+{THE THREE DRIVING CONDITIONS};
 
+\foreach \x/\num/\ttl/\sub in {
+0.46/01/STRAIGHT/Both lane boundaries available,
+3.84/02/LEFT\_CURVE/Follow LINE\_RIGHT,
+7.22/03/RIGHT\_CURVE/Follow LINE\_LEFT
+}{
 \node[
-anchor=east,
-text=white,
-font=\sffamily\fontsize{8}{9}\selectfont
+    anchor=north west,
+    align=left,
+    text width=3.42in
 ]
-at ($(current page.south east)+(-0.45in,0.18in)$)
-{11 ROAD FOLLOWING};
+at ($(current page.north west)+(\x in,-7.10in)$)
+{
+{\textcolor{PolyGold}{\sffamily\bfseries\fontsize{7.1}{6.2}\selectfont \num}}\\[2pt]
+{\textcolor{DeepGreen}{\sffamily\bfseries\fontsize{8.1}{7.2}\selectfont \ttl}}\\[3pt]
+{\textcolor{Muted}{\sffamily\fontsize{8.1}{5.6}\selectfont \sub}}
+};
+}
+
+\RFFooter
+{\hyperlink{roadfollowing-dynamic}{\faArrowLeft\ REFINED DETECTOR}}
+{7 / 9}
+{\hyperlink{roadfollowing-fsm}{FSM + CONTROL \faArrowRight}}
 
 \end{tikzpicture}
 
 
-
 %==============================================================
-% PAGE 11D — FSM + CONTROL + RESULT
+% PAGE 11G — FSM + CONTROL
 %==============================================================
 
 \clearpage
 \thispagestyle{empty}
-\hypertarget{roadfollowing-control}{}
+\hypertarget{roadfollowing-fsm}{}
+\null
 
 \begin{tikzpicture}[remember picture,overlay]
 
-%--------------------------------------------------------------
-% Base
-%--------------------------------------------------------------
+\RFPageBase
+\RFHeader
+{AUTONOMOUS CONTROL}
+{TURNING PERCEPTION INTO MOTION}
+{Finite-state driving logic \hspace{7pt}\textbullet\hspace{7pt}
+lane-reference selection \hspace{7pt}\textbullet\hspace{7pt}
+PD steering response}
 
-\fill[white]
-(current page.south west)
-rectangle
-($(current page.north east)+(0,0)$);
-
-\fill[DeepGreen]
-(current page.north west)
-rectangle
-($(current page.north east)+(0,-0.10in)$);
-
-\fill[PolyGold]
-($(current page.north west)+(0,-0.10in)$)
-rectangle
-($(current page.north east)+(0,-0.14in)$);
-
-\fill[DeepGreen]
-(current page.south west)
-rectangle
-($(current page.south east)+(0,0.36in)$);
-
-\fill[PolyGold]
-($(current page.south west)+(0,0.36in)$)
-rectangle
-($(current page.south east)+(0,0.40in)$);
-
-
-%--------------------------------------------------------------
-% Header
-%--------------------------------------------------------------
-
+% FSM as hero
 \node[
-anchor=north west,
-text=PolyGold,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.3}{7.4}\selectfont
 ]
-at ($(current page.north west)+(0.72in,-0.55in)$)
-{PROJECT 11 \hspace{0.08in}/\hspace{0.08in} AUTONOMOUS CONTROL};
-
-\node[
-anchor=north west,
-text=DeepGreen,
-font=\bfseries\fontsize{24}{26}\selectfont
-]
-at ($(current page.north west)+(0.72in,-0.85in)$)
-{03 \hspace{0.15in} Turning Perception into Motion};
-
-\node[
-anchor=north west,
-align=left,
-text width=8.55in,
-font=\fontsize{10.3}{12.9}\selectfont,
-text=Ink
-]
-at ($(current page.north west)+(0.72in,-1.42in)$)
-{
-The final architecture separated \textbf{what the camera sees} from
-\textbf{how the vehicle should respond}. Lane-detection flags triggered a
-finite-state machine representing straight, left-curve, and right-curve
-driving. Each state then selected the appropriate lane reference for steering.
-};
-
-
-%--------------------------------------------------------------
-% FSM diagram
-%--------------------------------------------------------------
-
-\node[
-anchor=north west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{10}{11}\selectfont
-]
-at ($(current page.north west)+(0.72in,-2.28in)$)
+at ($(current page.north west)+(0.46in,-1.76in)$)
 {FINITE-STATE DRIVING LOGIC};
 
-\node[
-anchor=north west,
-inner sep=0pt
-]
-at ($(current page.north west)+(0.72in,-2.57in)$)
-{\includegraphics[width=5.15in,height=4.05in,keepaspectratio]{FSM_Diagram.png}};
+\node[anchor=north west,inner sep=0pt]
+at ($(current page.north west)+(0.46in,-2.10in)$)
+{\includegraphics[width=5.92in,height=4.05in,keepaspectratio]{FSM_Diagram.png}};
 
-
-%--------------------------------------------------------------
-% State explanation panel
-%--------------------------------------------------------------
+% tight explanatory block
+\fill[SoftGreen,rounded corners=3pt]
+($(current page.north west)+(6.66in,-2.10in)$)
+rectangle
+($(current page.north west)+(10.54in,-5.95in)$);
 
 \node[
-anchor=north west,
-fill=SoftGreen,
-inner sep=10pt,
-align=left,
-text width=3.25in,
-font=\fontsize{8.9}{11.2}\selectfont,
-text=Ink
+    anchor=north west,
+    align=left,
+    text width=2.95in,
+    font=\fontsize{6.95}{6.45}\selectfont,
+    text=Ink
 ]
-at ($(current page.north west)+(6.05in,-2.57in)$)
+at ($(current page.north west)+(6.90in,-2.35in)$)
 {
-\textbf{\textcolor{DeepGreen}{STATE 0 — INITIALIZE}}
+\textbf{\textcolor{DeepGreen}{STATE 0 — INITIALIZE}}\\
+Establish controller variables, then enter normal driving.\\[5pt]
 
-Establishes the controller before entering normal driving.
+\textbf{\textcolor{DeepGreen}{STATE 1 — STRAIGHT}}\\
+Both lane boundaries are available.\\[5pt]
 
-\vspace{0.13in}
+\textbf{\textcolor{DeepGreen}{STATE 2 — LEFT\_CURVE}}\\
+Left boundary missing; use \texttt{LINE\_RIGHT}.\\[5pt]
 
-\textbf{\textcolor{DeepGreen}{STATE 1 — STRAIGHT}}
+\textbf{\textcolor{DeepGreen}{STATE 3 — RIGHT\_CURVE}}\\
+Right boundary missing; use \texttt{LINE\_LEFT}.\\[6pt]
 
-Both lane boundaries are available. The vehicle follows the nominal road
-corridor.
-
-\vspace{0.13in}
-
-\textbf{\textcolor{DeepGreen}{STATE 2 — LEFT CURVE}}
-
-The left boundary disappears while the right remains visible. Steering is
-referenced to \texttt{LINE\_RIGHT}.
-
-\vspace{0.13in}
-
-\textbf{\textcolor{DeepGreen}{STATE 3 — RIGHT CURVE}}
-
-The right boundary disappears while the left remains visible. Steering is
-referenced to \texttt{LINE\_LEFT}.
-
-\vspace{0.15in}
-
-\textbf{\textcolor{DeepGreen}{Transition logic}}
-
-\texttt{LINE\_LEFT\_DETECTED}
-
+\textbf{\textcolor{DeepGreen}{TRANSITION VARIABLES}}\\
+\texttt{LINE\_LEFT\_DETECTED}\\
 \texttt{LINE\_RIGHT\_DETECTED}
 };
 
-
-%--------------------------------------------------------------
-% Controller plot
-%--------------------------------------------------------------
-
+% steering response — text and plot positions switched for better balance
 \node[
-anchor=north west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.3}{7.4}\selectfont
 ]
-at ($(current page.north west)+(0.72in,-6.86in)$)
+at ($(current page.north west)+(0.46in,-6.35in)$)
 {STEERING RESPONSE};
 
+% PD controller explanation now occupies the left column
 \node[
-anchor=north west,
-inner sep=0pt
+    anchor=north west,
+    align=left,
+    text width=4.10in,
+    font=\fontsize{7.35}{8.35}\selectfont,
+    text=Ink
 ]
-at ($(current page.north west)+(0.72in,-7.16in)$)
-{\includegraphics[width=5.52in,height=2.30in,keepaspectratio]{FSM_PDcontroller.png}};
-
-\node[
-anchor=north west,
-align=left,
-text width=3.17in,
-font=\fontsize{8.8}{11.2}\selectfont,
-text=Ink
-]
-at ($(current page.north west)+(6.38in,-7.17in)$)
+at ($(current page.north west)+(0.46in,-6.74in)$)
 {
 A \textbf{PD steering controller} translated the selected visual reference
 into a steering command. Offline comparison against recorded steering data
-provided a way to tune the proportional and derivative response before
-physical testing.
-
-\vspace{0.14in}
-
-The resulting architecture combined:
-
-\vspace{0.06in}
-
-\textbf{Computer vision}
-
-$\downarrow$
-
-\textbf{Lane-state estimation}
-
-$\downarrow$
-
-\textbf{Finite-state decision logic}
-
-$\downarrow$
-
-\textbf{Feedback steering}
+provided a way to tune proportional and derivative behavior before physical
+testing.
 };
 
-
-%--------------------------------------------------------------
-% Final result banner
-%--------------------------------------------------------------
-
-\fill[DeepGreen]
-($(current page.north west)+(0.72in,-9.70in)$)
-rectangle
-($(current page.north east)+(-0.72in,-10.25in)$);
-
+% Steering-response plot: original size restored.
+% The image is physically moved so its rendered right edge aligns with
+% the right edge of the light-green state-description panel above.
 \node[
-anchor=west,
-align=left,
-text width=8.3in,
-text=white,
-font=\sffamily\fontsize{9}{11.2}\selectfont
+    anchor=north east,
+    inner sep=0pt
 ]
-at ($(current page.north west)+(0.92in,-9.975in)$)
+at ($(current page.north west)+(10.54in,-6.11in)$)
 {
-\textbf{\textcolor{PolyGold}{FINAL TEST}}
-\hspace{0.12in}
-The FSM-based road follower successfully completed a full loop of the
-physical track autonomously, transitioning between straight and curved
-segments using visual lane information.
+\includegraphics[
+    width=6.40in,
+    height=1.92in,
+    keepaspectratio
+]{FSM_PDcontroller.png}
 };
 
-
-%--------------------------------------------------------------
-% Navigation
-%--------------------------------------------------------------
-
-\node[
-anchor=south west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
-]
-at ($(current page.south west)+(0.70in,0.64in)$)
-{\hyperlink{roadfollowing-improved}{\faArrowLeft\ Perception}};
-
-\node[
-anchor=south east,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
-]
-at ($(current page.south east)+(-0.70in,0.64in)$)
-{\hyperlink{roadfollowing-result}{Project Result \faArrowRight}};
-
-\node[
-anchor=east,
-text=white,
-font=\sffamily\fontsize{8}{9}\selectfont
-]
-at ($(current page.south east)+(-0.45in,0.18in)$)
-{11 ROAD FOLLOWING};
+\RFFooter
+{\hyperlink{roadfollowing-state}{\faArrowLeft\ ROAD STATE}}
+{8 / 9}
+{\hyperlink{roadfollowing-result}{PHYSICAL RESULT \faArrowRight}}
 
 \end{tikzpicture}
 
 
-
 %==============================================================
-% PAGE 11E — FINAL RESULT / HERO + RESOURCES
+% PAGE 11H — PHYSICAL VALIDATION
 %==============================================================
 
 \clearpage
 \thispagestyle{empty}
 \hypertarget{roadfollowing-result}{}
+\null
 
 \begin{tikzpicture}[remember picture,overlay]
 
-%--------------------------------------------------------------
-% Background
-%--------------------------------------------------------------
+\RFPageBase
+\RFHeader
+{PHYSICAL VALIDATION}
+{AUTONOMOUS ROAD FOLLOWING}
+{Physical course validation
+\hspace{7pt}\textbullet\hspace{7pt}
+full-loop completion
+\hspace{7pt}\textbullet\hspace{7pt}
+integrated perception--decision--control}
 
-\fill[white]
-(current page.south west)
-rectangle
-(current page.north east);
-
-\fill[DeepGreen]
-(current page.north west)
-rectangle
-($(current page.north east)+(0,-0.10in)$);
-
-\fill[PolyGold]
-($(current page.north west)+(0,-0.10in)$)
-rectangle
-($(current page.north east)+(0,-0.14in)$);
-
-\fill[DeepGreen]
-(current page.south west)
-rectangle
-($(current page.south east)+(0,0.36in)$);
-
-\fill[PolyGold]
-($(current page.south west)+(0,0.36in)$)
-rectangle
-($(current page.south east)+(0,0.40in)$);
-
-
-%--------------------------------------------------------------
-% Header
-%--------------------------------------------------------------
-
+% -------------------------------------------------------------
+% HERO — restored to full page-threshold width
+% Cropped slightly at top/bottom so the bottom content still fits.
+% -------------------------------------------------------------
 \node[
-anchor=north west,
-text=PolyGold,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
+    anchor=north west,
+    inner sep=0pt,
+    draw=DeepGreen,
+    line width=0.85pt
 ]
-at ($(current page.north west)+(0.72in,-0.55in)$)
-{PROJECT 11 \hspace{0.08in}/\hspace{0.08in} PHYSICAL VALIDATION};
-
-\node[
-anchor=north west,
-text=DeepGreen,
-font=\bfseries\fontsize{25}{27}\selectfont
-]
-at ($(current page.north west)+(0.72in,-0.86in)$)
-{Autonomous Road Following};
-
-\node[
-anchor=north west,
-align=left,
-text width=8.45in,
-font=\fontsize{10.3}{12.9}\selectfont,
-text=Ink
-]
-at ($(current page.north west)+(0.72in,-1.43in)$)
+at ($(current page.north west)+(0.46in,-1.76in)$)
 {
-The final system brought the complete perception--decision--control pipeline
-onto the physical vehicle. Rather than relying on a continuously visible
-single feature, the controller used the structure of the road itself to
-decide which boundary should guide steering through each section of the track.
+\includegraphics[
+    width=10.08in,
+    trim=0 78bp 0 78bp,
+    clip
+]{car_hero.jpg}
 };
 
-
-%--------------------------------------------------------------
-% Hero image
-%--------------------------------------------------------------
-
+% Tight banner on image
 \node[
-anchor=north west,
-inner sep=0pt
+    anchor=south west,
+    fill=DeepGreen,
+    text=white,
+    inner xsep=8pt,
+    inner ysep=4pt,
+    font=\sffamily\bfseries\fontsize{7.0}{7.7}\selectfont
 ]
-at ($(current page.north west)+(0.72in,-2.18in)$)
-{\includegraphics[width=8.86in,height=4.50in,keepaspectratio]{car_hero.jpg}};
-
-% Hero overlay
-\node[
-anchor=south west,
-fill=DeepGreen,
-text=white,
-inner xsep=11pt,
-inner ysep=7pt,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
-]
-at ($(current page.north west)+(0.90in,-6.43in)$)
+at ($(current page.north west)+(0.62in,-6.5in)$)
 {PHYSICAL AUTONOMOUS VEHICLE PLATFORM};
 
+% -------------------------------------------------------------
+% BOTTOM CONTENT — cleaner two-column case-study closeout
+% -------------------------------------------------------------
 
-%--------------------------------------------------------------
-% Outcome section
-%--------------------------------------------------------------
-
+% Left outcome block
 \node[
-anchor=north west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{10}{11}\selectfont
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.25}{9.0}\selectfont
 ]
-at ($(current page.north west)+(0.72in,-6.95in)$)
+at ($(current page.north west)+(0.46in,-6.84in)$)
 {PROJECT OUTCOME};
 
+\draw[PolyGold,line width=1.15pt]
+($(current page.north west)+(0.46in,-7.02in)$) --
+($(current page.north west)+(5.95in,-7.02in)$);
+
 \node[
-anchor=north west,
-align=left,
-text width=5.25in,
-font=\fontsize{9.6}{12.2}\selectfont,
-text=Ink
+    anchor=north west,
+    align=left,
+    text width=5.45in,
+    font=\fontsize{6.55}{7.45}\selectfont,
+    text=Ink
 ]
-at ($(current page.north west)+(0.72in,-7.28in)$)
+at ($(current page.north west)+(0.46in,-7.00in)$)
 {
 The completed road follower autonomously navigated a full loop of the course.
 The project demonstrated an iterative robotics workflow: analyze recorded
 sensor data, prototype perception algorithms, identify failure modes,
 restructure the decision logic, tune control behavior, and validate the
-complete system on hardware.
-
-\vspace{0.14in}
-
-The final solution was intentionally modular. Perception generated lane
-states, the FSM interpreted the current road geometry, and the steering
-controller converted that decision into vehicle motion.
+complete system on hardware.\\[4pt]
+The final architecture remained modular: perception generated lane evidence,
+the FSM interpreted local road geometry, and the steering controller converted
+that decision into vehicle motion.
 };
 
+% Right methods block
+\fill[SoftGreen!68,rounded corners=4pt]
+($(current page.north west)+(6.40in,-6.82in)$)
+rectangle
+($(current page.north west)+(10.54in,-7.94in)$);
 
-%--------------------------------------------------------------
-% Skills box
-%--------------------------------------------------------------
+
+% CORE METHODS label intentionally drawn AFTER the panel so it stays visible
+% and appears in front of the SoftGreen fill.
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.25}{9.0}\selectfont
+]
+at ($(current page.north west)+(6.66in,-6.84in)$)
+{CORE METHODS};
 
 \node[
-anchor=north west,
-fill=SoftGreen,
-inner sep=10pt,
-align=left,
-text width=2.85in,
-font=\fontsize{8.8}{11}\selectfont,
-text=Ink
+    anchor=north west,
+    align=left,
+    text width=3.72in,
+    font=\fontsize{6.35}{7.10}\selectfont,
+    text=Ink
 ]
-at ($(current page.north west)+(6.38in,-7.27in)$)
+at ($(current page.north west)+(6.66in,-7.00in)$)
 {
-\textbf{\textcolor{DeepGreen}{CORE METHODS}}
+\textbf{PERCEPTION + CONTROL}\\[-1pt]
+Python \hspace{5pt}\textbullet\hspace{5pt}
+Computer Vision \hspace{5pt}\textbullet\hspace{5pt}
+Canny Edge Detection\\
+ROI + Image Masking \hspace{5pt}\textbullet\hspace{5pt}
+Finite-State Machines\\
+PD Feedback Control \hspace{5pt}\textbullet\hspace{5pt}
+Offline Data Analysis\\[5pt]
 
-\vspace{0.09in}
-
-\textbf{Python}
-
-Computer Vision
-
-Canny Edge Detection
-
-Image Masking + ROI Design
-
-Finite-State Machines
-
-PD Feedback Control
-
-Offline Data Analysis
-
-Physical System Validation
-
-\vspace{0.13in}
-
-\textbf{\textcolor{DeepGreen}{TOOLS}}
-
-\textbf{NVIDIA Jetson}
-
-\textbf{Intel RealSense}
-
-\textbf{Google Colab}
-
-\textbf{Foxglove}
+\textbf{\textcolor{DeepGreen}{PLATFORM + TOOLS}}\\[-1pt]
+NVIDIA Jetson \hspace{5pt}\textbullet\hspace{5pt}
+Intel RealSense\\
+Google Colab \hspace{5pt}\textbullet\hspace{5pt}
+Foxglove
 };
 
-
-%--------------------------------------------------------------
-% Resource buttons
-%--------------------------------------------------------------
-
-\node[
-anchor=north west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9.5}{10.5}\selectfont
-]
-at ($(current page.north west)+(0.72in,-9.25in)$)
-{PROJECT RESOURCES};
-
-% VIDEO — actual resource supplied by user
-\node[
-anchor=north west,
-draw=DeepGreen,
-line width=0.9pt,
-rounded corners=2pt,
-minimum width=2.72in,
-minimum height=0.54in,
-align=center,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{8}{9}\selectfont
-]
-at ($(current page.north west)+(0.72in,-9.58in)$)
-{
-\href{https://drive.google.com/file/d/11rblY0SEngrENpYdcI8bonIHuGg9S97w/view?usp=drive_link}
-{\faPlayCircle\ \ DEMO VIDEO}
-};
-
-% REPORT PLACEHOLDER
-\node[
-anchor=north west,
-draw=DeepGreen,
-line width=0.9pt,
-rounded corners=2pt,
-minimum width=2.72in,
-minimum height=0.54in,
-align=center,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{8}{9}\selectfont
-]
-at ($(current page.north west)+(3.77in,-9.58in)$)
-{
-\faFilePdf\ \ PROJECT REPORT
-};
-
-% CODE PLACEHOLDER
-\node[
-anchor=north west,
-draw=DeepGreen,
-line width=0.9pt,
-rounded corners=2pt,
-minimum width=2.72in,
-minimum height=0.54in,
-align=center,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{8}{9}\selectfont
-]
-at ($(current page.north west)+(6.82in,-9.58in)$)
-{
-\faCode\ \ COLAB / GITHUB
-};
-
-
-%--------------------------------------------------------------
-% Navigation
-%--------------------------------------------------------------
-
-\node[
-anchor=south west,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
-]
-at ($(current page.south west)+(0.70in,0.64in)$)
-{\hyperlink{roadfollowing-control}{\faArrowLeft\ FSM + Control}};
-
-% Change this hyperlink target once Project 12 target is finalized
-\node[
-anchor=south east,
-text=DeepGreen,
-font=\sffamily\bfseries\fontsize{9}{10}\selectfont
-]
-at ($(current page.south east)+(-0.70in,0.64in)$)
-{Perception-Driven Speed Controller \faArrowRight};
-
-\node[
-anchor=east,
-text=white,
-font=\sffamily\fontsize{8}{9}\selectfont
-]
-at ($(current page.south east)+(-0.45in,0.18in)$)
-{11 ROAD FOLLOWING};
+\RFFooter
+{\hyperlink{roadfollowing-fsm}{\faArrowLeft\ FSM + CONTROL}}
+{9 / 9}
+{PROJECT 12 \faArrowRight}
 
 \end{tikzpicture}
-
-\clearpage

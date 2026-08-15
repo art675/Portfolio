@@ -1,0 +1,976 @@
+
+% ============================================================
+% PROJECT 13 — ULTRASONIC-GUIDED PARALLEL PARKING
+% AUTONOMY SECTION
+%
+% Assumes the same portfolio preamble / TikZ styles / colors used
+% by the preceding autonomy projects:
+% DeepGreen, PolyGold, SoftGold, SoftGreen, Muted, Ink, RuleGray
+% and FontAwesome icons + hyperref.
+% ============================================================
+
+% ------------------------------------------------------------
+% PROJECT 13 RESOURCE LINKS
+% ------------------------------------------------------------
+\providecommand{\ParkingFoxgloveVideo}
+{https://drive.google.com/file/d/12W2ng6mrTPxz_kRwCZTrFpYuwABgNhwM/view?usp=drive_link}
+
+\providecommand{\ParkingSuccessfulDemo}
+{https://drive.google.com/file/d/1oCXujOBd6282LiU-8YD3VL5XIE1aAzpC/view?usp=drive_link}
+
+\providecommand{\ParkingDonutsVideo}
+{https://drive.google.com/file/d/1K4ayaqGevhIIPwETM9Oxl0O31EY6lD7q/view?usp=drive_link}
+
+% Replace these two placeholders when the final links are available.
+\providecommand{\ParkingNotebook}
+{https://example.com/replace-with-parking-colab-notebook}
+
+\providecommand{\ParkingReport}
+{https://example.com/replace-with-parking-project-pdf}
+
+
+% ============================================================
+% PAGE 1 — PROJECT FRAMING / VEHICLE PLATFORM
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{parallelparking}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+% ------------------------------------------------------------
+% PAGE FRAME
+% ------------------------------------------------------------
+\fill[white] (current page.south west) rectangle (current page.north east);
+
+\fill[DeepGreen]
+(current page.north west)
+rectangle
+($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0,-0.095in)$)
+rectangle
+($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+(current page.south west)
+rectangle
+($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+($(current page.south west)+(0,0.36in)$)
+rectangle
+($(current page.south east)+(0,0.405in)$);
+
+% ------------------------------------------------------------
+% HEADER
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+text=PolyGold,
+font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 13};
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\bfseries\fontsize{21.0}{22.0}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{ULTRASONIC-GUIDED PARALLEL PARKING};
+
+\node[
+anchor=north west,
+text=Muted,
+font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Learning-platform vehicle
+\hspace{7pt}\textbullet\hspace{7pt}
+Ultrasonic ranging
+\hspace{7pt}\textbullet\hspace{7pt}
+Finite-state parking logic
+\hspace{7pt}\textbullet\hspace{7pt}
+Physical validation};
+
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+\node[
+anchor=north west,
+align=left,
+text width=10.05in,
+text=Ink,
+font=\fontsize{6.95}{8.05}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.59in)$)
+{
+This project focused on a compact autonomous parking routine for the learning-platform
+vehicle. Ultrasonic measurements were used to identify open space beside the car,
+while a finite-state controller separated the maneuver into \textbf{driving},
+\textbf{scanning}, \textbf{positioning}, \textbf{parking in}, and \textbf{done}
+states. The objective was not only to detect a usable space, but to convert that
+measurement into a repeatable physical parking sequence.
+};
+
+% ------------------------------------------------------------
+% HERO IMAGE — GIANT HERO
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+inner sep=1.8pt,
+draw=DeepGreen,
+line width=0.65pt
+]
+at ($(current page.north west)+(0.48in,-2.18in)$)
+{
+\includegraphics[
+width=6.80in,
+height=4.20in,
+keepaspectratio
+]{\detokenize{giantHero.JPG}}
+};
+
+\fill[DeepGreen]
+($(current page.north west)+(0.63in,-2.38in)$)
+rectangle
+($(current page.north west)+(2.83in,-2.11in)$);
+
+\node[
+anchor=west,
+text=white,
+font=\sffamily\bfseries\fontsize{6.6}{7.2}\selectfont
+]
+at ($(current page.north west)+(0.75in,-2.245in)$)
+{PHYSICAL PARKING ENVIRONMENT};
+
+% ------------------------------------------------------------
+% RIGHT — TOP VIEW
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(6.98in,-2.18in)$)
+{THE VEHICLE PLATFORM};
+
+\node[
+anchor=north west,
+inner sep=1.5pt,
+draw=RuleGray,
+line width=0.50pt
+]
+at ($(current page.north west)+(6.98in,-2.47in)$)
+{
+\includegraphics[
+width=3.32in,
+height=3.32in,
+keepaspectratio
+]{\detokenize{topView.jpg}}
+};
+
+\node[
+anchor=north west,
+align=left,
+text width=3.02in,
+text=Ink,
+font=\fontsize{6.05}{7.0}\selectfont
+]
+at ($(current page.north west)+(6.98in,-5.83in)$)
+{
+The parking routine was implemented on the same scaled vehicle platform used
+throughout the autonomy work. The top view highlights the compact packaging and
+the proximity-sensing hardware used to reason about nearby obstacles and available
+parking space.
+};
+
+% ------------------------------------------------------------
+% DESIGN QUESTION
+% ------------------------------------------------------------
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(0.48in,-6.62in)$)
+rectangle
+($(current page.north west)+(7.28in,-7.64in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0.48in,-6.62in)$)
+rectangle
+($(current page.north west)+(0.58in,-7.64in)$);
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{7.5}{8.2}\selectfont
+]
+at ($(current page.north west)+(0.77in,-6.77in)$)
+{THE DESIGN QUESTION};
+
+\node[
+anchor=north west,
+align=left,
+text width=6.20in,
+text=Ink,
+font=\fontsize{6.05}{7.0}\selectfont
+]
+at ($(current page.north west)+(0.77in,-7.05in)$)
+{
+How can a vehicle detect a long-enough open region while moving, remember where that
+space begins and ends, and then trigger a parking maneuver only after it is positioned
+correctly? The next stage turns the ultrasonic measurements into this decision signal.
+};
+
+% ------------------------------------------------------------
+% SMALL RESOURCE — DONUTS / PLATFORM DEMO
+% ------------------------------------------------------------
+\fill[SoftGreen!58,rounded corners=4pt]
+($(current page.north west)+(7.58in,-6.62in)$)
+rectangle
+($(current page.north east)+(-0.42in,-7.64in)$);
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{7.35}{8.0}\selectfont
+]
+at ($(current page.north west)+(7.84in,-6.78in)$)
+{PLATFORM IN MOTION};
+
+\node[
+anchor=north west,
+align=left,
+text width=2.42in,
+text=Ink,
+font=\fontsize{5.80}{6.65}\selectfont
+]
+at ($(current page.north west)+(7.84in,-7.03in)$)
+{
+A short vehicle demo shows the same platform operating dynamically outside the
+parking routine.
+};
+
+\node[
+anchor=west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.35}{6.95}\selectfont
+]
+at ($(current page.north west)+(7.84in,-7.42in)$)
+{\href{\ParkingDonutsVideo}{\faPlayCircle\ DONUTS / PLATFORM VIDEO}};
+
+% ------------------------------------------------------------
+% FOOTER
+% ------------------------------------------------------------
+\node[
+anchor=south west,
+text=white,
+font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\hyperlink{speedcontroller}{\faArrowLeft\ PROJECT 12}};
+
+\node[
+anchor=south,
+text=white,
+font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{13 ULTRASONIC PARALLEL PARKING \hspace{6pt} 1 / 4};
+
+\node[
+anchor=south east,
+text=white,
+font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{SENSING \faArrowRight};
+
+\end{tikzpicture}
+
+
+% ============================================================
+% PAGE 2 — ULTRASONIC SENSING / OPEN-SPACE DETECTION
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\fill[white] (current page.south west) rectangle (current page.north east);
+
+\fill[DeepGreen]
+(current page.north west)
+rectangle
+($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0,-0.095in)$)
+rectangle
+($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+(current page.south west)
+rectangle
+($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+($(current page.south west)+(0,0.36in)$)
+rectangle
+($(current page.south east)+(0,0.405in)$);
+
+% Header
+\node[
+anchor=north west,
+text=PolyGold,
+font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 13 \hspace{5pt}/\hspace{5pt} SENSING};
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\bfseries\fontsize{20.6}{21.6}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{TURNING ULTRASONIC RANGE INTO OPEN-SPACE EVIDENCE};
+
+\node[
+anchor=north west,
+text=Muted,
+font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Raw range signal
+\hspace{7pt}\textbullet\hspace{7pt}
+Side-space detection
+\hspace{7pt}\textbullet\hspace{7pt}
+Spatial interpretation};
+
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+\node[
+anchor=north west,
+align=left,
+text width=10.05in,
+text=Ink,
+font=\fontsize{7.10}{8.25}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.59in)$)
+{
+The parking decision begins with a simple measurement: how far away is the nearest
+surface beside the vehicle? A blocked region produces a short range, while a sudden
+increase in measured distance indicates that the sensor is looking into open space.
+Tracking that change as the vehicle moves provides the evidence needed to estimate
+where a parking gap begins and where it ends.
+};
+
+% ------------------------------------------------------------
+% RAW USRF DATA
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.48in,-2.12in)$)
+{RAW ULTRASONIC RANGE DATA};
+
+\node[
+anchor=north west,
+inner sep=1.4pt,
+draw=RuleGray,
+line width=0.50pt
+]
+at ($(current page.north west)+(0.48in,-2.40in)$)
+{
+\includegraphics[
+width=10.00in,
+height=3.10in,
+keepaspectratio
+]{\detokenize{rawUSRFdata.png}}
+};
+
+\node[
+anchor=north west,
+align=left,
+text width=10.05in,
+text=Ink,
+font=\fontsize{6.15}{7.15}\selectfont
+]
+at ($(current page.north west)+(0.48in,-5.66in)$)
+{
+The recorded ultrasonic trace contains long plateaus, abrupt drops, and repeated
+returns. Rather than treating every individual sample as a command, the controller
+used the signal as \textbf{evidence of blocked versus open space}. Persistence and
+vehicle motion were therefore important: a parking space had to remain open long
+enough to represent a physically usable gap.
+};
+
+% ------------------------------------------------------------
+% ULTRASONIC IMAGING
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+inner sep=1.5pt,
+draw=DeepGreen,
+line width=0.52pt
+]
+at ($(current page.north west)+(0.48in,-6.27in)$)
+{
+\includegraphics[
+width=5.18in,
+height=1.72in,
+keepaspectratio
+]{\detokenize{ultrasonicImaging.png}}
+};
+
+\fill[DeepGreen]
+($(current page.north west)+(0.64in,-6.45in)$)
+rectangle
+($(current page.north west)+(2.58in,-6.20in)$);
+
+\node[
+anchor=west,
+text=white,
+font=\sffamily\bfseries\fontsize{6.25}{6.8}\selectfont
+]
+at ($(current page.north west)+(0.76in,-6.325in)$)
+{ULTRASONIC SPATIAL VIEW};
+
+% Interpretation panel
+\fill[SoftGreen!58,rounded corners=4pt]
+($(current page.north west)+(3.35in,-6.27in)$)
+rectangle
+($(current page.north east)+(-0.42in,-7.99in)$);
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{7.4}{8.05}\selectfont
+]
+at ($(current page.north west)+(3.61in,-6.43in)$)
+{WHAT THE SENSOR REPRESENTATION ADDS};
+
+\node[
+anchor=north west,
+align=left,
+text width=5.71in,
+text=Ink,
+font=\fontsize{5.95}{6.9}\selectfont
+]
+at ($(current page.north west)+(3.61in,-6.72in)$)
+{
+The spatial rendering makes the same range information easier to interpret:
+clusters of returns correspond to nearby surfaces, while gaps between those
+returns indicate free space. This gives a useful visualization of the geometric
+signal the parking logic is trying to extract from the raw sensor stream.
+};
+
+\node[
+anchor=west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.35}{6.95}\selectfont
+]
+at ($(current page.north west)+(3.61in,-7.68in)$)
+{\href{\ParkingFoxgloveVideo}{\faPlayCircle\ FOXGLOVE SENSOR VISUALIZATION}};
+
+% Footer
+\node[
+anchor=south west,
+text=white,
+font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ PLATFORM};
+
+\node[
+anchor=south,
+text=white,
+font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{13 ULTRASONIC PARALLEL PARKING \hspace{6pt} 2 / 4};
+
+\node[
+anchor=south east,
+text=white,
+font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{STATE LOGIC \faArrowRight};
+
+\end{tikzpicture}
+
+
+% ============================================================
+% PAGE 3 — FINITE-STATE PARKING LOGIC
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\fill[white] (current page.south west) rectangle (current page.north east);
+
+\fill[DeepGreen]
+(current page.north west)
+rectangle
+($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0,-0.095in)$)
+rectangle
+($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+(current page.south west)
+rectangle
+($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+($(current page.south west)+(0,0.36in)$)
+rectangle
+($(current page.south east)+(0,0.405in)$);
+
+% Header
+\node[
+anchor=north west,
+text=PolyGold,
+font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 13 \hspace{5pt}/\hspace{5pt} STATE LOGIC};
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\bfseries\fontsize{20.8}{21.8}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{FROM OPEN-SPACE DETECTION TO A PARKING MANEUVER};
+
+\node[
+anchor=north west,
+text=Muted,
+font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Finite-state control
+\hspace{7pt}\textbullet\hspace{7pt}
+Space detection
+\hspace{7pt}\textbullet\hspace{7pt}
+Positioning
+\hspace{7pt}\textbullet\hspace{7pt}
+Parking execution};
+
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+\node[
+anchor=north west,
+align=left,
+text width=10.05in,
+text=Ink,
+font=\fontsize{6.85}{7.95}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.59in)$)
+{
+Once open-space evidence was available, the maneuver was organized as a finite-state
+machine. Separating the task into discrete states made the behavior easier to reason
+about: the vehicle could continue driving while searching, transition into scanning
+when a candidate gap appeared, position itself relative to that gap, execute the
+parking motion, and finally terminate in a known done state.
+};
+
+% ------------------------------------------------------------
+% IDEAL FSM
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.48in,-2.13in)$)
+{IDEAL PARKING STATE MACHINE};
+
+\node[
+anchor=north west,
+inner sep=1.5pt,
+draw=DeepGreen,
+line width=0.52pt
+]
+at ($(current page.north west)+(0.48in,-2.42in)$)
+{
+\includegraphics[
+width=3.582in,
+height=2.699in,
+keepaspectratio
+]{\detokenize{IDEAL_PARKING_FSM.png}}
+};
+
+% ------------------------------------------------------------
+% RECORDED FSM
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(5.03in,-2.13in)$)
+{STATE PROGRESSION OVER VEHICLE POSITION};
+
+\node[
+anchor=north west,
+inner sep=1.5pt,
+draw=RuleGray,
+line width=0.50pt
+]
+at ($(current page.north west)+(5.03in,-2.42in)$)
+{
+\includegraphics[
+width=5.398in,
+height=4.166in,
+keepaspectratio
+]{\detokenize{ParkingFSM.png}}
+};
+
+% ------------------------------------------------------------
+% STATE EXPLANATION
+% ------------------------------------------------------------
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(0.48in,-5.72in)$)
+rectangle
+($(current page.north west)+(10.43in,-7.73in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0.48in,-5.72in)$)
+rectangle
+($(current page.north west)+(0.58in,-7.73in)$);
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{7.45}{8.1}\selectfont
+]
+at ($(current page.north west)+(0.78in,-5.92in)$)
+{HOW THE STATES DIVIDE THE PROBLEM};
+
+\node[
+anchor=north west,
+align=left,
+text width=9.10in,
+text=Ink,
+font=\fontsize{5.95}{6.90}\selectfont
+]
+at ($(current page.north west)+(0.78in,-6.22in)$)
+{
+\textbf{DRIVING} moves along the parking row. \textbf{SCANNING} evaluates whether
+the side sensor remains in open space. \textbf{POSITIONING} places the vehicle at
+the correct starting point for the maneuver. \textbf{PARKING\_IN} executes the
+parking sequence, and \textbf{DONE} provides a terminal state after the maneuver.
+};
+
+% Footer
+\node[
+anchor=south west,
+text=white,
+font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ SENSING};
+
+\node[
+anchor=south,
+text=white,
+font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{13 ULTRASONIC PARALLEL PARKING \hspace{6pt} 3 / 4};
+
+\node[
+anchor=south east,
+text=white,
+font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{PHYSICAL RESULT \faArrowRight};
+
+\end{tikzpicture}
+
+
+% ============================================================
+% PAGE 4 — PHYSICAL VALIDATION / SUCCESSFUL PARKING
+% ============================================================
+\clearpage
+\thispagestyle{empty}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\fill[white] (current page.south west) rectangle (current page.north east);
+
+\fill[DeepGreen]
+(current page.north west)
+rectangle
+($(current page.north east)+(0,-0.095in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0,-0.095in)$)
+rectangle
+($(current page.north east)+(0,-0.14in)$);
+
+\fill[DeepGreen]
+(current page.south west)
+rectangle
+($(current page.south east)+(0,0.36in)$);
+
+\fill[PolyGold]
+($(current page.south west)+(0,0.36in)$)
+rectangle
+($(current page.south east)+(0,0.405in)$);
+
+% Header
+\node[
+anchor=north west,
+text=PolyGold,
+font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.42in,-0.39in)$)
+{03 AUTONOMY \hspace{5pt}/\hspace{5pt} PROJECT 13 \hspace{5pt}/\hspace{5pt} PHYSICAL VALIDATION};
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\bfseries\fontsize{21.0}{22.0}\selectfont
+]
+at ($(current page.north west)+(0.40in,-0.67in)$)
+{AUTONOMOUS PARALLEL PARKING};
+
+\node[
+anchor=north west,
+text=Muted,
+font=\sffamily\fontsize{8.15}{8.95}\selectfont
+]
+at ($(current page.north west)+(0.42in,-1.12in)$)
+{Space detection
+\hspace{7pt}\textbullet\hspace{7pt}
+State transitions
+\hspace{7pt}\textbullet\hspace{7pt}
+Physical maneuver
+\hspace{7pt}\textbullet\hspace{7pt}
+Successful demo};
+
+\fill[PolyGold]
+($(current page.north west)+(0.42in,-1.36in)$)
+rectangle
+($(current page.north east)+(-0.42in,-1.315in)$);
+
+\node[
+anchor=north west,
+align=left,
+text width=10.05in,
+text=Ink,
+font=\fontsize{6.85}{7.95}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.59in)$)
+{
+The final test combined sensing, state transitions, and vehicle motion on the
+physical parking setup. The vehicle first identified the available space, continued
+until the correct maneuver starting point was reached, and then executed the
+parking sequence between the neighboring vehicles.
+};
+
+% ------------------------------------------------------------
+% LARGE PHYSICAL STILL
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+inner sep=1.7pt,
+draw=DeepGreen,
+line width=0.62pt
+]
+at ($(current page.north west)+(0.48in,-2.10in)$)
+{
+\includegraphics[
+width=7.18in,
+height=5.35in,
+keepaspectratio
+]{\detokenize{physicalCarParkingStill.JPG}}
+};
+
+\fill[DeepGreen]
+($(current page.north west)+(0.64in,-2.31in)$)
+rectangle
+($(current page.north west)+(2.83in,-2.04in)$);
+
+\node[
+anchor=west,
+text=white,
+font=\sffamily\bfseries\fontsize{6.6}{7.2}\selectfont
+]
+at ($(current page.north west)+(0.76in,-2.175in)$)
+{PHYSICAL PARKING MANEUVER};
+
+% ------------------------------------------------------------
+% RIGHT — PROJECT OUTCOME
+% ------------------------------------------------------------
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(4.90in,-2.12in)$)
+{PROJECT OUTCOME};
+
+\node[
+anchor=north west,
+align=left,
+text width=5.72in,
+text=Ink,
+font=\fontsize{6.15}{7.10}\selectfont
+]
+at ($(current page.north west)+(4.90in,-2.46in)$)
+{
+The completed routine demonstrated the full parking workflow on hardware:
+\textbf{detect an opening, confirm that it is long enough, transition through the
+parking states, and execute the maneuver physically}. The state-machine structure
+kept sensing and motion logic interpretable throughout the test.
+};
+
+% ------------------------------------------------------------
+% SUCCESSFUL DEMO RESOURCE
+% ------------------------------------------------------------
+\fill[SoftGreen!58,rounded corners=4pt]
+($(current page.north west)+(4.90in,-4.25in)$)
+rectangle
+($(current page.north east)+(-0.42in,-5.58in)$);
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{7.4}{8.05}\selectfont
+]
+at ($(current page.north west)+(5.16in,-4.42in)$)
+{SUCCESSFUL DEMONSTRATION};
+
+\node[
+anchor=north west,
+align=left,
+text width=5.22in,
+text=Ink,
+font=\fontsize{5.85}{6.75}\selectfont
+]
+at ($(current page.north west)+(5.16in,-4.72in)$)
+{
+The full physical run is available as a standalone video so the completed
+maneuver can be viewed from start to finish.
+};
+
+\node[
+anchor=west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.25}{6.9}\selectfont
+]
+at ($(current page.north west)+(5.16in,-5.28in)$)
+{\href{\ParkingSuccessfulDemo}{\faPlayCircle\ WATCH SUCCESSFUL PARKING}};
+
+% ------------------------------------------------------------
+% CORE METHODS
+% ------------------------------------------------------------
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(4.90in,-5.88in)$)
+rectangle
+($(current page.north east)+(-0.42in,-7.58in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(4.90in,-5.88in)$)
+rectangle
+($(current page.north west)+(4.95in,-7.58in)$);
+
+\node[
+anchor=north west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{7.4}{8.05}\selectfont
+]
+at ($(current page.north west)+(5.18in,-6.05in)$)
+{CORE METHODS};
+
+\node[
+anchor=north west,
+align=left,
+text width=5.22in,
+text=Ink,
+font=\fontsize{5.90}{6.80}\selectfont
+]
+at ($(current page.north west)+(5.18in,-6.34in)$)
+{
+\textbf{Sensing}\\
+Ultrasonic ranging\\[2pt]
+\textbf{Decision}\\
+Open-space detection\\
+Finite-state machine\\[2pt]
+\textbf{Execution}\\
+Positioning and parking sequence
+};
+
+% ------------------------------------------------------------
+% FINAL RESOURCES BAR
+% ------------------------------------------------------------
+\fill[SoftGreen!45,rounded corners=4pt]
+($(current page.north west)+(0.48in,-7.60in)$)
+rectangle
+($(current page.north west)+(7.62in,-7.92in)$);
+
+\node[
+anchor=west,
+text=DeepGreen,
+font=\sffamily\bfseries\fontsize{6.15}{6.75}\selectfont
+]
+at ($(current page.north west)+(0.82in,-7.76in)$)
+{\href{\ParkingSuccessfulDemo}{\faPlayCircle\ SUCCESSFUL DEMO}
+\hspace{18pt}
+\href{\ParkingFoxgloveVideo}{\faPlayCircle\ FOXGLOVE}
+\hspace{18pt}
+\href{\ParkingNotebook}{\faCode\ COLAB}
+\hspace{18pt}
+\href{\ParkingReport}{\faFilePdfO\ REPORT}};
+
+% Footer
+\node[
+anchor=south west,
+text=white,
+font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south west)+(0.42in,0.17in)$)
+{\faArrowLeft\ STATE LOGIC};
+
+\node[
+anchor=south,
+text=white,
+font=\sffamily\fontsize{7.0}{7.6}\selectfont
+]
+at ($(current page.south)+(0,0.17in)$)
+{13 ULTRASONIC PARALLEL PARKING \hspace{6pt} 4 / 4};
+
+\node[
+anchor=south east,
+text=white,
+font=\sffamily\bfseries\fontsize{7.1}{7.7}\selectfont
+]
+at ($(current page.south east)+(-0.42in,0.17in)$)
+{PROJECT 14 \faArrowRight};
+
+\end{tikzpicture}

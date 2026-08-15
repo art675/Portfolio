@@ -1,0 +1,1296 @@
+
+%==============================================================
+% PROJECT 15 — PILOTNET END-TO-END STEERING
+% 8-PAGE AUTONOMY PORTFOLIO SECTION
+%==============================================================
+%
+% REQUIRED IMAGE FILES — EACH USED EXACTLY ONCE
+% -------------------------------------------------------------
+% rawHistogram.png
+% mirroredHistogram.png
+% balancedHistogram.png
+% TrainingANDvalidation.png
+% EpochValLoss1.png
+% EpochValLoss2.png
+% EpochValLoss3.png
+% ModelPredictionsPlot.png
+%
+% Assumes the portfolio already defines:
+% DeepGreen, PolyGold, SoftGreen, SoftGold, Muted, Ink, RuleGray
+% and loads TikZ, graphicx, hyperref, fontawesome5.
+%
+% Instructor objective reflected in this layout:
+% • Predict a CONTINUOUS steering angle directly from camera imagery.
+% • Analyze steering-angle imbalance before training.
+% • Rebalance the dataset through binning / sampling.
+% • Compare learning rate, batch size, and training duration.
+% • Read validation-loss histories for stability and convergence.
+%==============================================================
+
+%--------------------------------------------------------------
+% PAGE BASE
+%--------------------------------------------------------------
+\newcommand{\PNPageBase}{%
+    \fill[white] (current page.south west) rectangle (current page.north east);
+    \fill[DeepGreen]
+      (current page.north west)
+      rectangle
+      ($(current page.north east)+(0,-0.095in)$);
+    \fill[PolyGold]
+      ($(current page.north west)+(0,-0.095in)$)
+      rectangle
+      ($(current page.north east)+(0,-0.14in)$);
+
+    \fill[DeepGreen]
+      (current page.south west)
+      rectangle
+      ($(current page.south east)+(0,0.36in)$);
+    \fill[PolyGold]
+      ($(current page.south west)+(0,0.36in)$)
+      rectangle
+      ($(current page.south east)+(0,0.405in)$);
+}
+
+%--------------------------------------------------------------
+% HEADER
+%--------------------------------------------------------------
+\newcommand{\PNHeader}[3]{%
+    \node[
+        anchor=north west,
+        text=PolyGold,
+        font=\sffamily\bfseries\fontsize{8.1}{8.7}\selectfont
+    ]
+    at ($(current page.north west)+(0.42in,-0.39in)$)
+    {03 AUTONOMY
+     \hspace{5pt}/\hspace{5pt}
+     PROJECT 15
+     \ifx&#1&\else
+     \hspace{5pt}/\hspace{5pt}
+     #1
+     \fi};
+
+    \node[
+        anchor=north west,
+        text=DeepGreen,
+        font=\bfseries\fontsize{21.0}{22.0}\selectfont
+    ]
+    at ($(current page.north west)+(0.40in,-0.67in)$)
+    {#2};
+
+    \node[
+        anchor=north west,
+        text=Muted,
+        font=\sffamily\fontsize{8.15}{8.95}\selectfont
+    ]
+    at ($(current page.north west)+(0.42in,-1.12in)$)
+    {#3};
+
+    \fill[PolyGold]
+      ($(current page.north west)+(0.42in,-1.36in)$)
+      rectangle
+      ($(current page.north east)+(-0.42in,-1.315in)$);
+}
+
+%--------------------------------------------------------------
+% FOOTER
+%--------------------------------------------------------------
+\newcommand{\PNFooter}[3]{%
+    \node[
+        anchor=south west,
+        text=white,
+        font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont
+    ]
+    at ($(current page.south west)+(0.42in,0.17in)$)
+    {#1};
+
+    \node[
+        anchor=south,
+        text=white,
+        font=\sffamily\fontsize{7.0}{7.6}\selectfont
+    ]
+    at ($(current page.south)+(0,0.17in)$)
+    {15 PILOTNET END-TO-END STEERING
+     \hspace{6pt}
+     #2};
+
+    \node[
+        anchor=south east,
+        text=white,
+        font=\sffamily\bfseries\fontsize{7.0}{7.6}\selectfont
+    ]
+    at ($(current page.south east)+(-0.42in,0.17in)$)
+    {#3};
+}
+
+%--------------------------------------------------------------
+% METRIC CARD
+%--------------------------------------------------------------
+\newcommand{\PNMetric}[6]{%
+    \fill[SoftGreen,rounded corners=3pt]
+      ($(current page.north west)+(#1,#2)$)
+      rectangle ++(#3,-0.78in);
+
+    \node[
+        anchor=north west,
+        text=DeepGreen,
+        font=\sffamily\bfseries\fontsize{6.8}{7.4}\selectfont
+    ]
+    at ($(current page.north west)+(#1+0.16in,#2-0.12in)$)
+    {#4};
+
+    \node[
+        anchor=north west,
+        text=Ink,
+        font=\bfseries\fontsize{13.0}{13.5}\selectfont
+    ]
+    at ($(current page.north west)+(#1+0.16in,#2-0.36in)$)
+    {#5};
+
+    \node[
+        anchor=north west,
+        text=Muted,
+        font=\sffamily\fontsize{5.9}{6.5}\selectfont
+    ]
+    at ($(current page.north west)+(#1+0.16in,#2-0.61in)$)
+    {#6};
+}
+
+%==============================================================
+% PAGE 1 — PROJECT OBJECTIVE + RAW DATA PROBLEM
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{pilotnet}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+\PNPageBase
+
+\PNHeader
+{}
+{PILOTNET END-TO-END STEERING}
+{Cal Poly Autonomous Vehicles Laboratory
+\hspace{7pt}\textbullet\hspace{7pt}
+Three-Person Team
+\hspace{7pt}\textbullet\hspace{7pt}
+Spring 2026
+\hspace{7pt}\textbullet\hspace{7pt}
+San Luis Obispo, California}
+
+% Intro
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    text=Ink,
+    font=\fontsize{8.2}{9.5}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{
+The final autonomy project moved from explicit lane-state logic to
+\textbf{end-to-end learning}. A PilotNet-style convolutional neural network
+was trained to predict a \textbf{continuous steering angle directly from a
+camera image}. Unlike classification, the output is a real-valued command,
+so the distribution of steering examples strongly affects what behavior the
+network learns.
+};
+
+% Main image
+\node[
+    anchor=north west,
+    inner sep=1.4pt,
+    draw=DeepGreen,
+    line width=0.65pt
+]
+at ($(current page.north west)+(0.48in,-2.28in)$)
+{
+\includegraphics[
+    width=6.18in,
+    height=4.65in,
+    keepaspectratio
+]{\detokenize{rawHistogram.png}}
+};
+
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(0.65in,-2.53in)$)
+rectangle
+($(current page.north west)+(2.60in,-2.28in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{6.2}{6.8}\selectfont
+]
+at ($(current page.north west)+(0.80in,-2.405in)$)
+{RAW STEERING DISTRIBUTION};
+
+% Right narrative
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.4}{9.1}\selectfont
+]
+at ($(current page.north west)+(6.92in,-2.30in)$)
+{WHY BALANCING COMES FIRST};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=3.47in,
+    text=Ink,
+    font=\fontsize{7.45}{8.7}\selectfont
+]
+at ($(current page.north west)+(6.92in,-2.67in)$)
+{
+The raw dataset is dominated by steering values near zero. That is exactly
+what a vehicle produces when most recorded driving is straight or only mildly
+curved.
+
+\vspace{7pt}
+
+If the network is trained on this distribution unchanged, minimizing average
+error rewards the model for predicting near-straight steering too often.
+Large steering angles are rarer, so their mistakes contribute less frequently
+to the training objective.
+
+\vspace{7pt}
+
+The first engineering task was therefore not model tuning. It was
+\textbf{reshaping the data so left, straight, and right steering examples were
+represented more deliberately}.
+};
+
+% Bottom flow
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(0.48in,-7.07in)$)
+rectangle
+($(current page.north west)+(10.42in,-7.95in)$);
+
+\node[
+    anchor=west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.0}{7.7}\selectfont
+]
+at ($(current page.north west)+(0.78in,-7.35in)$)
+{END-TO-END LEARNING PIPELINE};
+
+\node[
+    anchor=west,
+    text=Ink,
+    font=\sffamily\bfseries\fontsize{7.15}{7.9}\selectfont
+]
+at ($(current page.north west)+(0.78in,-7.67in)$)
+{CAMERA IMAGE
+\hspace{9pt}$\rightarrow$\hspace{9pt}
+CNN FEATURE EXTRACTION
+\hspace{9pt}$\rightarrow$\hspace{9pt}
+CONTINUOUS STEERING REGRESSION
+\hspace{9pt}$\rightarrow$\hspace{9pt}
+STEERING ANGLE};
+
+\PNFooter
+{\hyperlink{unet}{\faArrowLeft\ PROJECT 14}}
+{1 / 5}
+{DATA BALANCING \faArrowRight}
+
+\end{tikzpicture}
+
+%==============================================================
+% PAGE 2 — MIRROR + BALANCE
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{pilotnet-balance}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+\PNPageBase
+
+\PNHeader
+{DATA PREPARATION}
+{FROM A BIASED LOG TO A TRAINABLE STEERING DATASET}
+{Mirroring
+\hspace{7pt}\textbullet\hspace{7pt}
+Eight steering bins
+\hspace{7pt}\textbullet\hspace{7pt}
+Undersampling
+\hspace{7pt}\textbullet\hspace{7pt}
+Balanced regression targets}
+
+\node[
+anchor=north west,align=left,text width=10.00in,text=Ink,
+font=\fontsize{8.15}{9.45}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.60in)$)
+{
+The balancing workflow deliberately changed the steering-angle distribution
+\textbf{before} model training. Horizontal mirroring first created opposite-sign
+steering examples, reducing left/right bias. The steering range was then divided
+into eight bins and sampled to the same frequency so that hard-left, straight,
+and hard-right commands contributed more evenly to the regression problem.
+};
+
+% MIRRORED HISTOGRAM — enlarged
+\node[anchor=north west,inner sep=1.1pt,draw=DeepGreen,line width=0.60pt]
+at ($(current page.north west)+(0.48in,-2.18in)$)
+{\includegraphics[width=4.86in,height=3.55in,keepaspectratio]{\detokenize{mirroredHistogram.png}}};
+
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(0.62in,-2.39in)$)
+rectangle
+($(current page.north west)+(2.12in,-2.18in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{5.9}{6.4}\selectfont]
+at ($(current page.north west)+(0.77in,-2.285in)$)
+{1 \hspace{5pt} MIRROR};
+
+% BALANCED HISTOGRAM — enlarged
+\node[anchor=north west,inner sep=1.1pt,draw=DeepGreen,line width=0.60pt]
+at ($(current page.north west)+(5.56in,-2.18in)$)
+{\includegraphics[width=4.86in,height=3.55in,keepaspectratio]{\detokenize{balancedHistogram.png}}};
+
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(5.70in,-2.39in)$)
+rectangle
+($(current page.north west)+(7.34in,-2.18in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{5.9}{6.4}\selectfont]
+at ($(current page.north west)+(5.85in,-2.285in)$)
+{2 \hspace{5pt} BALANCE};
+
+% LEFT EXPLANATION
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(0.48in,-5.84in)$)
+rectangle
+($(current page.north west)+(5.16in,-7.28in)$);
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont]
+at ($(current page.north west)+(0.76in,-6.08in)$)
+{WHY MIRRORING WAS NOT ENOUGH};
+\node[anchor=north west,align=left,text width=4.08in,text=Ink,font=\fontsize{7.05}{8.25}\selectfont]
+at ($(current page.north west)+(0.76in,-6.46in)$)
+{
+Mirroring makes left and right steering more symmetric, but it still leaves
+the dominant central peak near zero. A network trained on that distribution
+would continue seeing far more near-straight examples than large-angle turns.
+};
+
+% RIGHT EXPLANATION
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(5.56in,-5.84in)$)
+rectangle
+($(current page.north west)+(10.42in,-7.28in)$);
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont]
+at ($(current page.north west)+(5.84in,-6.08in)$)
+{BINNING MAKES THE TARGET DISTRIBUTION EXPLICIT};
+\node[anchor=north west,align=left,text width=4.20in,text=Ink,font=\fontsize{7.05}{8.25}\selectfont]
+at ($(current page.north west)+(5.84in,-6.46in)$)
+{
+Eight steering ranges were populated evenly by sampling down to the least
+frequent bin. This intentionally trades dataset size for a more uniform
+learning signal across the full steering-angle range.
+};
+
+% NEXT-STEP STRIP — lowered slightly from the previous revision; entire block moves together
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(0.48in,-7.39in)$)
+rectangle
+($(current page.north west)+(10.42in,-8.01in)$);
+\fill[PolyGold]
+($(current page.north west)+(0.48in,-7.39in)$)
+rectangle
+($(current page.north west)+(0.58in,-8.01in)$);
+\node[anchor=west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.0}{7.7}\selectfont]
+at ($(current page.north west)+(0.80in,-7.69in)$)
+{NEXT: preserve this balanced target distribution when creating the training and validation subsets.};
+
+\PNFooter
+{\faArrowLeft\ RAW DATA}
+{2 / 8}
+{TRAIN / VALIDATION SPLIT \faArrowRight}
+
+\end{tikzpicture}
+
+%==============================================================
+% PAGE 3 — TRAIN / VALIDATION SPLIT
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{pilotnet-split}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+\PNPageBase
+
+\PNHeader
+{DATASET SPLIT}
+{BALANCING THE TRAINING AND VALIDATION TARGETS}
+{Balanced steering bins
+\hspace{7pt}\textbullet\hspace{7pt}
+Training subset
+\hspace{7pt}\textbullet\hspace{7pt}
+Validation subset
+\hspace{7pt}\textbullet\hspace{7pt}
+Generalization check}
+
+\node[
+anchor=north west,align=left,text width=10.00in,text=Ink,
+font=\fontsize{8.2}{9.5}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.60in)$)
+{
+Balancing the full dataset was only useful if that structure survived the
+train/validation split. Samples from each steering bin were therefore assigned
+to both subsets so the network learned from a broad steering range while the
+validation data independently tested how well that behavior generalized.
+};
+
+\node[anchor=north,inner sep=1.4pt,draw=DeepGreen,line width=0.70pt]
+at ($(current page.north)+(0in,-2.08in)$)
+{\includegraphics[width=8.66in,height=4.72in,keepaspectratio]{\detokenize{TrainingANDvalidation.png}}};
+
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(2.32in,-2.34in)$)
+rectangle
+($(current page.north west)+(4.68in,-2.08in)$);
+\node[anchor=west,text=white,font=\sffamily\bfseries\fontsize{6.2}{6.8}\selectfont]
+at ($(current page.north west)+(2.48in,-2.21in)$)
+{BALANCED TRAIN / VALIDATION DISTRIBUTIONS};
+
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(0.48in,-6.98in)$)
+rectangle
+($(current page.north west)+(5.18in,-8.02in)$);
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.5}{8.2}\selectfont]
+at ($(current page.north west)+(0.76in,-7.22in)$)
+{WHY BOTH SUBSETS MATTER};
+\node[anchor=north west,align=left,text width=4.10in,text=Ink,font=\fontsize{6.85}{7.95}\selectfont]
+at ($(current page.north west)+(0.76in,-7.56in)$)
+{
+The training subset drives weight updates. The validation subset is held out
+from those updates and acts as an independent signal for tuning, early
+stopping, and detecting poor generalization.
+};
+
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(5.40in,-6.98in)$)
+rectangle
+($(current page.north west)+(10.42in,-8.02in)$);
+\fill[PolyGold]
+($(current page.north west)+(5.40in,-6.98in)$)
+rectangle
+($(current page.north west)+(5.51in,-8.02in)$);
+\node[anchor=north west,text=DeepGreen,font=\sffamily\bfseries\fontsize{7.5}{8.2}\selectfont]
+at ($(current page.north west)+(5.72in,-7.22in)$)
+{WHAT THIS ENABLES NEXT};
+\node[anchor=north west,align=left,text width=4.20in,text=Ink,font=\fontsize{6.85}{7.95}\selectfont]
+at ($(current page.north west)+(5.72in,-7.56in)$)
+{
+With target imbalance controlled, changes in validation loss can be interpreted
+more meaningfully as effects of model training rather than simply the original
+steering-angle distribution.
+};
+
+\PNFooter
+{\faArrowLeft\ DATA BALANCING}
+{3 / 8}
+{TRAINING STRATEGY \faArrowRight}
+
+\end{tikzpicture}
+
+%==============================================================
+% PAGE 4 — WHAT WAS ACTUALLY TUNED
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{pilotnet-training}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+\PNPageBase
+
+\PNHeader
+{TRAINING STRATEGY}
+{TURNING DATA BALANCE INTO A CONTROL MODEL}
+{Continuous regression
+\hspace{7pt}\textbullet\hspace{7pt}
+Validation loss
+\hspace{7pt}\textbullet\hspace{7pt}
+Early stopping
+\hspace{7pt}\textbullet\hspace{7pt}
+Hyperparameter search}
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    text=Ink,
+    font=\fontsize{8.0}{9.3}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{
+Once the steering distribution was controlled, the remaining question was
+how to train the network stably. The project varied \textbf{learning rate},
+\textbf{batch size}, and effective \textbf{training duration}. Validation loss
+was used as the main comparison signal because the goal was not simply to fit
+the training data, but to produce steering predictions that generalized to
+unseen frames.
+};
+
+% Pipeline
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.2}{8.9}\selectfont
+]
+at ($(current page.north west)+(0.48in,-2.28in)$)
+{MODEL DEVELOPMENT LOOP};
+
+\foreach \x/\title/\sub in {
+0.48/CAMERA FRAMES/balanced images,
+2.52/PILOTNET CNN/feature extraction,
+4.56/REGRESSION HEAD/continuous output,
+6.60/VALIDATION LOSS/generalization check,
+8.64/RETRAIN/update settings}
+{
+    \fill[white,rounded corners=3pt]
+      ($(current page.north west)+(\x in,-2.72in)$)
+      rectangle
+      ($(current page.north west)+(\x in+1.76in,-3.46in)$);
+
+    \draw[DeepGreen,line width=0.55pt,rounded corners=3pt]
+      ($(current page.north west)+(\x in,-2.72in)$)
+      rectangle
+      ($(current page.north west)+(\x in+1.76in,-3.46in)$);
+
+    \node[
+        anchor=north,
+        align=center,
+        text=DeepGreen,
+        font=\sffamily\bfseries\fontsize{6.4}{7.0}\selectfont
+    ]
+    at ($(current page.north west)+(\x in+0.88in,-2.94in)$)
+    {\title};
+
+    \node[
+        anchor=north,
+        align=center,
+        text=Muted,
+        font=\sffamily\fontsize{5.8}{6.4}\selectfont
+    ]
+    at ($(current page.north west)+(\x in+0.88in,-3.19in)$)
+    {\sub};
+}
+
+\foreach \x in {2.36,4.40,6.44,8.48}
+{
+    \node[
+        text=PolyGold,
+        font=\bfseries\fontsize{13}{13}\selectfont
+    ]
+    at ($(current page.north west)+(\x in,-3.09in)$)
+    {$\rightarrow$};
+}
+
+% Experiment cards
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.2}{8.9}\selectfont
+]
+at ($(current page.north west)+(0.48in,-3.92in)$)
+{THREE VARIABLES DROVE THE SEARCH};
+
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(0.48in,-4.30in)$)
+rectangle
+($(current page.north west)+(3.58in,-6.18in)$);
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{7.0}{7.7}\selectfont
+]
+at ($(current page.north west)+(0.74in,-4.56in)$)
+{01};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(1.13in,-4.53in)$)
+{LEARNING RATE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.54in,
+    text=Ink,
+    font=\fontsize{7.0}{8.2}\selectfont
+]
+at ($(current page.north west)+(0.74in,-4.94in)$)
+{
+Controls how large each optimization update is. Too large can stall or
+oscillate; too small can make convergence unnecessarily slow.
+};
+
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(3.74in,-4.30in)$)
+rectangle
+($(current page.north west)+(6.84in,-6.18in)$);
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{7.0}{7.7}\selectfont
+]
+at ($(current page.north west)+(4.00in,-4.56in)$)
+{02};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(4.39in,-4.53in)$)
+{BATCH SIZE};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.54in,
+    text=Ink,
+    font=\fontsize{7.0}{8.2}\selectfont
+]
+at ($(current page.north west)+(4.00in,-4.94in)$)
+{
+Changes how many samples contribute to one gradient update. The report found
+the most useful range was approximately \textbf{64--128}.
+};
+
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(7.00in,-4.30in)$)
+rectangle
+($(current page.north west)+(10.42in,-6.18in)$);
+
+\node[
+    anchor=north west,
+    text=PolyGold,
+    font=\sffamily\bfseries\fontsize{7.0}{7.7}\selectfont
+]
+at ($(current page.north west)+(7.26in,-4.56in)$)
+{03};
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(7.65in,-4.53in)$)
+{TRAINING DURATION};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=2.78in,
+    text=Ink,
+    font=\fontsize{7.0}{8.2}\selectfont
+]
+at ($(current page.north west)+(7.26in,-4.94in)$)
+{
+Early stopping limited wasted training, but the strongest runs still needed
+roughly \textbf{300 epochs} to approach their best validation loss.
+};
+
+% Best run summary
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(0.48in,-6.50in)$)
+rectangle
+($(current page.north west)+(10.42in,-8.02in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0.48in,-6.50in)$)
+rectangle
+($(current page.north west)+(0.59in,-8.02in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{8.0}{8.7}\selectfont
+]
+at ($(current page.north west)+(0.82in,-6.78in)$)
+{BEST REPORTED CONFIGURATION};
+
+\PNMetric{0.82in}{-7.18in}{2.05in}{EPOCHS}{300}{long enough to plateau}
+\PNMetric{3.05in}{-7.18in}{2.05in}{LEARNING RATE}{$2\times10^{-4}$}{best reported setting}
+\PNMetric{5.28in}{-7.18in}{2.05in}{BATCH SIZE}{128}{within stable range}
+\PNMetric{7.51in}{-7.18in}{2.05in}{TEST LOSS}{0.0470}{best reported test loss}
+
+\PNFooter
+{\faArrowLeft\ TRAIN / VALIDATION}
+{4 / 8}
+{LOSS CURVES \faArrowRight}
+
+\end{tikzpicture}
+
+%==============================================================
+% PAGE 5 — EPOCH COUNT INVESTIGATION
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{pilotnet-loss}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+\PNPageBase
+
+\PNHeader
+{MODEL EXPERIMENTS}
+{HOW LONG DID THE NETWORK NEED TO TRAIN?}
+{Epoch count
+\hspace{7pt}\textbullet\hspace{7pt}
+Validation loss
+\hspace{7pt}\textbullet\hspace{7pt}
+Early stopping
+\hspace{7pt}\textbullet\hspace{7pt}
+Convergence}
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    text=Ink,
+    font=\fontsize{8.1}{9.4}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{
+The first training question was whether additional epochs were still producing
+useful learning or merely pushing the model toward overfitting. Two otherwise
+similar runs were compared at approximately 200 and 300 epochs. Their validation
+loss histories reveal whether the model had actually reached a plateau.
+};
+
+% Large EpochValLoss1 plot
+\node[
+    anchor=north west,
+    inner sep=1.4pt,
+    draw=DeepGreen,
+    line width=0.70pt
+]
+at ($(current page.north west)+(0.82in,-2.24in)$)
+{
+\includegraphics[
+    width=9.28in,
+    height=4.72in,
+    keepaspectratio
+]{\detokenize{EpochValLoss1.png}}
+};
+
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(1.00in,-2.50in)$)
+rectangle
+($(current page.north west)+(3.42in,-2.24in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{6.15}{6.7}\selectfont
+]
+at ($(current page.north west)+(1.16in,-2.37in)$)
+{EPOCH COUNT \hspace{5pt} 200 vs. 300};
+
+% Bottom left interpretation
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(0.48in,-7.08in)$)
+rectangle
+($(current page.north west)+(5.26in,-7.92in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.6}{8.3}\selectfont
+]
+at ($(current page.north west)+(0.76in,-7.27in)$)
+{MORE EPOCHS WERE STILL USEFUL};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.18in,
+    text=Ink,
+    font=\fontsize{6.9}{8.0}\selectfont
+]
+at ($(current page.north west)+(0.76in,-7.5in)$)
+{
+Both curves follow the same broad decay, but the longer run continues lowering
+validation loss after the shorter run ends. In this case, additional training
+was still extracting useful structure rather than simply memorizing the data.
+};
+
+% Bottom right takeaway
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(5.48in,-7.08in)$)
+rectangle
+($(current page.north west)+(10.42in,-7.92in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(5.48in,-7.08in)$)
+rectangle
+($(current page.north west)+(5.59in,-7.92in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.6}{8.3}\selectfont
+]
+at ($(current page.north west)+(5.80in,-7.27in)$)
+{TRAINING LESSON};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.16in,
+    text=Ink,
+    font=\fontsize{6.9}{8.0}\selectfont
+]
+at ($(current page.north west)+(5.80in,-7.5in)$)
+{
+Early stopping should be treated as a safeguard, not as proof that fewer epochs
+are always better. The validation history must first show that improvement has
+actually stalled.
+};
+
+\PNFooter
+{\faArrowLeft\ TRAINING STRATEGY}
+{5 / 8}
+{LEARNING RATE \faArrowRight}
+
+\end{tikzpicture}
+
+%==============================================================
+% PAGE 6 — LEARNING RATE INVESTIGATION
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{pilotnet-learning-rate}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+\PNPageBase
+
+\PNHeader
+{MODEL EXPERIMENTS}
+{HOW FAST SHOULD THE OPTIMIZER LEARN?}
+{Learning rate
+\hspace{7pt}\textbullet\hspace{7pt}
+Optimization speed
+\hspace{7pt}\textbullet\hspace{7pt}
+Validation loss
+\hspace{7pt}\textbullet\hspace{7pt}
+Stable convergence}
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    text=Ink,
+    font=\fontsize{8.1}{9.4}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{
+The next experiment isolated \textbf{learning rate}, which controls the size of
+each weight update during gradient descent. Two similar PilotNet runs were
+compared at $1\times10^{-4}$ and $2\times10^{-4}$. The goal was to determine
+whether the slower setting was genuinely more stable or simply delaying useful
+convergence.
+};
+
+% Large EpochValLoss2 plot
+\node[
+    anchor=north west,
+    inner sep=1.4pt,
+    draw=DeepGreen,
+    line width=0.70pt
+]
+at ($(current page.north west)+(0.82in,-2.24in)$)
+{
+\includegraphics[
+    width=9.28in,
+    height=4.72in,
+    keepaspectratio
+]{\detokenize{EpochValLoss2.png}}
+};
+
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(1.00in,-2.50in)$)
+rectangle
+($(current page.north west)+(3.72in,-2.24in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{6.15}{6.7}\selectfont
+]
+at ($(current page.north west)+(1.16in,-2.37in)$)
+{LEARNING RATE \hspace{5pt} $1e{-4}$ vs. $2e{-4}$};
+
+% Interpretation
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(0.48in,-7.08in)$)
+rectangle
+($(current page.north west)+(5.26in,-7.92in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.6}{8.3}\selectfont
+]
+at ($(current page.north west)+(0.76in,-7.27in)$)
+{FASTER CONVERGENCE WITHOUT INSTABILITY};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.18in,
+    text=Ink,
+    font=\fontsize{6.9}{8.0}\selectfont
+]
+at ($(current page.north west)+(0.76in,-7.5in)$)
+{
+Within the tested range, the $2e{-4}$ run reduced validation loss substantially
+faster. The slower run remained at a higher loss for much of training instead of
+showing a clear stability advantage.
+};
+
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(5.48in,-7.08in)$)
+rectangle
+($(current page.north west)+(10.42in,-7.92in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(5.48in,-7.08in)$)
+rectangle
+($(current page.north west)+(5.59in,-7.92in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.6}{8.3}\selectfont
+]
+at ($(current page.north west)+(5.80in,-7.27in)$)
+{WHY THIS MATTERS};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.16in,
+    text=Ink,
+    font=\fontsize{6.9}{8.0}\selectfont
+]
+at ($(current page.north west)+(5.80in,-7.5in)$)
+{
+Learning rate changes how quickly the optimizer traverses the loss landscape.
+Too large can overshoot useful minima, while too small can leave the model
+under-trained within the available epoch budget.
+};
+
+\PNFooter
+{\faArrowLeft\ EPOCH COUNT}
+{6 / 8}
+{INITIALIZATION \faArrowRight}
+
+\end{tikzpicture}
+
+%==============================================================
+% PAGE 7 — RUN-TO-RUN VARIABILITY
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{pilotnet-initialization}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+\PNPageBase
+
+\PNHeader
+{MODEL EXPERIMENTS}
+{WHY THE SAME NETWORK CAN TRAIN DIFFERENTLY TWICE}
+{Random initialization
+\hspace{7pt}\textbullet\hspace{7pt}
+Stochastic training
+\hspace{7pt}\textbullet\hspace{7pt}
+Convergence variability
+\hspace{7pt}\textbullet\hspace{7pt}
+Repeatability}
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    text=Ink,
+    font=\fontsize{8.1}{9.4}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{
+A final comparison used the same model structure and hyperparameter settings but
+different training runs. The resulting validation curves diverged considerably.
+This exposed an important machine-learning reality: random weight initialization
+and stochastic optimization can change how quickly an otherwise identical
+network reaches a useful solution.
+};
+
+% Large EpochValLoss3 plot
+\node[
+    anchor=north west,
+    inner sep=1.4pt,
+    draw=DeepGreen,
+    line width=0.70pt
+]
+at ($(current page.north west)+(0.82in,-2.24in)$)
+{
+\includegraphics[
+    width=9.28in,
+    height=4.72in,
+    keepaspectratio
+]{\detokenize{EpochValLoss3.png}}
+};
+
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(1.00in,-2.50in)$)
+rectangle
+($(current page.north west)+(3.86in,-2.24in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{6.15}{6.7}\selectfont
+]
+at ($(current page.north west)+(1.16in,-2.37in)$)
+{SAME MODEL \hspace{5pt} DIFFERENT INITIALIZATION};
+
+% Interpretation
+\fill[SoftGreen,rounded corners=4pt]
+($(current page.north west)+(0.48in,-7.08in)$)
+rectangle
+($(current page.north west)+(5.26in,-7.92in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.6}{8.3}\selectfont
+]
+at ($(current page.north west)+(0.76in,-7.27in)$)
+{TRAINING IS STOCHASTIC};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.18in,
+    text=Ink,
+    font=\fontsize{6.9}{8.0}\selectfont
+]
+at ($(current page.north west)+(0.76in,-7.5in)$)
+{
+One run begins improving much earlier than the other even though the architecture
+and nominal settings are the same. A single training history therefore should
+not be treated as perfectly repeatable evidence.
+};
+
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(5.48in,-7.08in)$)
+rectangle
+($(current page.north west)+(10.42in,-7.92in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(5.48in,-7.08in)$)
+rectangle
+($(current page.north west)+(5.59in,-7.92in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.6}{8.3}\selectfont
+]
+at ($(current page.north west)+(5.80in,-7.27in)$)
+{ENGINEERING IMPLICATION};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=4.16in,
+    text=Ink,
+    font=\fontsize{6.9}{8.0}\selectfont
+]
+at ($(current page.north west)+(5.80in,-7.5in)$)
+{
+Repeated runs, fixed random seeds, and consistent evaluation data improve
+reproducibility. Hyperparameter conclusions are stronger when they survive
+variation in initialization rather than depending on one favorable run.
+};
+
+\PNFooter
+{\faArrowLeft\ LEARNING RATE}
+{7 / 8}
+{PREDICTION RESULT \faArrowRight}
+
+\end{tikzpicture}
+
+%==============================================================
+% PAGE 8 — MODEL OUTPUT + FINAL ENGINEERING TAKEAWAYS
+%==============================================================
+\clearpage
+\thispagestyle{empty}
+\hypertarget{pilotnet-result}{}
+\null
+
+\begin{tikzpicture}[remember picture,overlay]
+\PNPageBase
+
+\PNHeader
+{MODEL RESULT}
+{FROM CAMERA FRAME TO CONTINUOUS STEERING}
+{Predicted vs. ground-truth steering
+\hspace{7pt}\textbullet\hspace{7pt}
+Regression behavior
+\hspace{7pt}\textbullet\hspace{7pt}
+Final training lessons}
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=10.00in,
+    text=Ink,
+    font=\fontsize{8.0}{9.3}\selectfont
+]
+at ($(current page.north west)+(0.48in,-1.62in)$)
+{
+The best model was evaluated by comparing its continuous steering output with
+the recorded ground-truth signal. The network captures the broad sequence of
+left, straight, and right steering behavior, while the prediction remains
+smoother and more quantized than the recorded command in several regions.
+That difference is exactly why validation loss alone is not enough: the final
+signal still has to be interpreted as a vehicle-control command.
+};
+
+% Prediction plot
+\node[
+    anchor=north west,
+    inner sep=1.2pt,
+    draw=DeepGreen,
+    line width=0.65pt
+]
+at ($(current page.north west)+(0.48in,-2.22in)$)
+{
+\includegraphics[
+    width=9.94in,
+    height=3.42in,
+    keepaspectratio
+]{\detokenize{ModelPredictionsPlot.png}}
+};
+
+\fill[DeepGreen,rounded corners=1.5pt]
+($(current page.north west)+(0.65in,-2.46in)$)
+rectangle
+($(current page.north west)+(2.95in,-2.20in)$);
+
+\node[
+    anchor=west,
+    text=white,
+    font=\sffamily\bfseries\fontsize{6.0}{6.6}\selectfont
+]
+at ($(current page.north west)+(0.80in,-2.33in)$)
+{BEST MODEL \hspace{5pt} PREDICTION VS. GROUND TRUTH};
+
+% Metrics
+\PNMetric{0.48in}{-5.82in}{2.20in}{EPOCHS}{300}{best reported model}
+\PNMetric{2.86in}{-5.82in}{2.20in}{LEARNING RATE}{$2e{-4}$}{faster useful convergence}
+\PNMetric{5.24in}{-5.82in}{2.20in}{BATCH SIZE}{128}{within stable range}
+\PNMetric{7.62in}{-5.82in}{2.80in}{TEST LOSS}{0.0470}{lowest reported test loss}
+
+% Final lessons
+\fill[SoftGold,rounded corners=4pt]
+($(current page.north west)+(0.48in,-6.70in)$)
+rectangle
+($(current page.north west)+(6.95in,-7.88in)$);
+
+\fill[PolyGold]
+($(current page.north west)+(0.48in,-6.70in)$)
+rectangle
+($(current page.north west)+(0.59in,-7.88in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.8}{8.5}\selectfont
+]
+at ($(current page.north west)+(0.82in,-6.94in)$)
+{ENGINEERING TAKEAWAYS};
+
+\node[
+    anchor=north west,
+    align=left,
+    text width=5.76in,
+    text=Ink,
+    font=\fontsize{6.65}{7.55}\selectfont
+]
+at ($(current page.north west)+(0.82in,-7.1in)$)
+{
+\textbf{Data distribution is part of the controller.}
+A regression model only learns the steering behaviors represented in its
+training examples.
+
+\vspace{2.5pt}
+
+\textbf{Validation history must be interpreted, not merely minimized.}
+A lower loss is meaningful only if the resulting steering signal is also
+physically useful.
+
+\vspace{2.5pt}
+
+\textbf{Training is stochastic.}
+Repeated runs of the same architecture can converge differently because the
+weights begin from different random initializations.
+};
+
+% Resources
+\fill[SoftGreen!34,rounded corners=4pt]
+($(current page.north west)+(7.18in,-6.70in)$)
+rectangle
+($(current page.north west)+(10.42in,-7.88in)$);
+
+\draw[RuleGray,line width=0.45pt,rounded corners=4pt]
+($(current page.north west)+(7.18in,-6.70in)$)
+rectangle
+($(current page.north west)+(10.42in,-7.88in)$);
+
+\node[
+    anchor=north west,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{7.6}{8.3}\selectfont
+]
+at ($(current page.north west)+(7.46in,-6.94in)$)
+{PROJECT RESOURCES};
+
+\node[
+    anchor=north west,
+    align=left,
+    text=DeepGreen,
+    font=\sffamily\bfseries\fontsize{6.9}{7.7}\selectfont
+]
+at ($(current page.north west)+(7.46in,-7.31in)$)
+{
+\faFilePdf\ PROJECT REPORT
+
+\vspace{7pt}
+
+\faCode\ COLAB / GITHUB
+};
+
+\PNFooter
+{\faArrowLeft\ INITIALIZATION}
+{8 / 8}
+{\hyperlink{overview}{PORTFOLIO OVERVIEW \faArrowRight}}
+
+\end{tikzpicture}
+
+%==============================================================
+% END PROJECT 15
+%==============================================================
